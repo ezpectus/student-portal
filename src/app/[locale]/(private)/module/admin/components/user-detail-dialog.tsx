@@ -1,15 +1,16 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import dayjs from 'dayjs';
+import { useTranslations } from 'next-intl';
+
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
 import { AdminUserDetail } from '../types';

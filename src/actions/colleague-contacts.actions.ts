@@ -1,12 +1,12 @@
 'use server';
 
+import { apiFetch } from '@/lib/client';
 import { ColleagueContact } from '@/types/models/colleague-contact';
 import { ContactType } from '@/types/models/contact';
-import { apiFetch } from '@/lib/client';
 
 export async function getColleagueContacts() {
   try {
-    const response = await apiFetch<ColleagueContact[]>('contacts');
+    const response = await apiFetch('contacts');
 
     if (!response.ok) {
       return [];
@@ -20,7 +20,7 @@ export async function getColleagueContacts() {
 
 export async function getColleagueContactTypes() {
   try {
-    const response = await apiFetch<ContactType[]>('contacts/types');
+    const response = await apiFetch('contacts/types');
 
     if (!response.ok) {
       return [];

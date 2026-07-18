@@ -4,6 +4,7 @@ import { getCourses, getRoles, getStudyForms } from '@/actions/announcement.acti
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Description, Heading2 } from '@/components/typography';
 import { LocaleProps } from '@/types/locale-props';
+
 import { CreateAnnouncementPage } from './create-announcement-page';
 
 const INTL_NAMESPACE = 'private.announcementseditor';

@@ -1,40 +1,34 @@
 'use client';
 
-import { Link, LOCALE, usePathname } from '@/i18n/routing';
-import { useLocale, useTranslations } from 'next-intl';
-import { FlagGB, FlagUA } from '@/app/images';
-import { ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useLocale } from 'next-intl';
 
-const LocaleOption = ({ text, icon }: { text: string; icon: ReactNode }) => (
-  <>
-    <span className="hidden text-neutral-600 md:block">{text}</span>
-    {icon}
-  </>
-);
+import { Link, LOCALE, usePathname } from '@/i18n/routing';
 
 export const LocaleSwitch = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const searchparams = useSearchParams();
-  const t = useTranslations('global.locale-switch');
 
-  const getTitle = () => {
-    switch (locale) {
-      case LOCALE.UK:
-        return <LocaleOption text={t('switch-to-english')} icon={<FlagGB />} />;
-      default:
-        return <LocaleOption text={t('switch-to-ukrainian')} icon={<FlagUA />} />;
-    }
+  const localeOrder: LOCALE[] = [LOCALE.UK, LOCALE.EN, LOCALE.PL, LOCALE.DE];
+  const currentIndex = localeOrder.indexOf(locale as LOCALE);
+  const nextLocale = localeOrder[(currentIndex + 1) % localeOrder.length];
+
+  const localeLabels: Record<string, string> = {
+    uk: 'Українська',
+    en: 'English',
+    pl: 'Polski',
+    de: 'Deutsch',
   };
 
   return (
     <Link
       href={{ pathname, search: searchparams.toString() }}
-      locale={locale === LOCALE.EN ? LOCALE.UK : LOCALE.EN}
+      locale={nextLocale}
       className="flex items-center gap-[6px] text-end"
     >
-      {getTitle()}
+      <span className="hidden text-neutral-600 md:block">{localeLabels[nextLocale] ?? 'English'}</span>
+      <span className="text-xs font-medium uppercase text-neutral-500">{nextLocale}</span>
     </Link>
   );
 };

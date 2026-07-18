@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import JWT from 'jsonwebtoken';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { getJWTPayload, getVerifiedLocalJWTPayload, LOCAL_JWT_ISSUER } from '@/lib/jwt';
 
 const TEST_SECRET = 'test-secret-key-for-vitest';
@@ -48,7 +49,7 @@ describe('getVerifiedLocalJWTPayload', () => {
 
   it('verifies and returns payload from a properly signed token', () => {
     const token = signToken({ exp: Math.floor(Date.now() / 1000) + 3600, modules: ['rating'] });
-    const payload = getVerifiedLocalJWTPayload<{ exp: number; modules: string[] }>(token);
+    const payload = getVerifiedLocalJWTPayload<{ exp: number; modules: string[]; iss?: string }>(token);
     expect(payload.modules).toEqual(['rating']);
     expect(payload.iss).toBe(LOCAL_JWT_ISSUER);
   });

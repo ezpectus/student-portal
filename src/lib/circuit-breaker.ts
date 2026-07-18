@@ -23,6 +23,7 @@ interface CircuitBreakerEntry {
   failureCount: number;
   openedAt: number;
   halfOpenCalls: number;
+  resetTimeoutMs: number;
 }
 
 const breakers = new Map<string, CircuitBreakerEntry>();
@@ -66,6 +67,7 @@ const ensureEntry = (name: string, config: CircuitBreakerConfig): CircuitBreaker
       failureCount: 0,
       openedAt: 0,
       halfOpenCalls: 0,
+      resetTimeoutMs: config.resetTimeoutMs,
     };
     breakers.set(name, entry);
   }

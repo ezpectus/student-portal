@@ -1,6 +1,6 @@
-import { CertificateStatus } from '@/types/models/certificate/status';
 import { badgeVariants } from '@/components/ui/badge';
 import { Certificate } from '@/types/models/certificate/certificate';
+import { CertificateStatus } from '@/types/models/certificate/status';
 
 export function getCertificateStatusStyle(certificate: Certificate) {
   if (certificate.approved && certificate.status === CertificateStatus.Processed) {

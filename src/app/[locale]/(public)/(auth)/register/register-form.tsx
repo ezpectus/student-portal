@@ -1,21 +1,22 @@
 'use client';
 
-import * as z from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Link } from '@/i18n/routing';
-import { registerUser } from '@/actions/auth.actions';
 import { useTranslations } from 'next-intl';
-import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import PasswordInput from '@/components/ui/password-input';
-import { useServerErrorToast } from '@/hooks/use-server-error-toast';
-import { useRouter } from '@/i18n/routing';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { registerUser } from '@/actions/auth.actions';
 import { DemoCredentials } from '@/components/auth/demo-credentials';
 import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
+import { Button } from '@/components/ui/button';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import PasswordInput from '@/components/ui/password-input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useServerErrorToast } from '@/hooks/use-server-error-toast';
+import { Link } from '@/i18n/routing';
+import { useRouter } from '@/i18n/routing';
 
 export const RegisterForm = () => {
   const t = useTranslations('auth.register');

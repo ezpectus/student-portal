@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
 import { exportToCsv } from '@/lib/utils/csv-export';
 
 describe('exportToCsv', () => {
@@ -29,14 +30,32 @@ describe('exportToCsv', () => {
   });
 
   it('escapes cells containing commas', () => {
-    const blobSpy = vi.spyOn(Blob.prototype, 'text').mockResolvedValue('');
+    let capturedContent = '';
+    const OriginalBlob = globalThis.Blob;
+    vi.stubGlobal('Blob', class {
+      size = 0;
+      type = '';
+      constructor(parts: BlobPart[]) {
+        capturedContent = parts.map((p) => String(p)).join('');
+      }
+    });
     exportToCsv('test.csv', ['Name', 'Value'], [['Hello, World', '42']]);
-    expect(blobSpy).toHaveBeenCalled();
+    expect(capturedContent).toContain('"Hello, World"');
+    vi.stubGlobal('Blob', OriginalBlob);
   });
 
   it('escapes cells containing quotes', () => {
-    const blobSpy = vi.spyOn(Blob.prototype, 'text').mockResolvedValue('');
+    let capturedContent = '';
+    const OriginalBlob = globalThis.Blob;
+    vi.stubGlobal('Blob', class {
+      size = 0;
+      type = '';
+      constructor(parts: BlobPart[]) {
+        capturedContent = parts.map((p) => String(p)).join('');
+      }
+    });
     exportToCsv('test.csv', ['Name', 'Value'], [['He said "hi"', '42']]);
-    expect(blobSpy).toHaveBeenCalled();
+    expect(capturedContent).toContain('"He said ""hi"""');
+    vi.stubGlobal('Blob', OriginalBlob);
   });
 });

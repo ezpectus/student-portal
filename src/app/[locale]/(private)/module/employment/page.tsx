@@ -1,9 +1,11 @@
-import { Description, Heading2 } from '@/components/typography';
-import { SubLayout } from '../../sub-layout';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Button } from '@/components/ui/button';
+
 import { redirectToEmploymentSystem } from '@/actions/auth.actions';
+import { Description, Heading2 } from '@/components/typography';
+import { Button } from '@/components/ui/button';
 import { LocaleProps } from '@/types/locale-props';
+
+import { SubLayout } from '../../sub-layout';
 
 const INTL_NAMESPACE = 'private.employment-system';
 

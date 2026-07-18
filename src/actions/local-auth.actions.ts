@@ -5,15 +5,17 @@ import JWT from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { prisma } from '@/lib/prisma';
+import { SID_COOKIE_NAME,TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
 import { env } from '@/lib/env';
-import { TOKEN_COOKIE_NAME, SID_COOKIE_NAME } from '@/lib/constants/cookies';
+import { prisma } from '@/lib/prisma';
 
 const JWT_EXPIRES_IN = '7d';
 
 const getModulesForRole = (role: string) => {
   const commonModules = ['studysheet', 'rating', 'certificates', 'announcementseditor'];
-  return role === 'ADMIN' ? ['admin', ...commonModules] : commonModules;
+  if (role === 'ADMIN') return ['admin', ...commonModules, 'grading'];
+  if (role === 'TEACHER') return [...commonModules, 'grading'];
+  return commonModules;
 };
 
 interface LocalJWTPayload {

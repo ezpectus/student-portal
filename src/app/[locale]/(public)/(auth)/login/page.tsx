@@ -1,8 +1,10 @@
-import { Heading2, Description } from '@/components/typography';
-import { CredentialsLogin } from './credentials-login';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
+
+import { Description,Heading2 } from '@/components/typography';
 import { Link } from '@/i18n/routing';
+import { LocaleProps } from '@/types/locale-props';
+
+import { CredentialsLogin } from './credentials-login';
 
 const INTL_NAMESPACE = 'auth.login';
 

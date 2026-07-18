@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 interface Props {
   password: string;
@@ -9,7 +9,7 @@ interface Props {
 
 type StrengthLevel = 'empty' | 'weak' | 'fair' | 'good' | 'strong';
 
-function calculateStrength(password: string): { level: StrengthLevel; score: number } {
+export function calculateStrength(password: string): { level: StrengthLevel; score: number } {
   if (!password) return { level: 'empty', score: 0 };
 
   let score = 0;

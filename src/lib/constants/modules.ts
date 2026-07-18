@@ -12,5 +12,6 @@ export const MODULES: Module[] = [
   { name: 'certificates', isExternal: false },
   { name: 'rating', isExternal: false },
   { name: 'employment', isExternal: false },
+  { name: 'grading', isExternal: false },
   { name: 'admin', isExternal: false },
 ];

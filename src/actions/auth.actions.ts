@@ -1,21 +1,22 @@
 'use server';
 
-import qs from 'query-string';
-import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { apiFetch } from '@/lib/client';
-import { getJWTPayload } from '@/lib/jwt';
-import { User } from '@/types/models/user';
-import { AuthResponse } from '@/types/models/auth-response';
-import { SID_COOKIE_NAME, TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
-import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
-import { env } from '@/lib/env';
-import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit';
+import qs from 'query-string';
+import { z } from 'zod';
+
 import { throwApiError } from '@/lib/api-error';
+import { apiFetch } from '@/lib/client';
+import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { SID_COOKIE_NAME, TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
+import { env } from '@/lib/env';
 import { PermanentError } from '@/lib/errors';
-import { validateInput } from '@/lib/validate';
+import { getJWTPayload } from '@/lib/jwt';
 import { logger } from '@/lib/logger';
+import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit';
+import { validateInput } from '@/lib/validate';
+import { AuthResponse } from '@/types/models/auth-response';
+import { User } from '@/types/models/user';
 
 const authLogger = logger.createScoped('auth');
 

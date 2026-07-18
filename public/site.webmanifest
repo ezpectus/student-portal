@@ -1,6 +1,7 @@
 {
-  "name": "Е-Кампус | КПІ ім. Ігоря Сікорського",
-  "short_name": "Е-Кампус",
+  "name": "Student Portal",
+  "short_name": "Student Portal",
+  "description": "Comprehensive student management platform",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +16,9 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
+  "theme_color": "#1c396e",
   "background_color": "#1c396e",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "start_url": "/"
 }

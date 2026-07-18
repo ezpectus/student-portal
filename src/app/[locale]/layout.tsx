@@ -1,13 +1,14 @@
-import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Viewport } from 'next';
-import { routing } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
-import { Toaster } from '@/components/ui/toaster';
-import { LocaleProps } from '@/types/locale-props';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
+
 import { exo2Font } from '@/app/font';
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { Toaster } from '@/components/ui/toaster';
+import { routing } from '@/i18n/routing';
 import { env } from '@/lib/env';
+import { LocaleProps } from '@/types/locale-props';
 
 interface Props extends LocaleProps {
   children: React.ReactNode;

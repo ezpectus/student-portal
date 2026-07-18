@@ -1,7 +1,9 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
-import { CertificateVerifier } from './certificate-verifier';
+
 import { AuthNavLayout } from '@/app/[locale]/(public)/auth-nav-layout';
+import { LocaleProps } from '@/types/locale-props';
+
+import { CertificateVerifier } from './certificate-verifier';
 
 export async function generateMetadata({ params }: LocaleProps) {
   const { locale } = await params;

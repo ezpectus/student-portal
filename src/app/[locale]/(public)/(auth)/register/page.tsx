@@ -1,7 +1,9 @@
-import { Heading2, Description } from '@/components/typography';
-import { RegisterForm } from './register-form';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { Description,Heading2 } from '@/components/typography';
 import { LocaleProps } from '@/types/locale-props';
+
+import { RegisterForm } from './register-form';
 
 const INTL_NAMESPACE = 'auth.register';
 

@@ -1,11 +1,11 @@
 'use server';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
+import { apiFetch } from '@/lib/client';
 import { Curator } from '@/types/models/curator';
 
 export async function getCurator(): Promise<Curator | null> {
-  const response = await apiFetch<Curator>('/curator');
+  const response = await apiFetch('/curator');
   if (response.status === 404) {
     return null;
   }

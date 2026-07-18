@@ -93,3 +93,9 @@ _*.cjs
 _*-out.txt
 npm-version.txt
 npm-install-output.txt
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

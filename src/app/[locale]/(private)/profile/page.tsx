@@ -1,13 +1,14 @@
-import { getContacts, getContactTypes } from '@/actions/profile.actions';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
-import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
+
 import { getUserDetails } from '@/actions/auth.actions';
-import { Description, Heading2 } from '@/components/typography';
-import { InfoBlock } from '@/app/[locale]/(private)/profile/components/info-block';
-import { Card, CardContent } from '@/components/ui/card';
+import { getContacts, getContactTypes } from '@/actions/profile.actions';
 import { Contacts } from '@/app/[locale]/(private)/profile/components/contacts';
+import { InfoBlock } from '@/app/[locale]/(private)/profile/components/info-block';
 import { IntellectPublicationInfo } from '@/app/[locale]/(private)/profile/components/intellect-publication-info';
+import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
+import { Description, Heading2 } from '@/components/typography';
+import { Card, CardContent } from '@/components/ui/card';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'private.profile';
 

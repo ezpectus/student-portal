@@ -1,10 +1,12 @@
+import { useTranslations } from 'next-intl';
+import { Dispatch } from 'react';
+
 import { Paragraph } from '@/components/typography';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { formatDate, formatTime } from '@/lib/date.utils';
-import { Dispatch } from 'react';
-import { Action } from '../types';
 import { Message } from '@/types/models/message';
-import { useTranslations } from 'next-intl';
+
+import { Action } from '../types';
 
 interface Props {
   isOpen: boolean;

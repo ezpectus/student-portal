@@ -1,13 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import { Card, CardContent } from '@/components/ui/card';
+
+import { CircleWavyCheck,WarningCircle } from '@/app/images';
 import { Heading5 } from '@/components/typography/headers';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { WarningCircle, CircleWavyCheck } from '@/app/images';
+import { Card, CardContent } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { Show } from '@/components/utils/show';
+import { Link } from '@/i18n/routing';
 import { User } from '@/types/models/user';
 
 interface Props {

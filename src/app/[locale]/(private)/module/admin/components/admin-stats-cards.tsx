@@ -1,8 +1,9 @@
 'use client';
 
+import { GraduationCap, TrendingUp,UserCheck, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, GraduationCap, UserCheck, TrendingUp } from 'lucide-react';
 
 interface Props {
   totalUsers: number;

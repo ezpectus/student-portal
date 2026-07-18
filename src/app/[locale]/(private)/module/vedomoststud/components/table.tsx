@@ -1,20 +1,18 @@
 'use client';
 
+import { Download } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { dash } from 'radash';
 
-import { useTableSort } from '@/hooks/use-table-sort';
-
 import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
+import { TermStatusBadge } from '@/app/[locale]/(private)/module/vedomoststud/components/term-status-badge';
+import { Paragraph } from '@/components/typography';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { TermStatusBadge } from '@/app/[locale]/(private)/module/vedomoststud/components/term-status-badge';
-import { Paragraph } from '@/components/typography';
+import { useTableSort } from '@/hooks/use-table-sort';
 import { exportToCsv } from '@/lib/utils/csv-export';
-import { Download } from 'lucide-react';
-
 import { Status } from '@/types/enums/session/status';
 import { TermDiscipline } from '@/types/models/term';
 

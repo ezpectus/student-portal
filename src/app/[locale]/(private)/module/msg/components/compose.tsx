@@ -1,9 +1,10 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Heading4 } from '@/components/typography';
-import { getAllGroups } from '@/actions/msg.actions';
-import { Individual } from '@/app/[locale]/(private)/module/msg/components/individual';
-import { Broadcast } from '@/app/[locale]/(private)/module/msg/components/broadcast';
 import { getTranslations } from 'next-intl/server';
+
+import { getAllGroups } from '@/actions/msg.actions';
+import { Broadcast } from '@/app/[locale]/(private)/module/msg/components/broadcast';
+import { Individual } from '@/app/[locale]/(private)/module/msg/components/individual';
+import { Heading4 } from '@/components/typography';
+import { Tabs, TabsContent,TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProfileArea } from '@/types/enums/profile-area';
 
 interface Props {

@@ -1,7 +1,8 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
+
 import { OnboardingWizard } from '@/components/onboarding/onboarding-wizard';
 import { Description, Heading2 } from '@/components/typography';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'private.onboarding';
 

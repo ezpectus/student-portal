@@ -1,12 +1,14 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Card } from '@/components/ui/card';
-import { Heading5 } from '@/components/typography';
 import { MapPin } from 'lucide-react';
-import { WorkPlaceRating } from '@/types/models/rating';
-import { EntriesTable } from './entries-table';
+import { useTranslations } from 'next-intl';
+
+import { Heading5 } from '@/components/typography';
+import { Card } from '@/components/ui/card';
 import { formatNumber } from '@/lib/utils';
+import { WorkPlaceRating } from '@/types/models/rating';
+
+import { EntriesTable } from './entries-table';
 
 interface WorkplaceCardProps {
   workplace: WorkPlaceRating;

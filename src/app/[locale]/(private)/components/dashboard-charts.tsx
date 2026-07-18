@@ -1,7 +1,7 @@
 'use client';
 
+import { Download } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Area,
   AreaChart,
@@ -16,8 +16,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { exportToCsv } from '@/lib/utils/csv-export';
 
 interface Props {

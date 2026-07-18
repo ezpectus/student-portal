@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { MoreHorizontal } from 'lucide-react';
-import { CaretRightLight } from '@/app/images';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { CaretRightLight } from '@/app/images';
 import { Link } from '@/i18n/routing';
+import { cn } from '@/lib/utils';
 
 const Breadcrumb = ({
   ref,
@@ -81,10 +81,10 @@ BreadcrumbEllipsis.displayName = 'BreadcrumbElipssis';
 
 export {
   Breadcrumb,
-  BreadcrumbList,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
 };

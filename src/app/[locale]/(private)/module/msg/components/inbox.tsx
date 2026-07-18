@@ -1,21 +1,23 @@
 'use client';
 
-import { useReducer, useEffect, useRef } from 'react';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trash2 } from 'lucide-react';
-import { ArrowClockwise, Star, MagnifyingGlassRegular } from '@/app/images';
-import { Input } from '@/components/ui/input';
-import { getMail, getMails, markAsImportant } from '@/actions/msg.actions';
-import { useToast } from '@/hooks/use-toast';
 import { useTranslations } from 'next-intl';
+import { useEffect, useReducer, useRef } from 'react';
+
+import { getMail, getMails, markAsImportant } from '@/actions/msg.actions';
+import { ArrowClockwise, MagnifyingGlassRegular,Star } from '@/app/images';
 import { Badge } from '@/components/ui/badge';
-import { Message } from '@/types/models/message';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/hooks/use-toast';
 import { formatDate } from '@/lib/date.utils';
-import { Action, State } from './types';
+import { MailFilter } from '@/types/enums/mail-filter';
+import { Message } from '@/types/models/message';
+
 import { DeleteDialog } from './dialog/delete-dialog';
 import { PreviewDialog } from './dialog/preview-dialog';
-import { MailFilter } from '@/types/enums/mail-filter';
+import { Action, State } from './types';
 
 interface Props {
   mails: Message[];
@@ -180,6 +182,7 @@ export default function Inbox({ mails, filter }: Props) {
               placeholder={t('search-placeholder')}
               className="h-9 w-48 pl-8"
               aria-label={t('search-placeholder')}
+              data-testid="msg-search"
             />
           </div>
           <button type="button" onClick={handleRefresh} className="flex cursor-pointer items-center justify-center" title={t('refresh')} aria-label={t('refresh')}>

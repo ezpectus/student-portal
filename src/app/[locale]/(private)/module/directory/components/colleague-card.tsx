@@ -1,11 +1,13 @@
 'use client';
 
+import Link from 'next/link';
+
+import { Paragraph } from '@/components/typography';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { ColleagueContact } from '@/types/models/colleague-contact';
 import { ContactType } from '@/types/models/contact';
-import { Paragraph } from '@/components/typography';
+
 import { ContactList } from './contact-list';
-import Link from 'next/link';
 import { useSplitContacts } from './use-split-contacts';
 
 interface ColleagueCardProps {

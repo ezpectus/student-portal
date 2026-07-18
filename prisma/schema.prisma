@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -49,6 +50,7 @@ model User {
   notifications Notification[]
   sentNotifications Notification[] @relation("sender")
   auditLogs    AuditLog[]
+  gradeChanges GradeHistory[]
 
   @@index([role])
   @@index([faculty])
@@ -61,6 +63,7 @@ model Course {
   id        Int    @id @default(autoincrement())
   name      String
   grade     Float
+  gradeType String  @default("NUMERIC")
   credits   Int
   userId    Int
   user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -68,6 +71,7 @@ model Course {
   school    School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
   teacherId Int?
   teacher   User? @relation("teacherCourses", fields: [teacherId], references: [id], onDelete: SetNull)
+  gradeHistory GradeHistory[]
 
   @@index([userId])
   @@index([schoolId])
@@ -116,6 +120,22 @@ model AuditLog {
 
   @@index([userId])
   @@index([action])
+  @@index([createdAt])
+}
+
+model GradeHistory {
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  oldGrade  Float
+  newGrade  Float
+  gradeType String   @default("NUMERIC")
+  changedBy Int
+  changedByUser User @relation(fields: [changedBy], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([courseId])
+  @@index([changedBy])
   @@index([createdAt])
 }
 

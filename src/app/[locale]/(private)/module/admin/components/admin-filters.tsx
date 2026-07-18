@@ -1,12 +1,13 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useRouter, usePathname } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
+
+import { MagnifyingGlassBold } from '@/app/images';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MagnifyingGlassBold } from '@/app/images';
+import { usePathname,useRouter } from '@/i18n/routing';
 
 interface Props {
   faculties: string[];

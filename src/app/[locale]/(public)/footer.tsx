@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
-import { cn } from '@/lib/utils';
-import RichText from '@/components/typography/rich-text';
 import { getTranslations } from 'next-intl/server';
+
+import RichText from '@/components/typography/rich-text';
+import { cn } from '@/lib/utils';
 
 interface FooterProps {
   className?: string;

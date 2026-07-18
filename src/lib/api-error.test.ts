@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
+
 import { throwApiError } from '@/lib/api-error';
 import { NotFoundError, PermanentError, TransientError, UnauthorizedError, ValidationError } from '@/lib/errors';
 

@@ -1,7 +1,8 @@
+import { getTranslations } from 'next-intl/server';
+
 import { Heading4 } from '@/components/typography/headers';
 import RichText from '@/components/typography/rich-text';
 import { Link } from '@/i18n/routing';
-import { getTranslations } from 'next-intl/server';
 import { env } from '@/lib/env';
 
 interface FrequentlyAskedQuestionsProps {

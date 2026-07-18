@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import { Bell, CheckCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useState } from 'react';
 
 import { getNotifications, markAllNotificationsRead, markNotificationRead } from '@/actions/notification.actions';
 import { Badge } from '@/components/ui/badge';

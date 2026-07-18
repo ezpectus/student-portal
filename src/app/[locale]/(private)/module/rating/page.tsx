@@ -1,9 +1,11 @@
-import React from 'react';
-import { getRatingData } from '@/actions/rating.actions';
-import { LocaleProps } from '@/types/locale-props';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import React from 'react';
+
+import { getRatingData } from '@/actions/rating.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Heading2, Paragraph } from '@/components/typography';
+import { LocaleProps } from '@/types/locale-props';
+
 import { RatingView } from './components/rating-view';
 
 const INTL_NAMESPACE = 'private.rating';

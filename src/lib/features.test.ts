@@ -1,5 +1,15 @@
-import { describe, it, expect } from 'vitest';
-import { isFeatureEnabled, getEnabledFeatures, type FeatureName } from '@/lib/features';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/lib/env', () => ({
+  env: {
+    NEXT_PUBLIC_FEATURE_DARK_MODE: 'true',
+    NEXT_PUBLIC_FEATURE_COMMAND_PALETTE: 'true',
+    NEXT_PUBLIC_FEATURE_REALTIME_NOTIFICATIONS: 'true',
+    NEXT_PUBLIC_FEATURE_ADMIN_PANEL: 'true',
+  },
+}));
+
+import { type FeatureName, getEnabledFeatures, isFeatureEnabled } from '@/lib/features';
 
 describe('feature-toggles', () => {
   it('returns true for enabled features by default', () => {

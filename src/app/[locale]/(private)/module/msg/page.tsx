@@ -1,18 +1,20 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
-import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
-import { Description, Heading2 } from '@/components/typography';
-import { getMails } from '@/actions/msg.actions';
-import { getUserDetails } from '@/actions/auth.actions';
-import { MessageTranslationKeys } from './constants';
-import { Card } from '@/components/ui/card';
-import { Tabs, TabsList, TabsContent, TabSheetTrigger } from '@/components/ui/tabs';
 import { Suspense } from 'react';
+
+import { getUserDetails } from '@/actions/auth.actions';
+import { getMails } from '@/actions/msg.actions';
+import Compose from '@/app/[locale]/(private)/module/msg/components/compose';
+import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { LoadingScreen } from '@/components/loading-screen';
-import Inbox from './components/inbox';
+import { Description, Heading2 } from '@/components/typography';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabSheetTrigger,TabsList } from '@/components/ui/tabs';
 import { MailFilter } from '@/types/enums/mail-filter';
 import { ProfileArea } from '@/types/enums/profile-area';
-import Compose from '@/app/[locale]/(private)/module/msg/components/compose';
+import { LocaleProps } from '@/types/locale-props';
+
+import Inbox from './components/inbox';
+import { MessageTranslationKeys } from './constants';
 
 const INTL_NAMESPACE = 'private.msg';
 

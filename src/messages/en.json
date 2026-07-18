@@ -88,14 +88,16 @@
       "viewcontrol": "Review current control",
       "pk2026": "Admission 2026 (Master's)",
       "pk2026admin": "Admission 2026 (Administrator)",
-      "studbonuspoints": "Bonus points"
+      "studbonuspoints": "Bonus points",
+      "grading": "Grade Book"
     },
     "menu": {
       "main": "Home",
       "profile": "Profile",
       "settings": "Settings",
       "contacts": "Contacts",
-      "admin": "Admin Panel"
+      "admin": "Admin Panel",
+      "grading": "Grade Book"
     },
     "user-category": {
       "student": "Student",
@@ -381,7 +383,9 @@
         "attended": "Attended",
         "missed": "Missed",
         "rate": "Rate",
-        "export": "Export"
+        "export": "Export",
+        "export-grades": "Export grades (CSV)",
+        "export-attendance": "Export attendance (CSV)"
       },
       "cards": {
         "information": {
@@ -1133,7 +1137,10 @@
       "schedule": "Schedule",
       "messages": "Messages",
       "materials": "Study Materials",
-      "announcements": "Announcements"
+      "announcements": "Announcements",
+      "grading": "Grade Book",
+      "certificates": "Certificates",
+      "directory": "Directory"
     },
     "shortcuts": {
       "title": "Keyboard Shortcuts",
@@ -1205,6 +1212,34 @@
       "success": {
         "title": "Profile updated",
         "description": "Welcome to Student Portal!"
+      }
+    },
+    "grading": {
+      "title": "Grade Book",
+      "empty": "You have no assigned courses",
+      "select-course": "Select a course",
+      "select-placeholder": "Select a course from the list",
+      "students": "students",
+      "loading": "Loading students...",
+      "no-students": "No students enrolled in this course",
+      "validation": {
+        "grade-range": "Grade must be between 0 and 100"
+      },
+      "success": {
+        "grade-updated": "Grade updated"
+      },
+      "table": {
+        "student": "Student",
+        "group": "Group",
+        "credits": "Credits",
+        "grade-type": "Grade Type",
+        "grade": "Grade",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel"
       }
     }
   }

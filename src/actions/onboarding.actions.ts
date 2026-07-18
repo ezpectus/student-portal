@@ -3,10 +3,10 @@
 import { revalidateTag } from 'next/cache';
 
 import { getLocalUser } from '@/actions/local-auth.actions';
-import { fileUpload } from '@/lib/file-upload';
-import { UnauthorizedError } from '@/lib/errors';
-import { prisma } from '@/lib/prisma';
 import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { UnauthorizedError } from '@/lib/errors';
+import { fileUpload } from '@/lib/file-upload';
+import { prisma } from '@/lib/prisma';
 
 export async function updateOnboardingProfile(data: {
   faculty?: string;

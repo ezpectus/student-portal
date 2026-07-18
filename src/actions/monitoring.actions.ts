@@ -1,12 +1,12 @@
 'use server';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
-import { Sheet } from '@/types/models/current-control/sheet';
+import { apiFetch } from '@/lib/client';
 import { CreditModule } from '@/types/models/current-control/credit-module';
+import { Sheet } from '@/types/models/current-control/sheet';
 
 export async function getMonitoring(): Promise<Sheet> {
-  const response = await apiFetch<Sheet>('monitoring');
+  const response = await apiFetch('monitoring');
 
   if (!response.ok) {
     throwApiError(response.status);
@@ -16,7 +16,7 @@ export async function getMonitoring(): Promise<Sheet> {
 }
 
 export async function getMonitoringById(id: string): Promise<CreditModule> {
-  const response = await apiFetch<CreditModule>(`monitoring/${id}`);
+  const response = await apiFetch(`monitoring/${id}`);
 
   if (!response.ok) {
     throwApiError(response.status);

@@ -1,8 +1,9 @@
 'use client';
 
+import Link from 'next/link';
+
 import { LinkSimple } from '@/app/images';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 
 interface CuratorSearchItemProps {
   group: string;

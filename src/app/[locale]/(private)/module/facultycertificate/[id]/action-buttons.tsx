@@ -1,13 +1,14 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { Check, PencilRegular, Printer, X } from '@/app/images';
-import { printCertificate } from '@/app/[locale]/(private)/module/facultycertificate/utils/print-certificate';
-import { signCertificate, updateCertificate, UpdateCertificateBody } from '@/actions/certificates.actions';
-import { Certificate } from '@/types/models/certificate/certificate';
 import { useTranslations } from 'next-intl';
-import { buttonDisableController } from '@/app/[locale]/(private)/module/facultycertificate/utils/button-state-controller';
+
+import { signCertificate, updateCertificate, UpdateCertificateBody } from '@/actions/certificates.actions';
 import { RejectDialog } from '@/app/[locale]/(private)/module/facultycertificate/components/reject-dialog';
+import { buttonDisableController } from '@/app/[locale]/(private)/module/facultycertificate/utils/button-state-controller';
+import { printCertificate } from '@/app/[locale]/(private)/module/facultycertificate/utils/print-certificate';
+import { Check, PencilRegular, Printer, X } from '@/app/images';
+import { Button } from '@/components/ui/button';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
+import { Certificate } from '@/types/models/certificate/certificate';
 
 interface Props {
   certificate: Certificate;

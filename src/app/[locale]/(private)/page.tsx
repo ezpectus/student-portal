@@ -1,12 +1,15 @@
-import Greeting from './greeting';
-import { AnnouncementsCard, SupportCard } from './cards';
-import { DashboardMetrics } from './components/dashboard-metrics';
-import { DashboardCharts } from './components/dashboard-charts';
-import { ProfileCompletionCard } from './components/profile-completion-card';
-import { getDashboardData } from '@/actions/dashboard.actions';
-import { getUserDetails } from '@/actions/auth.actions';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { getUserDetails } from '@/actions/auth.actions';
+import { getDashboardData } from '@/actions/dashboard.actions';
 import { LocaleProps } from '@/types/locale-props';
+
+import { AnnouncementsCard, SupportCard } from './cards';
+import { DashboardCharts } from './components/dashboard-charts';
+import { DashboardMetrics } from './components/dashboard-metrics';
+import { ExportButtons } from './components/export-buttons';
+import { ProfileCompletionCard } from './components/profile-completion-card';
+import Greeting from './greeting';
 
 const INTL_NAMESPACE = 'private.main.dashboard';
 
@@ -27,6 +30,7 @@ export default async function Home({ params }: LocaleProps) {
     <div className="flex flex-col gap-[20px]">
       <Greeting />
       <DashboardMetrics metrics={data.metrics} />
+      <ExportButtons />
       <DashboardCharts
         gpaTrend={data.gpaTrend}
         gradeDistribution={data.gradeDistribution}

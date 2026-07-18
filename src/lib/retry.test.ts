@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { NotFoundError, PermanentError, TransientError, UnauthorizedError,ValidationError } from '@/lib/errors';
 import { retryWithBackoff } from '@/lib/retry';
-import { TransientError, PermanentError, ValidationError, NotFoundError, UnauthorizedError } from '@/lib/errors';
 
 describe('retryWithBackoff', () => {
   it('returns result on first success', async () => {

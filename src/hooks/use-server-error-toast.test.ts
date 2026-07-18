@@ -1,13 +1,14 @@
-import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => (key: string) => `${namespace}.${key}`,
 }));
 
+const toastMock = vi.fn();
 vi.mock('./use-toast', () => ({
   useToast: () => ({
-    toast: vi.fn(),
+    toast: toastMock,
   }),
 }));
 
@@ -20,12 +21,12 @@ describe('useServerErrorToast', () => {
   });
 
   it('calls toast with destructive variant and translated strings', () => {
-    const { toast } = require('./use-toast');
+    toastMock.mockClear();
     const { result } = renderHook(() => useServerErrorToast());
 
     result.current.errorToast();
 
-    expect(toast).toHaveBeenCalledWith({
+    expect(toastMock).toHaveBeenCalledWith({
       variant: 'destructive',
       title: 'global.server-error.title',
       description: 'global.server-error.description',

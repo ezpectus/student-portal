@@ -1,20 +1,21 @@
 'use client';
 
-import * as z from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { loginWithCredentials } from '@/actions/auth.actions';
+import { DemoCredentials } from '@/components/auth/demo-credentials';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Link } from '@/i18n/routing';
-import { loginWithCredentials } from '@/actions/auth.actions';
-import { useTranslations } from 'next-intl';
-import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import PasswordInput from '@/components/ui/password-input';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
+import { Link } from '@/i18n/routing';
 import { useRouter } from '@/i18n/routing';
-import { DemoCredentials } from '@/components/auth/demo-credentials';
 
 export const CredentialsLogin = () => {
   const t = useTranslations('auth.login');
@@ -69,7 +70,7 @@ export const CredentialsLogin = () => {
           render={({ field }) => (
             <FormItem className="mb-6 grid w-full items-center gap-2">
               <Label htmlFor="username">{t('field.username')}</Label>
-              <Input {...field} />
+              <Input {...field} data-testid="login-username" />
             </FormItem>
           )}
         />
@@ -79,7 +80,7 @@ export const CredentialsLogin = () => {
           render={({ field }) => (
             <FormItem className="my-6 grid w-full items-center gap-2">
               <Label htmlFor="password">{t('field.password')}</Label>
-              <PasswordInput {...field} />
+              <PasswordInput {...field} data-testid="login-password" />
             </FormItem>
           )}
         />
@@ -99,7 +100,7 @@ export const CredentialsLogin = () => {
           </Link>
         </div>
         <FormMessage>{form.formState.errors.root?.message}</FormMessage>
-        <Button size="big" className="my-4 w-full" type="submit" loading={form.formState.isSubmitting}>
+        <Button size="big" className="my-4 w-full" type="submit" loading={form.formState.isSubmitting} data-testid="login-submit">
           {t('button.login')}
         </Button>
       </form>

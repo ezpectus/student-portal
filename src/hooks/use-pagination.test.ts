@@ -1,11 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({
+  useSearchParams: () => new URLSearchParams('page=1'),
+}));
+
+vi.mock('@/i18n/routing', () => ({
   useRouter: () => ({
     replace: vi.fn(),
   }),
-  useSearchParams: () => new URLSearchParams('page=1'),
 }));
 
 import { usePagination } from '@/hooks/use-pagination';

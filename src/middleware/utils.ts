@@ -1,11 +1,13 @@
-import { LOCALES } from '@/i18n/routing';
 import { NextRequest, NextResponse } from 'next/server';
 import { trim } from 'radash';
 import UrlPattern from 'url-pattern';
-import { LOGIN_PATH, NOT_FOUND_PATH, ROOT_PATH } from './constants';
+
+import { LOCALES } from '@/i18n/routing';
+import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
 import { getJWTPayload, getVerifiedLocalJWTPayload, LOCAL_JWT_ISSUER } from '@/lib/jwt';
 import { CampusJwtPayload } from '@/types/campus-jwt-payload';
-import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
+
+import { LOGIN_PATH, NOT_FOUND_PATH, ROOT_PATH } from './constants';
 
 export const redirectWithIntl = (request: NextRequest, path: string) => {
   const url = request.nextUrl.clone();

@@ -1,13 +1,16 @@
 'use client';
 
-import { useTableSort } from '@/hooks/use-table-sort';
-import { Table, TableHeader, TableHead, TableRow, TableCell, TableBody } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Link } from '@/i18n/routing';
-import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
 import { useTranslations } from 'next-intl';
-import { Discipline } from '@/types/models/current-control/sheet';
+
+import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody,TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useTableSort } from '@/hooks/use-table-sort';
+import { Link } from '@/i18n/routing';
 import { round } from '@/lib/utils';
+import { Discipline } from '@/types/models/current-control/sheet';
+import { EmptyState } from '@/components/utils/empty-state';
+import { BookOpen } from 'lucide-react';
 
 const MAX_SCORE = 100;
 
@@ -21,7 +24,7 @@ export function DisciplinesTable({ disciplines }: Props) {
   const { sortedRows, sortHandlers } = useTableSort<Discipline>(disciplines, (row, header) => row[header], ['score']);
 
   if (disciplines.length === 0) {
-    return <p className="text-muted-foreground py-12 text-center text-sm">{tTable('empty')}</p>;
+    return <EmptyState icon={<BookOpen className="h-6 w-6" />} title={tTable('empty')} />;
   }
 
   return (

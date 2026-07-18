@@ -1,8 +1,11 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
+
+import { logAuditEvent } from '@/actions/audit.actions';
 import { getUserDetails } from '@/actions/auth.actions';
 import { getLocalUser } from '@/actions/local-auth.actions';
-import { logAuditEvent } from '@/actions/audit.actions';
+import { ADMIN_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { UnauthorizedError } from '@/lib/errors';
 import { prisma } from '@/lib/prisma';
 import { UserCategory } from '@/types/enums/user-category';
@@ -165,6 +168,7 @@ export async function deleteUser(id: number): Promise<{ ok: boolean }> {
     });
     if (count > 0) {
       await logAuditEvent({ action: 'delete', entity: 'User', entityId: id });
+      revalidateTag(ADMIN_CACHE_TAG);
     }
     return { ok: count > 0 };
   } catch {
@@ -182,6 +186,7 @@ export async function updateUserStatus(id: number, status: string): Promise<{ ok
     });
     if (count > 0) {
       await logAuditEvent({ action: 'update_status', entity: 'User', entityId: id, metadata: { status } });
+      revalidateTag(ADMIN_CACHE_TAG);
     }
     return { ok: count > 0 };
   } catch {

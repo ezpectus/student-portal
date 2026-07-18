@@ -1,8 +1,9 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { getJWTPayload } from '@/lib/jwt';
+
 import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
+import { getJWTPayload } from '@/lib/jwt';
 
 export async function getSessionExpiry(): Promise<number | null> {
   const resolvedCookies = await cookies();

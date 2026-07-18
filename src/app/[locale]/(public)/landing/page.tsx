@@ -1,20 +1,21 @@
 import { setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
-import { Link } from '@/i18n/routing';
-import { Button } from '@/components/ui/button';
+
+import {
+  CalendarBlank,
+  ChartBarHorizontal,
+  ChatsTeardrop,
+  EnvelopeSimple,
+  GraduationCap,
+  UserCircle,
+} from '@/app/images';
+import { Logo } from '@/components/logo';
 import { Heading1, Heading2, Heading3 } from '@/components/typography/headers';
 import { Paragraph } from '@/components/typography/paragraph';
-import { Logo } from '@/components/logo';
+import { Button } from '@/components/ui/button';
 import { LocaleSwitch } from '@/components/ui/locale-switch';
-import {
-  GraduationCap,
-  CalendarBlank,
-  EnvelopeSimple,
-  ChartBarHorizontal,
-  UserCircle,
-  ChatsTeardrop,
-} from '@/app/images';
+import { Link } from '@/i18n/routing';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'landing';
 

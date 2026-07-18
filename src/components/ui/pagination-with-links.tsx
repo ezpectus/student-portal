@@ -1,6 +1,14 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
+
+import { useIsMobile } from '@/hooks/use-mobile';
+import { usePathname, useRouter } from '@/i18n/routing';
+import { createPagesRange } from '@/lib/pagination.utils';
+import { cn } from '@/lib/utils';
+
 import {
   Pagination,
   PaginationContent,
@@ -10,12 +18,6 @@ import {
   PaginationNext,
 } from './pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
-import { useSearchParams } from 'next/navigation';
-import { usePathname, useRouter } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { createPagesRange } from '@/lib/pagination.utils';
 
 export interface PaginationWithLinksProps {
   pageSizeSelectOptions?: {

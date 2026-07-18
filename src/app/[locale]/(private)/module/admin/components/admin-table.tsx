@@ -1,15 +1,16 @@
 'use client';
 
-import { memo } from 'react';
-import { useTranslations } from 'next-intl';
-import { Eye, Trash } from 'lucide-react';
 import dayjs from 'dayjs';
+import { Eye, Trash, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { memo } from 'react';
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Show } from '@/components/utils/show';
+import { EmptyState } from '@/components/utils/empty-state';
 import { usePagination } from '@/hooks/use-pagination';
 import { useTableSort } from '@/hooks/use-table-sort';
 import { PAGE_SIZE_DEFAULT } from '@/lib/constants/page-size';
@@ -53,7 +54,7 @@ export const AdminTable = memo(function AdminTable({ items, totalCount, onView, 
   const { paginatedItems } = usePagination(PAGE_SIZE_DEFAULT, sortedRows);
 
   if (items.length === 0) {
-    return <p className="text-muted-foreground py-12 text-center text-sm">{t('empty')}</p>;
+    return <EmptyState icon={<Users size={24} />} title={t('empty')} />;
   }
 
   return (

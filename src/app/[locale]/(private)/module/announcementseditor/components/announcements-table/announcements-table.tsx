@@ -1,18 +1,20 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { Trash2 } from 'lucide-react';
+import { Megaphone, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { PencilRegular } from '@/app/images';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Link } from '@/i18n/routing';
+import { EmptyState } from '@/components/utils/empty-state';
 import { useTableSort } from '@/hooks/use-table-sort';
+import { Link } from '@/i18n/routing';
 import { isOutdated } from '@/lib/date.utils';
 import { AdminAnnouncementItem } from '@/types/models/announcement';
-import { formatFilterCell, rolesText, studyFormsText, coursesText } from './utils';
+
+import { coursesText,formatFilterCell, rolesText, studyFormsText } from './utils';
 
 interface Props {
   items: AdminAnnouncementItem[];
@@ -23,29 +25,28 @@ export const AnnouncementsTable = ({ items, onDelete }: Props) => {
   const t = useTranslations('private.announcementseditor');
   const noRestriction = t('table.noRestriction');
 
-  const { sortedRows, sortHandlers } = useTableSort<AdminAnnouncementItem, 'title' | 'start'>(
+  const { sortedRows, sortHandlers } = useTableSort<AdminAnnouncementItem, 'filter' | 'announcement'>(
     items,
     (row, header) => {
-      return header === 'title'
-        ? row.announcement.title
-        : dayjs(row.announcement.start).valueOf();
+      if (header === 'announcement') return row.announcement.title;
+      return row.filter ?? '';
     },
-    ['title', 'start'],
+    ['announcement', 'filter'],
   );
 
   if (items.length === 0) {
-    return <p className="text-muted-foreground py-12 text-center text-sm">{t('table.empty')}</p>;
+    return <EmptyState icon={<Megaphone size={24} />} title={t('table.empty')} />;
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead sortHandlers={sortHandlers} sortHeader="title">
+          <TableHead sortHandlers={sortHandlers} sortHeader="announcement">
             {t('table.title')}
           </TableHead>
           <TableHead className="w-20">{t('table.language')}</TableHead>
-          <TableHead sortHandlers={sortHandlers} sortHeader="start" className="w-48 min-w-32">
+          <TableHead sortHandlers={sortHandlers} sortHeader="filter" className="w-48 min-w-32">
             {t('table.period')}
           </TableHead>
           <TableHead className="w-28">{t('table.status')}</TableHead>

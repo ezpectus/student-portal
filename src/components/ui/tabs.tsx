@@ -1,8 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -65,4 +65,4 @@ const TabsContent = ({ className, ref, ...props }: React.ComponentProps<typeof T
 );
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, TabSheetTrigger };
+export { Tabs, TabsContent, TabSheetTrigger,TabsList, TabsTrigger };

@@ -1,12 +1,13 @@
 'use client';
 
-import { useTableSort } from '@/hooks/use-table-sort';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Paragraph } from '@/components/typography/paragraph';
-import { Journal } from '@/types/models/current-control/journal';
 import { useTranslations } from 'next-intl';
+
 import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
+import { Paragraph } from '@/components/typography/paragraph';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useTableSort } from '@/hooks/use-table-sort';
+import { Journal } from '@/types/models/current-control/journal';
 
 interface Props {
   journal: Journal;

@@ -1,17 +1,18 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+
+import { updateIntellectInfo } from '@/actions/profile.actions';
 import { Heading6 } from '@/components/typography/headers';
-import { Separator } from '@/components/ui/separator';
 import { Paragraph } from '@/components/typography/paragraph';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { User } from '@/types/models/user';
-import { updateIntellectInfo } from '@/actions/profile.actions';
-import { useTranslations } from 'next-intl';
+import { Separator } from '@/components/ui/separator';
 import { Show } from '@/components/utils/show';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
+import { User } from '@/types/models/user';
 
 interface Props {
   user: User;

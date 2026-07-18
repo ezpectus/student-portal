@@ -1,6 +1,7 @@
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo,useRef } from 'react';
+
 import { useRouter } from '@/i18n/routing';
-import { useEffect, useRef, useMemo } from 'react';
 
 export const usePagination = <T>(pageSize: number, items: T[]) => {
   const searchParams = useSearchParams();

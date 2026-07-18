@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Database, RefreshCw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 import { getDbStats, getDbTableData } from '@/actions/admin.actions';
 import { Badge } from '@/components/ui/badge';

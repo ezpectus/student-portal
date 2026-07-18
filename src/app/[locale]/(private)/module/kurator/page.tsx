@@ -1,14 +1,15 @@
 import Link from 'next/link';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { getCurator } from '@/actions/curator.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
+import { Description } from '@/components/typography';
 import { Heading2, Heading4, Heading6 } from '@/components/typography/headers';
 import { Paragraph } from '@/components/typography/paragraph';
 import { Card } from '@/components/ui/card';
-import { getCurator } from '@/actions/curator.actions';
-import { LocaleProps } from '@/types/locale-props';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProfilePicture } from '@/components/ui/profile-picture';
 import { Show } from '@/components/utils/show';
-import { Description } from '@/components/typography';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'private.curator';
 

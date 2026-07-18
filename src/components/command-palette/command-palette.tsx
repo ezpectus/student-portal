@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
 import { Command } from 'cmdk';
-import { House, UserCircle, Gear, ChatsTeardrop, Books, CalendarBlank, EnvelopeSimple, ChartBarHorizontal, MagnifyingGlassBold } from '@/app/images';
-import { Shield } from 'lucide-react';
+import { GraduationCap, FileText, Contact, Users, Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { Books, CalendarBlank, ChartBarHorizontal, ChatsTeardrop, EnvelopeSimple, Gear, House, MagnifyingGlassBold,UserCircle } from '@/app/images';
+import { useRouter } from '@/i18n/routing';
 
 type CommandItem = {
   label: string;
@@ -49,6 +49,10 @@ export const CommandPalette = () => {
     { label: tCmd('items.messages'), icon: <EnvelopeSimple />, action: () => navigate('/module/msg'), group: tCmd('groups.modules') },
     { label: tCmd('items.materials'), icon: <Books />, action: () => navigate('/module/mob'), group: tCmd('groups.modules') },
     { label: tCmd('items.announcements'), icon: <ChatsTeardrop />, action: () => navigate('/module/announcementseditor'), group: tCmd('groups.modules') },
+    { label: tCmd('items.grading'), icon: <GraduationCap size={16} />, action: () => navigate('/module/grading'), group: tCmd('groups.modules') },
+    { label: tCmd('items.certificates'), icon: <FileText size={16} />, action: () => navigate('/module/certificates'), group: tCmd('groups.modules') },
+    { label: tCmd('items.directory'), icon: <Contact size={16} />, action: () => navigate('/module/directory'), group: tCmd('groups.modules') },
+    { label: t('contacts'), icon: <Users size={16} />, action: () => navigate('/contacts'), group: tCmd('groups.navigation') },
     { label: t('admin'), icon: <Shield size={16} />, action: () => navigate('/module/admin'), group: tCmd('groups.navigation') },
   ];
 

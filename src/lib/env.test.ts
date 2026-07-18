@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('env schema validation', () => {
   const originalEnv = { ...process.env };
@@ -17,6 +17,7 @@ describe('env schema validation', () => {
     vi.stubEnv('API_BASE_URL', 'https://api.example.com');
     vi.stubEnv('DATABASE_URL', '');
     vi.stubEnv('JWT_SECRET', '');
+    vi.stubEnv('NEXT_PUBLIC_LOCAL_AUTH', '');
 
     const { env } = await import('@/lib/env');
     expect(env.DATABASE_URL).toBe('file:./dev.db');

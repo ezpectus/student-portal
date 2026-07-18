@@ -1,11 +1,11 @@
 'use server';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
+import { apiFetch } from '@/lib/client';
 import { Term } from '@/types/models/term';
 
 export async function getTerm() {
-  const response = await apiFetch<Term>('/term');
+  const response = await apiFetch('/term');
   if (!response.ok) {
     throwApiError(response.status);
   }

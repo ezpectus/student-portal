@@ -1,18 +1,17 @@
 'use server';
 
 import { revalidatePath, revalidateTag } from 'next/cache';
-
 import { z } from 'zod';
 
-import { apiFetch } from '@/lib/client';
+import { AnnouncementCreate } from '@/app/[locale]/(private)/module/announcementseditor/types';
+import { LOCALE } from '@/i18n/routing';
 import { throwApiError } from '@/lib/api-error';
-import { validateInput } from '@/lib/validate';
+import { apiFetch } from '@/lib/client';
 import { ANNOUNCEMENTS_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { isOutdated } from '@/lib/date.utils';
 import { retryWithBackoff } from '@/lib/retry';
-import { LOCALE } from '@/i18n/routing';
+import { validateInput } from '@/lib/validate';
 import { AdminAnnouncementItem, Announcement } from '@/types/models/announcement';
-import { AnnouncementCreate } from '@/app/[locale]/(private)/module/announcementseditor/types';
 
 // URL pathname (no [locale] prefix, no route group). Matches the convention
 // used by other actions in the repo, e.g. certificates.actions revalidating
@@ -44,7 +43,7 @@ export const getAdminAnnouncements = async (query: AdminAnnouncementsQuery): Pro
 
     const qs = params.toString();
     const url = qs ? `announcements/admin?${qs}` : 'announcements/admin';
-    const response = await apiFetch<AdminAnnouncementItem[]>(url, {
+    const response = await apiFetch(url, {
       next: { revalidate: 300, tags: [ANNOUNCEMENTS_CACHE_TAG] },
     });
 
@@ -63,7 +62,7 @@ export const getAdminAnnouncements = async (query: AdminAnnouncementsQuery): Pro
 
 export const getAdminAnnouncementById = async (id: number): Promise<AdminAnnouncementItem> => {
   try {
-    const response = await apiFetch<AdminAnnouncementItem>(`announcements/admin/${id}`);
+    const response = await apiFetch(`announcements/admin/${id}`);
 
     if (!response.ok) {
       throwApiError(response.status, 'getAdminAnnouncementById');
@@ -77,7 +76,7 @@ export const getAdminAnnouncementById = async (id: number): Promise<AdminAnnounc
 
 export const getAnnouncements = async ({ excludeOutdated = false }: { excludeOutdated?: boolean } = {}) => {
   try {
-    const response = await retryWithBackoff(() => apiFetch<Announcement[]>('announcements', {
+    const response = await retryWithBackoff(() => apiFetch('announcements', {
       next: { revalidate: 300, tags: [ANNOUNCEMENTS_CACHE_TAG] },
     }), {
       maxAttempts: 2,
@@ -175,7 +174,7 @@ export const deleteAnnouncement = async (id: number): Promise<void> => {
 
 export const getRoles = async () => {
   try {
-    const response = await apiFetch<string[]>('roles');
+    const response = await apiFetch('roles');
     if (!response.ok) {
       return [];
     }
@@ -187,7 +186,7 @@ export const getRoles = async () => {
 
 export const getStudyForms = async () => {
   try {
-    const response = await apiFetch<string[]>('study-forms');
+    const response = await apiFetch('study-forms');
     if (!response.ok) {
       return [];
     }
@@ -199,7 +198,7 @@ export const getStudyForms = async () => {
 
 export const getCourses = async () => {
   try {
-    const response = await apiFetch<number[]>('courses');
+    const response = await apiFetch('courses');
     if (!response.ok) {
       return [];
     }

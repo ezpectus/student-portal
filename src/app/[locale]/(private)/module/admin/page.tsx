@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { getAdminStats, getAdminUsers, getDbStats, getFaculties } from '@/actions/admin.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { LocaleProps } from '@/types/locale-props';
-import { getAdminUsers, getAdminStats, getDbStats, getFaculties } from '@/actions/admin.actions';
 
 import { AdminPageContent } from './admin-page-content';
 

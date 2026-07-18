@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
 import { z } from 'zod';
 
-import { validateInput } from '@/lib/validate';
 import { ValidationError } from '@/lib/errors';
+import { validateInput } from '@/lib/validate';
 
 describe('validateInput', () => {
   const testSchema = z.object({

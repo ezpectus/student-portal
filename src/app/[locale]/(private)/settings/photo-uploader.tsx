@@ -1,10 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
+
+import { Paragraph } from '@/components/typography/paragraph';
 import { Button } from '@/components/ui/button';
 import { ProfilePicture } from '@/components/ui/profile-picture';
-import { Paragraph } from '@/components/typography/paragraph';
-import { useTranslations } from 'next-intl';
 
 const FILE_MAX_SIZE = 1024 * 1024; // 1 Mb
 const FILE_TYPES = ['image/png', 'image/jpeg'];

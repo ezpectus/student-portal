@@ -2,13 +2,12 @@
 
 import { revalidateTag } from 'next/cache';
 import queryString from 'query-string';
-
 import { z } from 'zod';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
-import { validateInput } from '@/lib/validate';
+import { apiFetch } from '@/lib/client';
 import { MESSAGES_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { validateInput } from '@/lib/validate';
 import { MailFilter } from '@/types/enums/mail-filter';
 import { EntityIdName } from '@/types/models/entity-id-name';
 import { Group } from '@/types/models/group';
@@ -18,7 +17,7 @@ import { Message } from '@/types/models/message';
  * @throws {ActionError} On API failure.
  */
 export async function getMails(filter: MailFilter = MailFilter.Incoming) {
-  const response = await apiFetch<Message[]>(`/mail?filter=${filter}`, {
+  const response = await apiFetch(`/mail?filter=${filter}`, {
     next: { revalidate: 300, tags: [MESSAGES_CACHE_TAG] },
   });
   if (!response.ok) {
@@ -31,7 +30,7 @@ export async function getMails(filter: MailFilter = MailFilter.Incoming) {
  * @throws {ActionError} On API failure.
  */
 export async function getMail(mailId: number) {
-  const response = await apiFetch<Message>(`/mail/${mailId}`, {
+  const response = await apiFetch(`/mail/${mailId}`, {
     next: { revalidate: 300, tags: [MESSAGES_CACHE_TAG] },
   });
   if (!response.ok) {
@@ -41,7 +40,7 @@ export async function getMail(mailId: number) {
 }
 
 export async function getFacultyOptions() {
-  const response = await apiFetch<EntityIdName[]>('/mail/faculty-options');
+  const response = await apiFetch('/mail/faculty-options');
   if (!response.ok) {
     throwApiError(response.status);
   }
@@ -52,7 +51,7 @@ export async function getAllGroups() {
   const allFaculties = await getFacultyOptions();
   const allFacultiesIds = allFaculties.map((faculty) => faculty.id);
   const query = queryString.stringify({ faculties: allFacultiesIds }, { arrayFormat: 'none' });
-  const response = await apiFetch<EntityIdName[]>(`/mail/group-options?${query}`);
+  const response = await apiFetch(`/mail/group-options?${query}`);
   if (!response.ok) {
     throwApiError(response.status);
   }
@@ -66,7 +65,7 @@ export async function deleteMail(mailIds: number[], deleteForRecipient: boolean)
     { arrayFormat: 'none' },
   );
 
-  const response = await apiFetch<Message>(`/mail?${query}`, {
+  const response = await apiFetch(`/mail?${query}`, {
     method: 'DELETE',
   });
 
@@ -78,7 +77,7 @@ export async function deleteMail(mailIds: number[], deleteForRecipient: boolean)
 }
 
 export async function markAsImportant(mailIds: number[], isImportant: boolean) {
-  const response = await apiFetch<Message>(`/mail/important`, {
+  const response = await apiFetch(`/mail/important`, {
     method: 'PATCH',
     body: JSON.stringify({ mailIds: mailIds, isImportant: isImportant }),
   });
@@ -92,7 +91,7 @@ export async function markAsImportant(mailIds: number[], isImportant: boolean) {
 
 export async function getGroupOptions(facultyIds: number[]) {
   const query = queryString.stringify({ faculties: facultyIds }, { arrayFormat: 'none' });
-  const response = await apiFetch<Group[]>(`/mail/group-options?${query}`);
+  const response = await apiFetch(`/mail/group-options?${query}`);
   if (!response.ok) {
     throwApiError(response.status);
   }
@@ -102,7 +101,7 @@ export async function getGroupOptions(facultyIds: number[]) {
 
 export async function getStudentOptions(groups: number[]) {
   const query = queryString.stringify({ groups }, { arrayFormat: 'none' });
-  const response = await apiFetch<EntityIdName[]>(`/mail/student-options?${query}`);
+  const response = await apiFetch(`/mail/student-options?${query}`);
   if (!response.ok) {
     throwApiError(response.status);
   }
@@ -110,7 +109,7 @@ export async function getStudentOptions(groups: number[]) {
 }
 
 export async function getEmployeeOptions(search: string) {
-  const response = await apiFetch<EntityIdName[]>(`/mail/employee-options?search=${search}`);
+  const response = await apiFetch(`/mail/employee-options?search=${search}`);
   if (!response.ok) {
     throwApiError(response.status);
   }
@@ -136,7 +135,7 @@ const sendMailSchema = z.object({
 export async function sendMail(params: SendMailParams) {
   const validated = validateInput(sendMailSchema, params, 'sendMail');
 
-  const response = await apiFetch<Message>('/mail', {
+  const response = await apiFetch('/mail', {
     method: 'POST',
     body: JSON.stringify(validated),
   });
@@ -152,7 +151,7 @@ export async function sendMail(params: SendMailParams) {
  */
 export async function getUnreadMailCount() {
   try {
-    const response = await apiFetch<Message[]>('/mail?filter=incoming', {
+    const response = await apiFetch('/mail?filter=incoming', {
       next: { revalidate: 60, tags: [MESSAGES_CACHE_TAG] },
     });
     if (!response.ok) return 0;

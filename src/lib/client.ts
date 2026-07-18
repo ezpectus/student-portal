@@ -4,9 +4,10 @@ import { cookies, headers as nextHeaders } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 
 import { DEFAULT_LOCALE } from '@/i18n/routing';
+import { CircuitBreakerOpenError,withCircuitBreaker } from '@/lib/circuit-breaker';
 import { env } from '@/lib/env';
-import { withCircuitBreaker, CircuitBreakerOpenError } from '@/lib/circuit-breaker';
 import { logger } from '@/lib/logger';
+
 import { TOKEN_COOKIE_NAME } from './constants/cookies';
 
 const apiLogger = logger.createScoped('api');
@@ -20,7 +21,7 @@ const getLocaleSafe = async () => {
 };
 
 const createApiFetch = (basePath: string) => {
-  return async <T = unknown>(url: string | URL, options: RequestInit = {}): Promise<Response> => {
+  return async (url: string | URL, options: RequestInit = {}): Promise<Response> => {
     const { headers = {}, ...otherOptions } = options;
     const resolvedCookies = await cookies();
     const jwt = resolvedCookies.get(TOKEN_COOKIE_NAME)?.value;

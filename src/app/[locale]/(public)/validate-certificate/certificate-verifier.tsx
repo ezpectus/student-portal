@@ -1,24 +1,25 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import * as z from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { verifyCertificate } from '@/actions/certificates.actions';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
-import { LoadingState } from '@/app/[locale]/(public)/validate-certificate/components/loading-state';
-import { EmptyState } from '@/app/[locale]/(public)/validate-certificate/components/empty-state';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+
+import { verifyCertificate } from '@/actions/certificates.actions';
 import { CertificateDetails } from '@/app/[locale]/(public)/validate-certificate/components/certificate-details';
+import { EmptyState } from '@/app/[locale]/(public)/validate-certificate/components/empty-state';
+import { LoadingState } from '@/app/[locale]/(public)/validate-certificate/components/loading-state';
 import { Warning } from '@/app/images';
 import { Paragraph } from '@/components/typography';
-import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { env } from '@/lib/env';
+import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
 
 export function CertificateVerifier() {
   const autoSubmittedRef = useRef(false);

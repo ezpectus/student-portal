@@ -1,4 +1,5 @@
 import { Paragraph } from '@/components/typography';
+
 import { ContactLink } from './contact-link';
 
 interface ProcessedContact {

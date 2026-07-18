@@ -1,10 +1,12 @@
 'use client';
 
-import { Heading2 } from '@/components/typography/headers';
-import { CreditModule } from '@/types/models/current-control/credit-module';
 import { useTranslations } from 'next-intl';
-import { InfoItem } from './components/info-item';
+
+import { Heading2 } from '@/components/typography/headers';
 import { Separator } from '@/components/ui/separator';
+import { CreditModule } from '@/types/models/current-control/credit-module';
+
+import { InfoItem } from './components/info-item';
 
 interface Props {
   creditModule: CreditModule;

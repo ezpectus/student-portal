@@ -1,10 +1,11 @@
 import { NextRequest } from 'next/server';
-import { needsLocaleHandling } from './middleware/utils';
+
 import { authenticationMiddleware } from './middleware/authentication.middleware';
 import { intlMiddleware } from './middleware/intl.middleware';
+import { needsLocaleHandling } from './middleware/utils';
 
 export const config = {
-  matcher: ['/', `/(uk|en)/:path*`, '/((?!_next|api|favicon.ico|.*\\.[^/]+$).*)'],
+  matcher: ['/', `/(uk|en|pl|de)/:path*`, '/((?!_next|api|favicon.ico|.*\\.[^/]+$).*)'],
 };
 
 export async function middleware(request: NextRequest) {

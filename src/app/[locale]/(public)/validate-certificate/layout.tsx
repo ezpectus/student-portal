@@ -1,7 +1,9 @@
 import { setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
-import { Header } from '../header';
+
 import { Footer } from '@/app/[locale]/(public)/footer';
+import { LocaleProps } from '@/types/locale-props';
+
+import { Header } from '../header';
 
 interface Props extends LocaleProps {
   children: React.ReactNode;

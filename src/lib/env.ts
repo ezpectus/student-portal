@@ -1,16 +1,22 @@
 import { z } from 'zod';
 
+const withDefault = <T extends z.ZodTypeAny>(schema: T, defaultValue: string) =>
+  z.preprocess(
+    (val) => (val === '' || val === undefined ? defaultValue : val),
+    schema,
+  );
+
 const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  NODE_ENV: withDefault(z.enum(['development', 'production', 'test']), 'development'),
 
   API_BASE_URL: z.string().url(),
   MAIN_COOKIE_DOMAIN: z.string().optional(),
   ROOT_COOKIE_DOMAIN: z.string().optional(),
 
-  DATABASE_URL: z.string().default('file:./dev.db'),
-  JWT_SECRET: z.string().default('student-portal-demo-secret'),
+  DATABASE_URL: withDefault(z.string(), 'file:./dev.db'),
+  JWT_SECRET: withDefault(z.string(), 'student-portal-demo-secret'),
 
-  NEXT_PUBLIC_LOCAL_AUTH: z.string().optional().default('true'),
+  NEXT_PUBLIC_LOCAL_AUTH: withDefault(z.string(), 'true'),
   NEXT_PUBLIC_SHOW_DEMO_CREDENTIALS: z.string().optional().default('false'),
   NEXT_PUBLIC_BETA_LOGO: z.string().optional(),
 

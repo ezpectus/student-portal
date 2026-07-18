@@ -1,13 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
+import { updateAnnouncement } from "@/actions/announcement.actions";
+import { useServerErrorToast } from "@/hooks/use-server-error-toast";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "@/i18n/routing";
-import { AnnouncementFormValues, toAnnouncementCreate } from '../../components/schema';
-import { useTranslations } from "next-intl";
-import { updateAnnouncement } from "@/actions/announcement.actions";
+
 import { AnnouncementEditorView } from "../../components/announcement-editor-view";
+import { AnnouncementFormValues, toAnnouncementCreate } from '../../components/schema';
 import { LIST_PATH } from "../../constants";
-import { useServerErrorToast } from "@/hooks/use-server-error-toast";
 
 interface Props {
     id: number;

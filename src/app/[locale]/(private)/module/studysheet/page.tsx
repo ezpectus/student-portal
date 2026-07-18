@@ -1,6 +1,7 @@
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
 import { getMonitoring } from '@/actions/monitoring.actions';
 import { StudySheetContent } from '@/app/[locale]/(private)/module/studysheet/components/study-sheet-content';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LocaleProps } from '@/types/locale-props';
 
 export async function generateMetadata({ params }: LocaleProps) {

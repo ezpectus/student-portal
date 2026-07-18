@@ -1,16 +1,17 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { Heading4, Heading6 } from '@/components/typography/headers';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { User } from '@/types/models/user';
-import { USER_CATEGORIES } from '@/lib/constants/user-category';
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { dash } from 'radash';
+
 import { LecturerInfo } from '@/app/[locale]/(private)/profile/components/lecturer-info';
 import { StudentInfo } from '@/app/[locale]/(private)/profile/components/student-info';
+import { Heading4, Heading6 } from '@/components/typography/headers';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { ProfilePicture } from '@/components/ui/profile-picture';
-import { dash } from 'radash';
-import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+import { Separator } from '@/components/ui/separator';
+import { USER_CATEGORIES } from '@/lib/constants/user-category';
+import { cn } from '@/lib/utils';
+import { User } from '@/types/models/user';
 
 interface Props {
   user: User;

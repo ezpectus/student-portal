@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
 
-const TOAST_LIMIT = 1;
+const TOAST_LIMIT = 3;
 const TOAST_REMOVE_DELAY = 5000;
 
 type ToasterToast = ToastProps & {
@@ -186,4 +186,12 @@ function useToast() {
   };
 }
 
-export { useToast, toast };
+export { toast, useToast };
+
+const successToast = (title: React.ReactNode, description?: React.ReactNode) =>
+  toast({ title: title as string, description: description as string, variant: 'default' });
+
+const errorToast = (title: React.ReactNode, description?: React.ReactNode) =>
+  toast({ title: title as string, description: description as string, variant: 'destructive' });
+
+export { successToast, errorToast };

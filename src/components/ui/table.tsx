@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { SortIcon } from '@/components/ui/sort-icon';
+import { cn } from '@/lib/utils';
 
 type SortDirection = 'asc' | 'desc' | null;
 type SortHandlers = Record<
@@ -90,4 +90,4 @@ const TableCaption = ({ className, ref, ...props }: React.ComponentProps<'captio
 );
 TableCaption.displayName = 'TableCaption';
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption,TableCell, TableFooter, TableHead, TableHeader, TableRow };

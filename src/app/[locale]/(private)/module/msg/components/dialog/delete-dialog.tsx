@@ -1,18 +1,19 @@
+import { useTranslations } from 'next-intl';
+import { Dispatch } from 'react';
+
 import { deleteMail } from '@/actions/msg.actions';
 import { Button } from '@/components/ui/button';
-
 import {
   Dialog,
-  DialogTitle,
-  DialogFooter,
   DialogContent,
-  DialogHeader,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useTranslations } from 'next-intl';
+
 import { Action } from '../types';
-import { Dispatch } from 'react';
 
 interface Props {
   selectedRows: number[];

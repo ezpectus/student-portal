@@ -1,7 +1,7 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { getLocalUser } from '@/actions/local-auth.actions';
+import { prisma } from '@/lib/prisma';
 
 export async function getAuditLogs(page: number = 1, pageSize: number = 20) {
   const user = await getLocalUser();

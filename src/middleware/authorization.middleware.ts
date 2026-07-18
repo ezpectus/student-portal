@@ -1,8 +1,9 @@
 import { NextRequest } from 'next/server';
-import { MODULES_BASE_PATH } from './constants';
-import { getAuthInfo, gotoNotFound, matchesUrl } from './utils';
 import UrlPattern from 'url-pattern';
+
+import { MODULES_BASE_PATH } from './constants';
 import { intlMiddleware } from './intl.middleware';
+import { getAuthInfo, gotoNotFound, matchesUrl } from './utils';
 
 const isAuthorized = async (request: NextRequest) => {
   const payload = getAuthInfo(request);

@@ -1,15 +1,17 @@
 'use server';
 
+import { cookies } from 'next/headers';
+import { getTranslations } from 'next-intl/server';
+import { group } from 'radash';
+
+import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
+import { MODULES } from '@/lib/constants/modules';
 import { getJWTPayload } from '@/lib/jwt';
 import { CampusJwtPayload } from '@/types/campus-jwt-payload';
-import { getTranslations } from 'next-intl/server';
-import { cookies } from 'next/headers';
-import { getUserDetails } from './auth.actions';
 import { MenuGroup } from '@/types/menu-item-meta';
-import { MODULES } from '@/lib/constants/modules';
 import { Module } from '@/types/module';
-import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
-import { group } from 'radash';
+
+import { getUserDetails } from './auth.actions';
 
 type Translation = Awaited<ReturnType<typeof getTranslations>>;
 

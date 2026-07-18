@@ -88,14 +88,16 @@
       "viewcontrol": "Перегляд контролів",
       "pk2026": "Вступ 2026 (магістратура)",
       "pk2026admin": "Вступ 2026 (адміністратор)",
-      "studbonuspoints": "Додаткові бали"
+      "studbonuspoints": "Додаткові бали",
+      "grading": "Журнал оцінок"
     },
     "menu": {
       "main": "Головна",
       "profile": "Профіль",
       "settings": "Налаштування",
       "contacts": "Контакти",
-      "admin": "Адмін Панель"
+      "admin": "Адмін Панель",
+      "grading": "Журнал оцінок"
     },
     "user-category": {
       "student": "Студент",
@@ -381,7 +383,9 @@
         "attended": "Відвідано",
         "missed": "Пропущено",
         "rate": "Відсоток",
-        "export": "Експорт"
+        "export": "Експорт",
+        "export-grades": "Експорт оцінок (CSV)",
+        "export-attendance": "Експорт відвідуваності (CSV)"
       },
       "cards": {
         "information": {
@@ -1133,7 +1137,10 @@
       "schedule": "Розклад",
       "messages": "Повідомлення",
       "materials": "Навчальні матеріали",
-      "announcements": "Оголошення"
+      "announcements": "Оголошення",
+      "grading": "Журнал оцінок",
+      "certificates": "Сертифікати",
+      "directory": "Довідник"
     },
     "shortcuts": {
       "title": "Гарячі клавіші",
@@ -1205,6 +1212,34 @@
       "success": {
         "title": "Профіль оновлено",
         "description": "Ласкаво просимо до Student Portal!"
+      }
+    },
+    "grading": {
+      "title": "Журнал оцінок",
+      "empty": "У вас немає призначених курсів",
+      "select-course": "Оберіть курс",
+      "select-placeholder": "Оберіть курс зі списку",
+      "students": "студ.",
+      "loading": "Завантаження студентів...",
+      "no-students": "На цьому курсі немає студентів",
+      "validation": {
+        "grade-range": "Оцінка має бути від 0 до 100"
+      },
+      "success": {
+        "grade-updated": "Оцінку оновлено"
+      },
+      "table": {
+        "student": "Студент",
+        "group": "Група",
+        "credits": "Кредити",
+        "grade-type": "Тип оцінки",
+        "grade": "Оцінка",
+        "actions": "Дії"
+      },
+      "actions": {
+        "edit": "Змінити",
+        "save": "Зберегти",
+        "cancel": "Скасувати"
       }
     }
   }

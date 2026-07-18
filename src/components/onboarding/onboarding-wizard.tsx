@@ -1,21 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { updateOnboardingProfile, uploadOnboardingPhoto, completeOnboarding } from '@/actions/onboarding.actions';
+import { completeOnboarding,updateOnboardingProfile, uploadOnboardingPhoto } from '@/actions/onboarding.actions';
+import { PhotoUploader } from '@/app/[locale]/(private)/settings/photo-uploader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { PhotoUploader } from '@/app/[locale]/(private)/settings/photo-uploader';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 import { toast } from '@/hooks/use-toast';
+import { useRouter } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
 const TOTAL_STEPS = 3;

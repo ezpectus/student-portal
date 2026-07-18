@@ -19,7 +19,8 @@ export type FeatureName =
   | 'messages'
   | 'curator'
   | 'colleagueContacts'
-  | 'schedule';
+  | 'schedule'
+  | 'grading';
 
 const DEFAULT_TOGGLES: Record<FeatureName, boolean> = {
   darkMode: true,
@@ -41,6 +42,7 @@ const DEFAULT_TOGGLES: Record<FeatureName, boolean> = {
   curator: true,
   colleagueContacts: true,
   schedule: true,
+  grading: true,
 };
 
 const ENV_OVERRIDES: Partial<Record<FeatureName, boolean>> = {

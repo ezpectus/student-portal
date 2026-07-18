@@ -1,15 +1,16 @@
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar/app-sidebar';
-import { Header } from './header';
-import { getUserDetails } from '@/actions/auth.actions';
 import { redirect } from 'next/navigation';
+import React from 'react';
+
+import { getUserDetails } from '@/actions/auth.actions';
+import { AppSidebar } from '@/components/app-sidebar/app-sidebar';
 import { Footer } from '@/components/app-sidebar/footer';
 import { CommandPalette } from '@/components/command-palette/command-palette';
 import { KeyboardShortcutsHelp } from '@/components/command-palette/keyboard-shortcuts-help';
-import { SessionExpiryBanner } from '@/components/session-expiry-banner';
-import React from 'react';
-
 import { PrivacyConsentDialog } from '@/components/privacy-consent-dialog';
+import { SessionExpiryBanner } from '@/components/session-expiry-banner';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+
+import { Header } from './header';
 
 export default async function MainPageLayout({
   children,

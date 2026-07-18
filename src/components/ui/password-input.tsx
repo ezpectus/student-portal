@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Input, InputProps } from '@/components/ui/input';
+
+import { EyeClosedRegular,EyeRegular } from '@/app/images';
 import { Button } from '@/components/ui/button';
-import { EyeRegular, EyeClosedRegular } from '@/app/images';
+import { Input, InputProps } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 const PasswordInput = ({ className, type, ref, ...props }: InputProps) => {

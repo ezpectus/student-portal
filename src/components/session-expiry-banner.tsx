@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { getSessionExpiry } from '@/actions/session.actions';
+import { useEffect, useState } from 'react';
+
 import { logout } from '@/actions/auth.actions';
+import { getSessionExpiry } from '@/actions/session.actions';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const WARNING_THRESHOLD_MS = 5 * 60 * 1000;
 const CHECK_INTERVAL_MS = 30 * 1000;

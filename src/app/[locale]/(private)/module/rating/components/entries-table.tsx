@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { sum, toggle } from 'radash';
+import React, { useState } from 'react';
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatNumber, linkifyText } from '@/lib/utils';
-import { EntriesTableProps, GroupedByWorkKind } from '../types';
+
 import { useGroupedEntries } from '../hooks';
+import { EntriesTableProps, GroupedByWorkKind } from '../types';
 
 function NumericTableHead({ children }: { children: React.ReactNode }) {
   return <TableHead className="w-24 whitespace-nowrap text-right">{children}</TableHead>;

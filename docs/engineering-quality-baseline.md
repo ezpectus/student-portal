@@ -45,7 +45,7 @@
 - Admin action authorization supports remote API fallback but should eventually use a single verified session abstraction.
 - Password reset, refresh-token rotation remain. Rate limiting (in-memory) and logout-all-devices are implemented.
 - Audit log model added to Prisma schema; admin actions (delete user, update status) are logged.
-- Automated Vitest/Playwright coverage is not yet configured.
+- Vitest unit tests configured: circuit-breaker, retry, validate, errors, features, logger, csv-export, password-strength, audit actions. Playwright E2E tests configured: auth, grades, messages.
 - A clean-install baseline exposed 24 TypeScript errors; fixes are documented in changelog 28.
 - The lockfile must be regenerated after the Next/Radix dependency update; do not use `npm audit fix --force` because it conflicts with the pinned override.
 - The Docker demo seeds data on every container recreation when `SEED_DATABASE=true`; use a persistent volume and disable reseeding for production.

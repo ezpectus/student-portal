@@ -1,10 +1,11 @@
-import { getCertificateList, getCertificateTypes } from '@/actions/certificates.actions';
-import { LocaleProps } from '@/types/locale-props';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { getCertificateList, getCertificateTypes } from '@/actions/certificates.actions';
+import { HistoryTable } from '@/app/[locale]/(private)/module/certificates/components/history-table';
+import { RequestCertificateForm } from '@/app/[locale]/(private)/module/certificates/components/request-certificate-form';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Heading2, Paragraph } from '@/components/typography';
-import { RequestCertificateForm } from '@/app/[locale]/(private)/module/certificates/components/request-certificate-form';
-import { HistoryTable } from '@/app/[locale]/(private)/module/certificates/components/history-table';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'private.certificate';
 

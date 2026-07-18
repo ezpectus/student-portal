@@ -1,9 +1,11 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+import * as React from 'react';
+
 import { SpinnerGap } from '@/app/images';
-import { cn } from '@/lib/utils';
 import { Link } from '@/i18n/routing';
+import { cn } from '@/lib/utils';
+
 import { IconPosition } from '../types';
 
 const textButtonVariants = cva(

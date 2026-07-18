@@ -1,8 +1,9 @@
-import { getMonitoringById } from '@/actions/monitoring.actions';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { LocaleProps } from '@/types/locale-props';
+
+import { getMonitoringById } from '@/actions/monitoring.actions';
 import { StudySheetContent } from '@/app/[locale]/(private)/module/studysheet/[id]/page.content';
 import { LoadingScreen } from '@/components/loading-screen';
+import { LocaleProps } from '@/types/locale-props';
 
 const INTL_NAMESPACE = 'private.study-sheet';
 

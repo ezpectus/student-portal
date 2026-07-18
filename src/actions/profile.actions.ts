@@ -2,13 +2,12 @@
 
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
-
 import { z } from 'zod';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
-import { validateInput } from '@/lib/validate';
+import { apiFetch } from '@/lib/client';
 import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { validateInput } from '@/lib/validate';
 import { Contact, ContactType } from '@/types/models/contact';
 
 /**
@@ -16,7 +15,7 @@ import { Contact, ContactType } from '@/types/models/contact';
  */
 export async function getContacts() {
   try {
-    const response = await apiFetch<Contact[]>('profile/contacts', {
+    const response = await apiFetch('profile/contacts', {
       next: { revalidate: 300, tags: [USER_PROFILE_CACHE_TAG] },
     });
 
@@ -32,7 +31,7 @@ export async function getContacts() {
  */
 export async function getContactTypes() {
   try {
-    const response = await apiFetch<ContactType[]>('profile/contacts/types', {
+    const response = await apiFetch('profile/contacts/types', {
       next: { revalidate: 3600, tags: [USER_PROFILE_CACHE_TAG] },
     });
 

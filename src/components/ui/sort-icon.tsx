@@ -1,4 +1,4 @@
-import { CaretUp, CaretDown } from '@/app/images';
+import { CaretDown,CaretUp } from '@/app/images';
 
 export function SortIcon({ dir }: { dir: 'asc' | 'desc' | null }) {
   if (!dir) return null;

@@ -1,15 +1,16 @@
-import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { getCertificate } from '@/actions/certificates.actions';
-import { Description, Heading2, Paragraph } from '@/components/typography';
-import { Card } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Warning } from '@/app/images';
-import { TextDivider } from '@/components/ui/text-divider';
-import { CertificateStatusBadge } from '@/app/[locale]/(private)/module/certificates/components/certificate-status-badge';
-import { Badge } from '@/components/ui/badge';
 import dayjs from 'dayjs';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { getCertificate } from '@/actions/certificates.actions';
+import { CertificateStatusBadge } from '@/app/[locale]/(private)/module/certificates/components/certificate-status-badge';
 import ActionButtons from '@/app/[locale]/(private)/module/facultycertificate/[id]/action-buttons';
+import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
+import { Warning } from '@/app/images';
+import { Description, Heading2, Paragraph } from '@/components/typography';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import { TextDivider } from '@/components/ui/text-divider';
 
 interface Props {
   params: Promise<{ id: number; locale: string }>;

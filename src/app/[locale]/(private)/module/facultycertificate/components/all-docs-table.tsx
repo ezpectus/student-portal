@@ -1,27 +1,29 @@
 'use client';
 
-import { memo } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useTranslations } from 'next-intl';
 import dayjs from 'dayjs';
-import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { memo } from 'react';
+
+import { signCertificate, updateCertificate, UpdateCertificateBody } from '@/actions/certificates.actions';
+import { CertificateStatusBadge } from '@/app/[locale]/(private)/module/certificates/components/certificate-status-badge';
+import { RejectDialog } from '@/app/[locale]/(private)/module/facultycertificate/components/reject-dialog';
+import { buttonDisableController } from '@/app/[locale]/(private)/module/facultycertificate/utils/button-state-controller';
+import { EmptyState } from '@/components/utils/empty-state';
+import { FileText } from 'lucide-react';
+import { printCertificate } from '@/app/[locale]/(private)/module/facultycertificate/utils/print-certificate';
 import { Check, EyeBold, PencilRegular, Printer, X } from '@/app/images';
 import { Badge } from '@/components/ui/badge';
-import { printCertificate } from '@/app/[locale]/(private)/module/facultycertificate/utils/print-certificate';
-import { Link } from '@/i18n/routing';
-import { buttonDisableController } from '@/app/[locale]/(private)/module/facultycertificate/utils/button-state-controller';
-import { useServerErrorToast } from '@/hooks/use-server-error-toast';
-
-import { RejectDialog } from '@/app/[locale]/(private)/module/facultycertificate/components/reject-dialog';
-import { CertificateStatusBadge } from '@/app/[locale]/(private)/module/certificates/components/certificate-status-badge';
-import { Certificate } from '@/types/models/certificate/certificate';
-import { usePagination } from '@/hooks/use-pagination';
+import { Button } from '@/components/ui/button';
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Show } from '@/components/utils/show';
-import { PAGE_SIZE_DEFAULT } from '@/lib/constants/page-size';
+import { usePagination } from '@/hooks/use-pagination';
+import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 import { useTableSort } from '@/hooks/use-table-sort';
-import { signCertificate, updateCertificate, UpdateCertificateBody } from '@/actions/certificates.actions';
 import { useToast } from '@/hooks/use-toast';
+import { Link } from '@/i18n/routing';
+import { PAGE_SIZE_DEFAULT } from '@/lib/constants/page-size';
+import { Certificate } from '@/types/models/certificate/certificate';
 
 interface Props {
   certificates: Certificate[];
@@ -69,7 +71,7 @@ export const AllDocsTable = memo(function DocsTable({ certificates, totalCount }
   const { page } = usePagination(PAGE_SIZE_DEFAULT, certificates);
 
   if (certificates.length === 0) {
-    return <p className="text-muted-foreground py-12 text-center text-sm">{tTable('empty')}</p>;
+    return <EmptyState icon={<FileText className="h-6 w-6" />} title={tTable('empty')} />;
   }
 
   return (

@@ -3,8 +3,8 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 import qs from 'query-string';
 
-import { apiFetch } from '@/lib/client';
 import { throwApiError } from '@/lib/api-error';
+import { apiFetch } from '@/lib/client';
 import { CERTIFICATES_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { parseContentDispositionFilename } from '@/lib/utils';
 import { Certificate } from '@/types/models/certificate/certificate';
@@ -12,7 +12,7 @@ import { CertificateVerificationResult } from '@/types/models/certificate/certif
 import { CertificateStatus } from '@/types/models/certificate/status';
 
 export async function getCertificateTypes() {
-  const response = await apiFetch<string[]>('/certificates/types', {
+  const response = await apiFetch('/certificates/types', {
     next: { revalidate: 3600, tags: [CERTIFICATES_CACHE_TAG] },
   });
   if (!response.ok) {
@@ -60,7 +60,7 @@ export async function createCertificateRequest(body: CertificateRequestBody) {
 }
 
 export async function getCertificateList() {
-  const response = await apiFetch<Certificate[]>('/certificates', {
+  const response = await apiFetch('/certificates', {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
   if (!response.ok) {
@@ -72,7 +72,7 @@ export async function getCertificateList() {
 
 export async function getAllFacultyCertificates(query: FacultyCertificatesQuery = {}) {
   const queryParams = qs.stringify(query);
-  const res = await apiFetch<Certificate[]>(`/certificates/all?${queryParams}`, {
+  const res = await apiFetch(`/certificates/all?${queryParams}`, {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
   if (!res.ok) {
@@ -106,7 +106,7 @@ export async function getCertificatePDF(id: number) {
 }
 
 export async function getCertificate(id: number) {
-  const res = await apiFetch<Certificate>(`/certificates/${id}`, {
+  const res = await apiFetch(`/certificates/${id}`, {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
   if (!res.ok) {
@@ -116,7 +116,7 @@ export async function getCertificate(id: number) {
 }
 
 export async function verifyCertificate(id: string) {
-  const response = await apiFetch<CertificateVerificationResult>(`/certificates/validate/${id}`);
+  const response = await apiFetch(`/certificates/validate/${id}`);
   if (!response.ok) {
     return 'error';
   }
@@ -132,7 +132,7 @@ export interface FacultyCertificatesQuery {
 }
 
 export async function getOtherFacultyCertificate() {
-  const res = await apiFetch<Certificate[]>('/certificates/all', {
+  const res = await apiFetch('/certificates/all', {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
 

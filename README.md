@@ -16,6 +16,7 @@ A production-grade SaaS web application for educational institutions. Built with
 - **Directory** — search faculty and staff by name, department, or contact type
 
 ### Faculty / Staff
+- **Grade Book** — select course, view enrolled students, edit grades inline with audit trail
 - **Certificate Management** — approve, reject, sign, and process student certificate requests
 - **Announcement Editor** — create, edit, and publish announcements with audience targeting
 - **Student Directory** — search and view student contact information
@@ -63,7 +64,7 @@ A production-grade SaaS web application for educational institutions. Built with
 | Charts | Recharts 3 (dashboard analytics) |
 | Icons | Lucide React + centralized SVG index (@svgr/webpack) |
 | Deploy | Vercel / Netlify / Docker multi-stage (node:22-alpine) |
-| Testing | Vitest (planned), Playwright (planned) |
+| Testing | Vitest (unit), Playwright (E2E) |
 
 ---
 
@@ -319,9 +320,14 @@ All environment variables are validated through a Zod schema at startup. No `pro
 
 - **Password hashing** — bcryptjs with 10 rounds
 - **JWT** stored in httpOnly cookies (not accessible via JavaScript)
+- **JWT validation** — Zod schema validates exp, modules, iss on every request
 - **Cookie flags** — `secure` and `sameSite: 'lax'` in production
 - **CSP** — Content-Security-Policy header on all routes
 - **HSTS** — Strict-Transport-Security with preload
+- **Rate limiting** — password-reset endpoint throttled per username
+- **Fetch timeout** — AbortSignal.timeout(10s) on all external API calls
+- **Circuit breaker** — 5xx errors trip circuit, fast-fail after 5 failures
+- **Audit logging** — all admin and grade mutations logged with user, action, metadata
 - **Environment validation** — Zod schema, no unvalidated env access
 - **URL allow-listing** — external redirects validated against trusted domains
 - **IP header sanitization** — X-Forwarded-For and X-Real-IP headers sanitized against spoofing
@@ -341,6 +347,14 @@ All environment variables are validated through a Zod schema at startup. No `pro
 | `npm run db:seed` | Seed database with demo data |
 | `npm run db:studio` | Open Prisma Studio (DB browser) |
 | `npm run db:generate` | Regenerate Prisma client |
+| `npm test` | Run unit tests (Vitest) |
+| `npm run test:e2e` | Run E2E tests (Playwright) |
+
+---
+
+## Roadmap
+
+See [docs/roadmap.md](./docs/roadmap.md) for the full feature roadmap including AI-powered predictions, parent portal, mobile app, LMS integration, webhook system, and multi-tenant architecture.
 
 ---
 

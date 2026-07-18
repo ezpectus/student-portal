@@ -1,11 +1,11 @@
 'use client';
 
-import * as React from 'react';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
-import { CaretLeftRegular, CaretRightRegular } from '@/app/images';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { CaretLeftRegular, CaretRightRegular } from '@/app/images';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -236,4 +236,4 @@ const CarouselNext = ({
 };
 CarouselNext.displayName = 'CarouselNext';
 
-export { type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext };
+export { Carousel, type CarouselApi, CarouselContent, CarouselItem, CarouselNext,CarouselPrevious };

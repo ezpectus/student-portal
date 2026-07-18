@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { env } from '@/lib/env';
 import { getCircuitState } from '@/lib/circuit-breaker';
+import { env } from '@/lib/env';
 import { prisma } from '@/lib/prisma';
 
 type CheckResult = {
@@ -82,6 +82,8 @@ export async function GET() {
     {
       status: overallStatus,
       timestamp: new Date().toISOString(),
+      version: process.env.npm_package_version ?? 'unknown',
+      uptime: process.uptime ? Math.round(process.uptime()) : undefined,
       checks,
     },
     { status: httpStatus },

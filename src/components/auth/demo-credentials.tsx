@@ -1,10 +1,10 @@
 'use client';
 
-import { KeyRound, Shield, GraduationCap, Presentation } from 'lucide-react';
+import { GraduationCap, KeyRound, Presentation,Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useTranslations } from 'next-intl';
 
 interface Props {
   onSelect?: (username: string, password: string) => void;

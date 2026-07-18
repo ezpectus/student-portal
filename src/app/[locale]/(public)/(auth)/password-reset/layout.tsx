@@ -4,6 +4,7 @@
 // This version of recaptcha library should be replace with official one,
 // when it starts to support React 19
 import { GoogleReCaptchaProvider } from 'react19-google-recaptcha-v3';
+
 import { env } from '@/lib/env';
 
 interface Props

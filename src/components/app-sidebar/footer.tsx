@@ -1,9 +1,10 @@
-import { Paragraph } from '../typography/paragraph';
-import { TextButton } from '../ui/text-button';
 import dayjs from 'dayjs';
-import RichText from '../typography/rich-text';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
+
+import { Paragraph } from '../typography/paragraph';
+import RichText from '../typography/rich-text';
+import { TextButton } from '../ui/text-button';
 
 const createFooterLinks = (t: Awaited<ReturnType<typeof getTranslations>>) => [
   { title: t('contacts'), url: '/contacts' },

@@ -1,0 +1,1246 @@
+{
+  "global": {
+    "metadata": {
+      "title": "Portal Studenta",
+      "description": "Portal Studenta"
+    },
+    "server-error": {
+      "title": "Coś poszło nie tak",
+      "description": "Wystąpił problem z Twoim żądaniem"
+    },
+    "error": {
+      "title": "Wystąpił błąd",
+      "description": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie lub odśwież stronę.",
+      "retry": "Spróbuj ponownie"
+    },
+    "session": {
+      "expiring-soon": "Your session will expire in {minutes} min. Please save your work."
+    },
+    "navigation": {
+      "back": "Wstecz",
+      "next": "Dalej"
+    },
+    "locale-switch": {
+      "switch-to-english": "Switch to English",
+      "switch-to-ukrainian": "Перейти на українську"
+    },
+    "misc": {
+      "download": "Pobierz",
+      "view": "Wyświetl",
+      "rows-per-page": "Rows per page",
+      "select-page-size": "Select page size"
+    },
+    "tooltip": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "not-found": {
+      "title": "Page not found",
+      "description": "We're sorry, but we can't find the page you requested. It may have been moved or deleted.",
+      "return": "Back to the main page",
+      "footer": "<paragraph>All rights reserved. © {year} Student Portal</paragraph>"
+    },
+    "modules": {
+      "directory": "Contact list",
+      "msg": "Messages",
+      "kurator": "Curator",
+      "announcementseditor": "Announcements management",
+      "facultycertificate": "Faculty certificate",
+      "rnp": "RNP",
+      "mob": "Methodological support",
+      "vote": "Survey Teacher through students eyes",
+      "studysheet": "Current control",
+      "rectorialcontrol": "Rectorial control",
+      "certificates": "Certificates",
+      "vedomoststud": "Semester control",
+      "studdoc": "Student documents",
+      "plans_individual": "Individual plans",
+      "journals": "Journals",
+      "np": "NP",
+      "lists": "Lists",
+      "sessiyaNPP": "Professor session",
+      "plans": "SPW's workload",
+      "attestation": "Calendar control",
+      "vedomost": "Session",
+      "vidpovidalniy": "Responsible",
+      "webometrics": "Translation of EIR metadata",
+      "attestationresults": "Results of calendar control",
+      "ekanat": "Dean’s office",
+      "editRNP": "RNP Editing Ruslan",
+      "hignyak": "Reporting for DNVR",
+      "rnpedit": "RNP Editing Alexey",
+      "rnpupd": "RNP Editing KM",
+      "rnpupd2": "RNP Editing KM 2",
+      "voteresult": "Survey results",
+      "vedomostadmin": "Session Administrator",
+      "zamdekan": "Deputy Dean",
+      "zavkaf": "Head of Department",
+      "zdekan": "Deans office",
+      "ekk": "EKK",
+      "bravook": "Bravo VC",
+      "studdocadmin": "Student documents (Admin)",
+      "yiystat": "Statistical data",
+      "adminpanel": "Admin panel",
+      "employment": "Employment system",
+      "admin": "Admin Panel",
+      "rating": "Archival SPW Rating",
+      "useract": "Bravo Requests",
+      "viewcontrol": "Review current control",
+      "pk2026": "Admission 2026 (Master's)",
+      "pk2026admin": "Admission 2026 (Administrator)",
+      "studbonuspoints": "Bonus points",
+      "grading": "Grade Book"
+    },
+    "menu": {
+      "main": "Home",
+      "profile": "Profile",
+      "settings": "Settings",
+      "contacts": "Contacts",
+      "admin": "Admin Panel",
+      "grading": "Grade Book"
+    },
+    "user-category": {
+      "student": "Student",
+      "spw": "SPW",
+      "admin": "Administrator"
+    },
+    "enums": {
+      "academic-degree": {
+        "none": "Not specified",
+        "candidate-of-sciences": "Candidate of Sciences",
+        "doctor-of-sciences": "Doctor of Sciences",
+        "ph-d": "Doctor of Philosophy (Ph.D.)"
+      },
+      "academic-status": {
+        "none": "Not specified",
+        "professor": "Professor",
+        "senior-research-associate": "Senior Research Associate",
+        "associate-professor": "Associate Professor",
+        "senior-researcher": "Senior Researcher"
+      },
+      "student-status": {
+        "dismissed": "Dismissed",
+        "studying": "Studying",
+        "on-academic-leave": "On Academic Leave"
+      },
+      "study-form": {
+        "none": "Not specified",
+        "evening": "Evening",
+        "full-time": "Full-Time",
+        "remote": "Remote",
+        "extern": "Extern",
+        "correspondence": "Correspondence",
+        "shortened": "Shortened",
+        "out-of-postgraduate": "Out Of Postgraduate",
+        "other": "Other"
+      },
+      "assessment-type": {
+        "exam": "Exam",
+        "individual": "Individual",
+        "attestation1": "Attestation #1",
+        "attestation2": "Attestation #2",
+        "total": "Total",
+        "graphic-work-izd": "Graphic Work [IZD]",
+        "dkr": "DKR",
+        "differentiated-credit": "Differentiated Credit",
+        "control-work-pmk": "Control Work [PMK]",
+        "course-work": "Course Work",
+        "course-project": "Course Project",
+        "laboratory": "Laboratory",
+        "laboratory-individual": "Individual Laboratory",
+        "lectures": "Lectures",
+        "lectures-individual": "Individual Lectures",
+        "module-control-pmk": "Module (thematic), Control Works [PMK]",
+        "undefined-izt": "Undefined [IZT]",
+        "final-attestation": "Final Attestation",
+        "practice": "Practice",
+        "practical": "Practical",
+        "practical-individual": "Individual Practical",
+        "rr-gr-dz-izd": "RR, GR, DZ [IZD]",
+        "referat-izd": "Referat [IZD]",
+        "calculation-work-izd": "Calculation Work [IZD]",
+        "calc-graphic-work-izd": "Calculation-Graphic Work [IZD]",
+        "self-study": "Self Study",
+        "credit": "Credit"
+      },
+      "record-type": {
+        "main": "Main",
+        "retake1": "First retake",
+        "retake2": "Second retake",
+        "individual": "Individual"
+      },
+      "employment-type": {
+        "unknown": "Unknown",
+        "full-time": "Full-time",
+        "part-time": "Part-time",
+        "part-time-internal": "Internal part-time",
+        "part-time-external": "External part-time"
+      },
+      "status": {
+        "passed": "Passed",
+        "unknown": "Unknown",
+        "expelled": "Expelled",
+        "rejected": "Rejected",
+        "pending": "Pending",
+        "absent": "Absent",
+        "sufficient": "Sufficient",
+        "good": "Good",
+        "very-good": "Very Good",
+        "excellent": "Excellent",
+        "processed": "Processed",
+        "approved": "Approved",
+        "created": "Created",
+        "error": "Error",
+        "in-queue": "In Queue",
+        "signed": "Signed"
+      },
+      "certificate-type": {
+        "employment-certificate": "Employment Certificate",
+        "studying-certificate": "Studying Certificate"
+      }
+    },
+    "footer": "<paragraph>© {year} Student Portal</paragraph>"
+  },
+  "auth": {
+    "login": {
+      "header": "Sign in",
+      "description": "Welcome back! Please enter your credentials to continue accessing your account and enjoy all available features.",
+      "or": "or",
+      "rememberMe": "Remember me",
+      "passwordReset": "Forgot my password",
+      "register": "Don't have an account? Sign up",
+      "publicLink": {
+        "support": "User support",
+        "curator-search": "Find curator",
+        "chat": "Support chat"
+      },
+      "field": {
+        "username": "Email address or username",
+        "password": "Password",
+        "error": "Invalid credentials",
+        "error-rate-limited": "Too many login attempts. Try again in {minutes} min."
+      },
+      "button": {
+        "login": "Sign in",
+        "kpi-id": "Sign in with KPI ID"
+      }
+    },
+    "register": {
+      "header": "Create account",
+      "description": "Sign up to access your courses, grades, schedule, and more.",
+      "field": {
+        "name": "Full name",
+        "email": "Email address",
+        "school-code": "School code",
+        "password": "Password",
+        "passwordConfirm": "Confirm password",
+        "role": "I am a...",
+        "role-student": "Student",
+        "role-teacher": "Teacher",
+        "error": {
+          "email-taken": "An account with this email already exists",
+          "school-not-found": "School not found for the provided code",
+          "generic": "Registration failed. Please try again."
+        }
+      },
+      "button": {
+        "register": "Sign up",
+        "login": "Already have an account? Sign in"
+      },
+      "validation": {
+        "name-required": "Full name is required",
+        "email-required": "Email is required",
+        "email-invalid": "Please enter a valid email address",
+        "password-required": "Password is required",
+        "password-min": "Password must be at least 8 characters",
+        "password-confirm-required": "Please confirm your password",
+        "school-code-required": "School code is required",
+        "password-strength": {
+          "weak": "Weak password",
+          "fair": "Fair password",
+          "good": "Good password",
+          "strong": "Strong password"
+        },
+        "password-match": "Passwords do not match"
+      }
+    },
+    "demo": {
+      "title": "Demo accounts",
+      "description": "For portfolio review only. Click a role to fill the form.",
+      "roles": {
+        "admin": "Administrator",
+        "teacher": "Teacher",
+        "student": "Student"
+      }
+    },
+    "kpi-id": {
+      "header": "Sign in",
+      "description": "You have successfully logged in with your KPI ID. Select the account you wish to log in with.",
+      "sign-in": "Sign in"
+    },
+    "passwordChange": {
+      "header": "Change password",
+      "description": "Now create a new password. Secure password includes digits, letters and delimiter symbols.",
+      "button": {
+        "set": "Set new password"
+      },
+      "field": {
+        "password": "New password",
+        "passwordRepeat": "Repeat password"
+      },
+      "success": {
+        "header": "Password changed",
+        "description": "Your password has been successfully changed. Click below to log in.",
+        "button": "Continue"
+      }
+    },
+    "passwordReset": {
+      "header": "Reset your password",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "button": {
+        "reset": "Reset password"
+      },
+      "field": {
+        "username": "Username or email address"
+      },
+      "success": {
+        "header": "Check your inbox",
+        "description": "We've sent you a link to reset your password on email {username}. Click below to sign in to your account.",
+        "retryMessage": "Didn't get an email? <link>Click to resend.</link>",
+        "button": "Continue",
+        "loading": "Loading..."
+      }
+    },
+    "footer": "All rights reserved. © {year} Student Portal"
+  },
+  "public": {
+    "verification": {
+      "header": "Certificate verification",
+      "search": {
+        "title": "Certificate verification:",
+        "label": "Certificate ID",
+        "placeholder": "Enter certificate ID",
+        "check": "Verify certificate"
+      },
+      "result": {
+        "title": "Verification result:",
+        "empty": "Nothing here yet",
+        "enter": "Enter the certificate ID to start verification",
+        "label": "Certificate ID",
+        "checking": "Verifying certificate...",
+        "wait": "Please wait while we verify the certificate",
+        "owner": "Certificate owner:",
+        "date": "Issue date:",
+        "type": "Certificate type:",
+        "purpose": "Purpose:",
+        "success": "Success verification",
+        "notfound": "Certificate not found",
+        "again": "Check certificate ID and try again or",
+        "contact-support": "<link>Contact support</link>",
+        "table": {
+          "title": "History:",
+          "type": "Type",
+          "date": "Date",
+          "status": "Status",
+          "actions": "Actions",
+          "download": "Download PDF",
+          "empty": "You have no certificate orders yet"
+        }
+      }
+    },
+    "suggestions": {
+      "header": "Suggestions form"
+    },
+    "curator-search": {
+      "header": "Curator search",
+      "description": "Enter the name of your group to find a curator",
+      "search-placeholder": "Group name",
+      "searching": "Searching...",
+      "not-found": "No results found",
+      "search-default": "Enter your group name above to find a curator.",
+      "unknown-value": "Unknown"
+    }
+  },
+  "private": {
+    "main": {
+      "welcome": "Welcome, {name}!",
+      "welcome-short": "Welcome!",
+      "dashboard": {
+        "title": "Academic Overview",
+        "gpa-trend": "GPA by Semester",
+        "grade-distribution": "Grade Distribution",
+        "attendance": "Attendance Rate",
+        "metrics": {
+          "average-score": "Average Score",
+          "credits-earned": "Credits Earned",
+          "courses-active": "Active Courses",
+          "attendance-rate": "Attendance Rate"
+        },
+        "semester": "Semester",
+        "gpa": "GPA",
+        "grade": "Grade",
+        "count": "Count",
+        "attended": "Attended",
+        "missed": "Missed",
+        "rate": "Rate",
+        "export": "Export",
+        "export-grades": "Export grades (CSV)",
+        "export-attendance": "Export attendance (CSV)"
+      },
+      "cards": {
+        "information": {
+          "title": "Information",
+          "schedule": "Schedule",
+          "dnvr": "Education-related questions",
+          "faq": "Frequently Asked Questions",
+          "user-manual": "User manual",
+          "student-manual": "Student manual",
+          "university-notice-board": "University notice board",
+          "library-discovery": "Library catalog",
+          "university-news": "University news",
+          "student-council": "Student council"
+        },
+        "social-networks": {
+          "title": "Social Networks",
+          "description": "You can always find the latest information about the operation of the 'Electronic Campus KPI' system and other services on our Facebook page and our other social networks accounts:"
+        },
+        "support": {
+          "title": "Support",
+          "description": "You can always contact the support service:",
+          "button": {
+            "suggestions-form": "Suggestion form",
+            "email": "Email",
+            "chat": "Support chat"
+          }
+        },
+        "carousel": {
+          "slide-1": "Welcome to Student Portal",
+          "slide-2": "Your campus, simplified",
+          "slide-3": "Everything in one place",
+          "slide-4": "Grades, schedules, and more",
+          "slide-5": "Built for students and faculty",
+          "credits-by": "by"
+        }
+      }
+    },
+    "profile-completion": {
+      "title": "Profile Completion",
+      "progress": "Progress",
+      "complete-profile": "Complete profile",
+      "fields": {
+        "photo": "Photo",
+        "phone": "Phone",
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "groupName": "Group",
+        "birthDate": "Date of birth",
+        "address": "Address"
+      }
+    },
+    "about": {
+      "title": "About",
+      "content": "<p>Information and telecommunications system \"Electronic Campus\" - application software, which is an element of the information and telecommunications environment of the university and is used for information support of the daily activities of students, teachers, university employees, as well as for information support of all types of innovative activities at the university (hereinafter referred to as ITS EC).</p><p>ITS EC unites internal information resources (educational, methodological and others), provides centralized access to them on the basis of unified system and technological solutions and ensures their use for effective management and planning of the scientific and educational process.</p><h4>Main functions of ITS EC</h4><p>ITS EC ensures the implementation of the following main functions:</p><ul><li>multilateral communication between students, teachers, scientific community;</li><li>formation of a single information resource that reflects the state of the scientific and educational process of the university;</li><li>ensuring timely and operational placement of: complete, objective, reliable and consistent information about the educational process of the university;</li><li>dissemination of information about upcoming events and activities and other reference information;</li><li>ensuring centralized and convenient access to information about the activities of the administration and university departments;</li><li>ensuring navigation through the entire information content of the ITS EC;</li><li>organizing interaction and information exchange between the ITS EC and other information resources and systems of the university.</li></ul><p>The ITS EC system has developed virtual offices according to user profiles: student, lecturer-scientist, methodologist of the department.</p>"
+    },
+    "user-manual": {
+      "title": "User manual"
+    },
+    "student-manual": {
+      "title": "Student manual"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "sections": {
+        "group-has-no-students": {
+          "header": "What to do if the group exists but has no students?",
+          "content": "<p>You need to contact the dean's office of your department to have the responsible person allocate students to the groups.</p>"
+        },
+        "student-missing-in-control": {
+          "header": "What to do if a student is in the group but missing in the current control?",
+          "content": "<p>Add the student manually through the appropriate field below the group list in the current control.</p>"
+        },
+        "wrong-student-group": {
+          "header": "What to do if my student cabinet shows the wrong group?",
+          "content": "<p>Contact the dean's office of your department to have the responsible person allocate students to the groups.</p>"
+        },
+        "extra-disciplines-in-control": {
+          "header": "What to do if there are extra disciplines in the current control?",
+          "content": "<p>Contact the instructor through your class leader or classmates and ask them to remove you from the list.</p>"
+        }
+      }
+    },
+    "documents": {
+      "title": "KPI Documents",
+      "header": "Igor Sikorsky Kyiv Polytechnic Institute Documents",
+      "code-of-honor": "Code of honor",
+      "internal-regulations": "Internal regulations",
+      "educational-organization-regulation": "Temporary Regulation on the Organization of the Educational Process at the University",
+      "anti-corruption-program": "Anti-Corruption Program"
+    },
+    "terms-of-service": {
+      "title": "Terms of service",
+      "header": "Terms of service",
+      "content": "<p>The editorial board of the project \"Electronic Campus «KPI»\" is not responsible for the consequences of using the project information. The visitor uses the project information at his own risk. The opinion of the editorial board may not coincide with the opinion of the authors of the publications.</p><p>All rights reserved. All copyright materials created specifically for the project \"Electronic Campus «KPI»\", or translations from other sources, as well as the layout are the property of the project.</p><p>Reproduction of any copyright information provided on the site is possible only under the condition of mandatory placement of a link to the site \"Electronic Campus «KPI»\" (ecampus.kpi.ua), in web-based media a hyperlink is mandatory.</p><p>It is forbidden to hide hyperlinks, use JavaScript in a hyperlink or limit the indexing of hyperlinks by search engines! The hyperlink must be placed above or below the material, unless otherwise provided for by the design of the site using the material.</p><p>All methodological materials presented in the Campus are the intellectual property of the authors, their use is allowed only for the educational process of KPI. Teaching methodological materials of the Campus on social networks without the written permission of the authors is prosecuted in accordance with the Law of Ukraine “On Copyright”.</p>"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "header": "Contacts",
+      "content": "<h3>Contact details</h3><p>Bureau office address: <addresslink>Ukraine, Kyiv, 14-v Polytechnic St.</addresslink>, Building 13, 4th floor, room 25</p><h3>Social networks</h3><p><githublink>KPI on GitHub</githublink><br></br><facebooklink>Facebook</facebooklink><br></br><twitterlink>Twitter</twitterlink><br></br><instagramlink>Instagram</instagramlink><br></br></p><h3>Support service</h3><p>If you have any questions, you can contact the support service:</p><suggestionslink>Suggestions form</suggestionslink><br></br><emaillink>Email</emaillink>"
+    },
+    "directory": {
+      "title": "Contacts",
+      "subtitle": "Search and view contact information of colleagues from your department",
+      "search-placeholder": "Search by name, subdivision or position...",
+      "all-subdivisions": "All subdivisions",
+      "all-contact-types": "All contact types",
+      "no-contacts-found": "No contacts found",
+      "showing-count": "Showing {count} contacts"
+    },
+    "notice-board": {
+      "title": "Notice board",
+      "subtitle": "Here you can view current university announcements and stay up to date with all important news.",
+      "input": {
+        "placeholder": "Search",
+        "not-found": "No results found"
+      },
+      "loading": "Loading..."
+    },
+    "announcementseditor": {
+      "title": "Announcement Management",
+      "subtitle": "Create and manage university announcements",
+      "create": {
+        "title": "Create New Announcement",
+        "description": "Click the button below to create a new announcement for the university community.",
+        "button": "Create Announcement"
+      },
+      "success": {
+        "title": "Announcement Created Successfully!",
+        "message": "Your announcement has been created with ID: {id}"
+      },
+      "form": {
+        "title": "Create Announcement",
+        "not-found": "No results found",
+        "fields": {
+          "title": "Title",
+          "description": "Description",
+          "imageUrl": "Image URL",
+          "linkTitle": "Link Title",
+          "linkUrl": "Link URL",
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "language": "Language",
+          "studyForms": "Study Forms",
+          "roles": "Roles",
+          "subdivisions": "Subdivisions",
+          "courses": "Courses"
+        },
+        "placeholders": {
+          "title": "Enter announcement title",
+          "description": "Enter announcement description",
+          "imageUrl": "https://example.com/image.jpg",
+          "linkTitle": "Enter link title",
+          "linkUrl": "https://example.com",
+          "language": "Select a language",
+          "studyForms": "Select study forms",
+          "roles": "Select roles",
+          "subdivisions": "Select subdivisions",
+          "courses": "Select courses"
+        },
+        "buttons": {
+          "submit": "Submit",
+          "cancel": "Cancel"
+        },
+        "languages": {
+          "uk": "Ukrainian",
+          "en": "English"
+        }
+      },
+      "filters": {
+        "searchPlaceholder": "Search by title or description",
+        "languageLabel": "Language",
+        "language": {
+          "all": "All languages",
+          "uk": "Ukrainian",
+          "en": "English"
+        }
+      },
+      "table": {
+        "title": "Title",
+        "language": "Lang",
+        "period": "Period",
+        "status": "Status",
+        "roles": "Roles",
+        "studyForms": "Study forms",
+        "courses": "Courses",
+        "actions": "Actions",
+        "empty": "No announcements found",
+        "noRestriction": "All"
+      },
+      "status": {
+        "active": "Active",
+        "outdated": "Outdated"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "back": "Back to list"
+      },
+      "edit": {
+        "title": "Edit announcement",
+        "save": "Save",
+        "success": "Announcement updated"
+      },
+      "delete": {
+        "title": "Delete announcement?",
+        "description": "\"{title}\" will be permanently removed. This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "success": "Announcement deleted"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Here you can view your profile, edit contacts, add links to accounts, and set appointment details.",
+      "info": {
+        "education-title": "Information about place of study",
+        "work-title": "Information about place of work",
+        "subdivision": "Subdivision",
+        "group": "Group",
+        "grade-book": "Grade book number",
+        "education-form": "Form of study",
+        "study-year": "Study year",
+        "speciality": "Speciality",
+        "academic-degree": "Academic degree",
+        "academic-status": "Academic title",
+        "position": "Position",
+        "positions": "Positions",
+        "intellect-profile": "Profile on intellect.kpi.ua"
+      },
+      "contact": {
+        "title": "Contact",
+        "add-contact": "Add contact",
+        "contact-type": "Contact Type",
+        "choose-contact-type": "Choose contact type",
+        "delete-dialog-title": "Deletion",
+        "delete-dialog-description": "Are you sure you want to delete this contact?",
+        "delete-dialog-cancel": "Cancel",
+        "delete-dialog-confirm": "Delete"
+      },
+      "intellect": {
+        "info-title": "Information for publication on the intellect.kpi.ua website on the Internet",
+        "credo": "Credo",
+        "scientific-interests": "Scientific interests"
+      },
+      "codeOfHonor": {
+        "title": "Code of honor",
+        "content": "<paragraph>The presented <documentsLink>document</documentsLink> of the National Technical University of Ukraine \"Igor Sikorsky Kyiv Polytechnic Institute\" was developed taking into account the experience and examples of the best universities in the world.\n\nThe text was formed on the basis of proposals from the university community, student self-government bodies and trade union organizations.\n\nThe adoption of the principles and norms given in this document is certified by the consent of a member of the university community.\n\n</paragraph>",
+        "agreement": "You have agreed to the principles and standards set forth in the documents provided."
+      },
+      "button": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "add-new": "Add new",
+        "edit": "Edit",
+        "agree": "Agree",
+        "logout": "Logout"
+      },
+      "placeholder": {
+        "credo": "Enter your credo",
+        "scientific-interests": "Enter your scientific interests",
+        "not-specified": "Not specified"
+      }
+    },
+    "employment-system": {
+      "title": "Employment system",
+      "subtitle": "You can proceed to filling out the skills and knowledge questionnaire or watch the video tutorial",
+      "button": {
+        "title": "Go to questionnaire"
+      }
+    },
+    "facultycertificate": {
+      "title": "Faculty certificate",
+      "subtitle": "Review and process student requests for certificates",
+      "alert": {
+        "reason": "Reason for rejection:",
+        "title": "Reject request",
+        "subtitle": "Certificate request for {name} rejected. Please provide a reason for rejection."
+      },
+      "status": {
+        "pending": "Pending",
+        "error": "Error",
+        "created": "Created",
+        "rejected": "Rejected",
+        "processed": "Processed"
+      },
+      "details": {
+        "subtitle": "Request for a certificate for {name}"
+      },
+      "button": {
+        "print": "Print",
+        "approve": "Approve",
+        "reject": "Reject",
+        "cancel": "Cancel",
+        "signed": "Signed",
+        "sign": "Sign",
+        "view": "View"
+      },
+      "sheet": {
+        "all": "All",
+        "rejected": "Rejected",
+        "pending": "Pending",
+        "approved": "Approved"
+      },
+      "search-placeholder": "Search by student name, purpose...",
+      "table": {
+        "created": "Date",
+        "documentNumber": "Document number",
+        "fullname": "full name",
+        "originalRequired": "Paper original",
+        "withstamp": "Paper original",
+        "updatedAt": "Updated at",
+        "received": "received",
+        "status": "status",
+        "purpose": "purpose",
+        "actions": "actions",
+        "signedSuccess": "Certificate signed successfully",
+        "signedDescription": "The certificate has been signed successfully",
+        "empty": "No certificate requests yet"
+      }
+    },
+    "vedomoststud": {
+      "title": "Semester control",
+      "subtitle": "Semester control of students' learning outcomes. The terms of semester control are determined by the curriculum. The terms of liquidation of academic debt (a week for the first and second retakes) are determined by the university order.",
+      "date": "Date",
+      "subject": "Educational component",
+      "score": "Score",
+      "controlType": "Control type",
+      "sessionType": "Session order type",
+      "lecturer": "Lecturer",
+      "status": "Status",
+      "average-score": "Average score for the entire period of study:"
+    },
+    "msg": {
+      "title": "Message",
+      "subtitle": "You can send a message to students or lecturers.",
+      "tab": {
+        "inbox": "Inbox",
+        "sent": "Sent",
+        "important": "Important",
+        "compose": "Compose"
+      },
+      "inbox": {
+        "selected": "selected:",
+        "refresh": "Refresh",
+        "search-placeholder": "Search...",
+        "empty": "No messages",
+        "no-results": "No results found",
+        "table": {
+          "sender": "Sender",
+          "recipient": "Recipient",
+          "message": "Message",
+          "date": "Date"
+        },
+        "badge": {
+          "important": "Important"
+        },
+        "dialog": {
+          "to": "To:"
+        },
+        "delete-dialog": {
+          "title": "Delete",
+          "description": "Do you really want to delete {count, plural, one {# message} other {# messages}}?",
+          "cancel": "Cancel",
+          "confirm": "Delete"
+        },
+        "toast": {
+          "success-title-delete": "Message deleted",
+          "success-description-delete": "Message deleted successfully",
+          "success-title-mark-as-important": "Message marked as important",
+          "success-description-mark-as-important": "Message marked as important successfully",
+          "error-title-delete": "Error deleting message",
+          "error-description-delete": "Message not deleted",
+          "error-title-mark-as-important": "Error marking message as important",
+          "error-description-mark-as-important": "Message not marked as important",
+          "error-title-refresh": "Error refreshing data",
+          "error-description-refresh": "Failed to refresh data"
+        }
+      },
+      "compose": {
+        "title": "New message",
+        "individual": "Individual",
+        "broadcast": "Broadcast",
+        "recipient-type": {
+          "employee": "Employee",
+          "student": "Student"
+        },
+        "form": {
+          "subdivision": "Subdivision",
+          "study-group": "Study group",
+          "recipient-name": "Recipient name",
+          "subject": "Message subject",
+          "subject-placeholder": "Message subject",
+          "content": "Message text",
+          "content-placeholder": "Message text",
+          "send": "Send",
+          "search-placeholder": "Enter at least 5 characters to search...",
+          "search-empty": "No results found",
+          "select-recipient-placeholder": "Select recipient...",
+          "select-group-first": "Select study group first"
+        },
+        "validation": {
+          "group-required": "Select a group",
+          "user-required": "Select a user",
+          "subject-required": "Enter subject",
+          "content-required": "Enter message text"
+        },
+        "toast": {
+          "success-title": "Message sent",
+          "success-description": "Message sent successfully"
+        }
+      }
+    },
+    "study-sheet": {
+      "title": "Current control",
+      "subtitle": "Current control is carried out during the semester in order to ensure the testing of the level of training of applicants at each stage of the discipline.",
+      "your-information": "Your order:",
+      "study-year": "The academic year",
+      "credit-module": "Educational component",
+      "module-info": "Component info",
+      "lecturers": "Lecturers",
+      "total-score": "Total score:",
+      "semester": {
+        "title": "semester",
+        "first": "First",
+        "second": "Second",
+        "all": "All"
+      },
+      "tab": {
+        "journal": "Gradebook",
+        "event-plan": "Events plan",
+        "internal-materials": "Internal materials",
+        "external-materials": "External materials"
+      },
+      "table": {
+        "date": "Date",
+        "subject": "Educational component",
+        "score": "Score",
+        "lecturer": "Lecturer",
+        "control-type": "Type of control",
+        "link": "Link",
+        "note": "Note",
+        "empty": "No data to display"
+      }
+    },
+    "attestation-results": {
+      "title": "Calendar control results",
+      "subtitle": "This presents the results of calendar controls by semester, indicating disciplines, teachers, and grades according to the educational process schedule.",
+      "subject": "Educational component",
+      "lecturer": "Lecturer",
+      "success-attestation": "А",
+      "fail-attestation": "N/A",
+      "column": {
+        "semester": "{semesterNumber} semester",
+        "attestation": "Attestation №{attestationNumber}"
+      }
+    },
+    "curator": {
+      "title": "Curator",
+      "info": "This section provides official information about your curator, including positions held, departments, contact details, and a link to the personal profile.",
+      "curator-info": "Curator information",
+      "not-found": "Curator not found",
+      "subdivisions": "Academic position(s):",
+      "contacts": "Contacts:",
+      "profile": "Personal page:"
+    },
+    "certificate": {
+      "title": "Certificates",
+      "info": "This section provides copy information about your curator, including positions held, departments, contact details, and a link to the personal profile.",
+      "orderTitle": "Create an order:",
+      "docType": "Type of certificate",
+      "docTypePlaceholder": "select the type of certificate",
+      "purpose": "Comment / purpose of the certificate",
+      "originalRequired": "I need the original certificate",
+      "notes": "Notes",
+      "notesPlaceholder": "For example: with a wet seal",
+      "purposePlaceholder": "For example: for the French embassy",
+      "submit": "Order",
+      "success": "Request successfully created",
+      "status": {
+        "created": "Created",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "approved": "Approved",
+        "processed": "Processed",
+        "in-queue": "In Queue",
+        "error": "Error",
+        "signed": "Signed"
+      }
+    },
+    "rating": {
+      "title": "Archival SPW Rating",
+      "subtitle": "View scientific-pedagogical workers rating data by years and workplaces.",
+      "noData": "No data to display",
+      "noEntries": "No entries",
+      "summary": {
+        "title": "Summary"
+      },
+      "total": "Total",
+      "points": "points",
+      "entries": "{count, plural, one {# entry} other {# entries}}",
+      "showDetails": "Show details",
+      "hideDetails": "Hide",
+      "table": {
+        "workType": "Work type",
+        "mark": "Standard",
+        "quantity": "Quantity",
+        "percent": "Share, %",
+        "result": "Result"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Here you can change your photo, e-mail and password for your profile.",
+      "section": {
+        "photo": "Photo",
+        "contacts": "Contacts",
+        "password": "Password",
+        "preferences": "Preferences",
+        "security": "Security"
+      },
+      "security": {
+        "logout-all": "Log out of all devices",
+        "logout-all-description": "This will end your sessions on all devices where you are currently logged in, including this one."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Choose which notifications you want to receive.",
+        "email": "Email notifications",
+        "email-hint": "Receive important updates via email",
+        "announcements": "Announcements",
+        "announcements-hint": "Notifications about new announcements",
+        "messages": "Messages",
+        "messages-hint": "Notifications about new incoming messages",
+        "saved": "Notification preferences saved"
+      },
+      "preferences": {
+        "theme": "Appearance",
+        "theme-hint": "Cycle through light, dim, and dark themes",
+        "language": "Language",
+        "language-hint": "Choose your portal language"
+      },
+      "button": {
+        "edit": "Edit",
+        "save-changes": "Save changes"
+      },
+      "field": {
+        "current-password": "Current password",
+        "new-password": "New password",
+        "confirm-password": "Confirm password",
+        "error": "Error"
+      },
+      "success": {
+        "title": "Success",
+        "description": "Your changes have been saved successfully.",
+        "email": "A confirmation email has been sent to your new address. Please check your mailbox to verify access."
+      },
+      "error": {
+        "invalid-email": "Invalid email",
+        "password-mismatch": "Password mismatch",
+        "file-size": "Please upload a picture smaller than 1 MB.",
+        "file-type": "Only PNG, JPEG, and JPG files are supported."
+      }
+    },
+    "notifications": {
+      "title": "Notifications",
+      "open": "Open notifications",
+      "unread": "{count} unread",
+      "mark-all": "Mark all as read",
+      "refresh": "Refresh",
+      "empty": "You are all caught up."
+    },
+    "privacy-consent": {
+      "title": "Consent to Publish KPI Personal Data on the Internet",
+      "description": "Agreement on the use of personal data on the Intellect portal.",
+      "agreement-intro": "I hereby consent to the publication of the following personal data on the Intellect portal:",
+      "data-items": {
+        "name": "Last name, first name",
+        "education": "Education (institution)",
+        "media": "Photo and video recordings made during classes, place of work",
+        "works": "Publication of creative works",
+        "other": "Other information: SPW assessment data"
+      },
+      "responsibility": "I understand the responsibility and potential negative consequences of this decision, including the possibility of unauthorized use of this data by third parties.",
+      "revocation": "This consent is granted indefinitely and may be revoked at any time by submitting a written application.",
+      "accept-button": "I give my consent"
+    },
+    "admin": {
+      "title": "Admin Panel",
+      "subtitle": "Manage users, view student profiles, and oversee academic records.",
+      "stats": {
+        "total-users": "Total Users",
+        "students": "Students",
+        "active-students": "Active Students",
+        "avg-gpa": "Average GPA"
+      },
+      "filters": {
+        "search-placeholder": "Search by name, email, or specialty...",
+        "category": "Category",
+        "all-categories": "All Categories",
+        "status": "Status",
+        "all-statuses": "All Statuses",
+        "faculty": "Faculty",
+        "all-faculties": "All Faculties",
+        "role-student": "Student",
+        "role-teacher": "Teacher",
+        "role-admin": "Administrator",
+        "status-studying": "Studying",
+        "status-leave": "On Academic Leave",
+        "status-dismissed": "Dismissed"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "category": "Category",
+        "faculty": "Faculty",
+        "status": "Status",
+        "gpa": "GPA",
+        "last-active": "Last Active",
+        "actions": "Actions",
+        "view": "View",
+        "delete": "Delete",
+        "empty": "No users found."
+      },
+      "detail": {
+        "username": "Username",
+        "phone": "Phone",
+        "birth-date": "Date of Birth",
+        "address": "Address",
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "group": "Study Group",
+        "grade-book": "Grade Book #",
+        "study-year": "Study Year",
+        "gpa": "GPA",
+        "created-at": "Registered",
+        "last-active": "Last Active",
+        "courses": "Courses",
+        "credits": "credits",
+        "attendance": "Attendance",
+        "honor-code-signed": "Honor Code Signed",
+        "honor-code-unsigned": "Honor Code Not Signed"
+      },
+      "database": {
+        "title": "Database Explorer",
+        "refresh": "Refresh",
+        "empty": "No records found.",
+        "showing": "Total records: {total}",
+        "previous": "Previous",
+        "next": "Next",
+        "tables": {
+          "users": "Users",
+          "courses": "Courses",
+          "attendance": "Attendance",
+          "notifications": "Notifications"
+        }
+      },
+      "delete": {
+        "title": "Delete User",
+        "description": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "success": "User deleted successfully."
+      },
+      "audit": {
+        "title": "Audit Log",
+        "loading": "Loading audit log...",
+        "empty": "No audit entries found.",
+        "column": {
+          "time": "Time",
+          "user": "User",
+          "action": "Action",
+          "entity": "Entity",
+          "details": "Details"
+        },
+        "action": {
+          "delete": "Delete",
+          "update_status": "Status Update",
+          "change_email": "Email Change",
+          "change_password": "Password Change",
+          "change_photo": "Photo Change",
+          "change_notifications": "Notification Preferences Change"
+        }
+      }
+    }
+  },
+  "landing": {
+    "meta": {
+      "title": "Student Portal — Modern Student Management Platform",
+      "description": "A comprehensive platform for managing grades, schedules, messages, and more."
+    },
+    "nav": {
+      "login": "Sign in",
+      "register": "Get started"
+    },
+    "hero": {
+      "title": "The modern way to manage student life",
+      "description": "Student Portal brings together grades, schedules, messages, and academic records into one clean, intuitive interface.",
+      "cta": {
+        "register": "Create free account",
+        "login": "Sign in"
+      }
+    },
+    "features": {
+      "title": "Everything you need in one place",
+      "grades": {
+        "title": "Grades & Performance",
+        "description": "Track academic progress with real-time grades, GPA calculations, and semester overviews."
+      },
+      "schedule": {
+        "title": "Schedule & Timetable",
+        "description": "View weekly schedules with course details, room assignments, and teacher information."
+      },
+      "messages": {
+        "title": "Messages",
+        "description": "Communicate with teachers and classmates through a built-in messaging system."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Visualize academic trends and identify areas for improvement with detailed analytics."
+      },
+      "profile": {
+        "title": "Student Profile",
+        "description": "Manage your personal information, contacts, and academic details in one place."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Stay informed about new grades, schedule changes, and important announcements."
+      }
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "description": "Join thousands of students who use Student Portal to manage their academic life.",
+      "button": "Create free account"
+    },
+    "footer": {
+      "copyright": "© {year} Student Portal. All rights reserved."
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Search pages and actions...",
+    "empty": "No results found.",
+    "hint": "Search",
+    "groups": {
+      "navigation": "Navigation",
+      "modules": "Modules"
+    },
+    "items": {
+      "grades": "Grades",
+      "schedule": "Schedule",
+      "messages": "Messages",
+      "materials": "Study Materials",
+      "announcements": "Announcements",
+      "grading": "Grade Book",
+      "certificates": "Certificates",
+      "directory": "Directory"
+    },
+    "shortcuts": {
+      "title": "Keyboard Shortcuts",
+      "groups": {
+        "general": "General",
+        "navigation": "Navigation",
+        "actions": "Actions"
+      },
+      "items": {
+        "command-palette": "Open command palette",
+        "help": "Show keyboard shortcuts",
+        "close": "Close dialog",
+        "home": "Home page",
+        "profile": "Profile",
+        "settings": "Settings",
+        "search-messages": "Search messages"
+      }
+    },
+    "onboarding": {
+      "title": "Welcome to Student Portal",
+      "subtitle": "Fill in your information to get started. You can skip any step.",
+      "skip-all": "Skip all",
+      "steps": {
+        "academic": {
+          "title": "Academic Information",
+          "description": "Tell us about your faculty and program."
+        },
+        "personal": {
+          "title": "Personal Details",
+          "description": "Add your contact information and date of birth."
+        },
+        "photo": {
+          "title": "Profile Photo",
+          "description": "Upload a photo so others can recognize you."
+        }
+      },
+      "field": {
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "group": "Group",
+        "study-form": "Study Form",
+        "study-year": "Year",
+        "phone": "Phone",
+        "birth-date": "Date of Birth",
+        "grade-book": "Grade Book Number"
+      },
+      "placeholder": {
+        "faculty": "e.g. FIOT",
+        "speciality": "e.g. Software Engineering",
+        "group": "e.g. IP-01",
+        "study-form": "e.g. Full-time",
+        "phone": "+380...",
+        "grade-book": "e.g. 12345678"
+      },
+      "validation": {
+        "faculty-required": "Faculty is required",
+        "speciality-required": "Speciality is required",
+        "group-required": "Group is required",
+        "study-form-required": "Study form is required",
+        "study-year-required": "Year is required",
+        "study-year-max": "Year must be between 1 and 6"
+      },
+      "button": {
+        "back": "Back",
+        "next": "Next",
+        "skip": "Skip",
+        "finish": "Finish"
+      },
+      "success": {
+        "title": "Profile updated",
+        "description": "Welcome to Student Portal!"
+      }
+    },
+    "grading": {
+      "title": "Grade Book",
+      "empty": "You have no assigned courses",
+      "select-course": "Select a course",
+      "select-placeholder": "Select a course from the list",
+      "students": "students",
+      "loading": "Loading students...",
+      "no-students": "No students enrolled in this course",
+      "validation": {
+        "grade-range": "Grade must be between 0 and 100"
+      },
+      "success": {
+        "grade-updated": "Grade updated"
+      },
+      "table": {
+        "student": "Student",
+        "group": "Group",
+        "credits": "Credits",
+        "grade-type": "Grade Type",
+        "grade": "Grade",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    }
+  }
+}
