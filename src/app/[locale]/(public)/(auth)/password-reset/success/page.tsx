@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { Suspense } from 'react';
 
 const PageContents = () => {

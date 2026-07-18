@@ -1,5 +1,5 @@
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getCertificate } from '@/actions/certificates.actions';
 import { Description, Heading2, Paragraph } from '@/components/typography';
 import { Card } from '@/components/ui/card';
@@ -12,11 +12,22 @@ import dayjs from 'dayjs';
 import ActionButtons from '@/app/[locale]/(private)/module/facultycertificate/[id]/action-buttons';
 
 interface Props {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: number; locale: string }>;
+}
+
+const INTL_NAMESPACE = 'private.facultycertificate';
+
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: INTL_NAMESPACE });
+  return {
+    title: t('title'),
+  };
 }
 
 export default async function DocInfoPage({ params }: Props) {
-  const { id } = await params;
+  const { id, locale } = await params;
+  setRequestLocale(locale);
   const certificate = await getCertificate(id);
   const t = await getTranslations('private.facultycertificate');
   const tTable = await getTranslations('private.facultycertificate.table');

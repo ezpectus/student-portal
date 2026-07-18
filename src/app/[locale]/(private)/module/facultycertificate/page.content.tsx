@@ -7,7 +7,8 @@ import { AllDocsTable } from './components/all-docs-table';
 import { Certificate } from '@/types/models/certificate/certificate';
 import { Input } from '@/components/ui/input';
 import { MagnifyingGlassRegular } from '@/app/images';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import qs from 'query-string';
 import { Tabs, TabSheetTrigger, TabsList } from '@/components/ui/tabs';
 import { useTranslations } from 'next-intl';
@@ -36,6 +37,7 @@ export default function FacultyCertificatePageContent({
   const [search, setSearch] = useState(searchFilter);
 
   const t = useTranslations(`private.facultycertificate.sheet`);
+  const tFc = useTranslations('private.facultycertificate');
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -78,7 +80,7 @@ export default function FacultyCertificatePageContent({
             <div className="mb-4 flex">
               <Input
                 icon={<MagnifyingGlassRegular />}
-                placeholder="Пошук за імʼям студента, призначенням..."
+                placeholder={tFc('search-placeholder')}
                 value={search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 className="w-full max-w-md"

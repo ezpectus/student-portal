@@ -1,7 +1,7 @@
 'use client';
 
 import { Link, LOCALE, usePathname } from '@/i18n/routing';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { FlagGB, FlagUA } from '@/app/images';
 import { ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -17,13 +17,14 @@ export const LocaleSwitch = () => {
   const locale = useLocale();
   const pathname = usePathname();
   const searchparams = useSearchParams();
+  const t = useTranslations('global.locale-switch');
 
   const getTitle = () => {
     switch (locale) {
       case LOCALE.UK:
-        return <LocaleOption text="Switch to English" icon={<FlagGB />} />;
+        return <LocaleOption text={t('switch-to-english')} icon={<FlagGB />} />;
       default:
-        return <LocaleOption text="Перейти на українську" icon={<FlagUA />} />;
+        return <LocaleOption text={t('switch-to-ukrainian')} icon={<FlagUA />} />;
     }
   };
 

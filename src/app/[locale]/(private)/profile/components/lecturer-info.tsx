@@ -1,5 +1,5 @@
 import { EmployeePosition, EmployeeProfile } from '@/types/models/employee-profile';
-import { EMPLOYMENT_TYPE } from '@/lib/constants/employment-type';
+import { getEmploymentTypeKey } from '@/lib/constants/employment-type';
 import { InfoItem, InfoList } from './info-list';
 import { Heading6 } from '@/components/typography/headers';
 import { Show } from '@/components/utils/show';
@@ -23,7 +23,7 @@ export async function LecturerInfo({ employeeProfile }: Props) {
 
   const formatPositions = (position: EmployeePosition) => {
     return [
-      { label: t('info.position'), value: `${position.name} (${EMPLOYMENT_TYPE[position.employment]})` },
+      { label: t('info.position'), value: `${position.name} (${tEnums(`employment-type.${getEmploymentTypeKey(position.employment)}`)})` },
       { label: t('info.subdivision'), value: position.subdivision.name },
     ];
   };

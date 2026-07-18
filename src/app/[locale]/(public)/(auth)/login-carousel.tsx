@@ -6,6 +6,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import Fade from 'embla-carousel-fade';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { env } from '@/lib/env';
 
 const CAROUSEL_CDN_BASE_URL = env.NEXT_PUBLIC_CAROUSEL_CDN_BASE_URL;
@@ -18,34 +19,15 @@ type CarouselImage = {
 };
 
 const IMAGES: CarouselImage[] = [
-  {
-    src: 'img1.jpg',
-    description: 'Welcome to Student Portal',
-    credits: 'Student Portal',
-  },
-  {
-    src: 'img2.jpg',
-    description: 'Your campus, simplified',
-    credits: 'Student Portal',
-  },
-  {
-    src: 'img3.jpg',
-    description: 'Everything in one place',
-    credits: 'Student Portal',
-  },
-  {
-    src: 'img4.jpg',
-    description: 'Grades, schedules, and more',
-    credits: 'Student Portal',
-  },
-  {
-    src: 'img5.jpg',
-    description: 'Built for students and faculty',
-    credits: 'Student Portal',
-  },
+  { src: 'img1.jpg', description: 'slide-1', credits: 'Student Portal' },
+  { src: 'img2.jpg', description: 'slide-2', credits: 'Student Portal' },
+  { src: 'img3.jpg', description: 'slide-3', credits: 'Student Portal' },
+  { src: 'img4.jpg', description: 'slide-4', credits: 'Student Portal' },
+  { src: 'img5.jpg', description: 'slide-5', credits: 'Student Portal' },
 ];
 
 export const LoginCarousel = () => {
+  const t = useTranslations('public.auth.carousel');
   return (
     <Carousel
       opts={{
@@ -74,11 +56,11 @@ export const LoginCarousel = () => {
                 className="h-[calc(100dvh-40px)] w-full shrink-0 object-cover"
               />
               <div className="from-basic-black/80 to-basic-black/0 text-basic-white absolute bottom-0 left-0 w-full rounded-b-xl bg-linear-to-t from-10% px-14 pt-32 pb-14">
-                <h6>{image.description}</h6>
+                <h6>{t(image.description)}</h6>
                 <span>
-                  by{' '}
+                  {t('credits-by')}{' '}
                   {image.creditsUrl ? (
-                    <Link className="text-basic-white" href={image.creditsUrl} target="_blank">
+                    <Link className="text-basic-white" href={image.creditsUrl} target="_blank" rel="noopener noreferrer">
                       {image.credits}
                     </Link>
                   ) : (

@@ -1,6 +1,6 @@
 'use client';
 
-import { Moon, Sun } from 'lucide-react';
+import { Contrast, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/hooks/use-theme';
 
@@ -12,8 +12,14 @@ export const ThemeToggle = () => {
   }
 
   return (
-    <Button variant="tertiary" size="small" onClick={toggle} aria-label="Toggle theme">
-      {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+    <Button
+      variant="tertiary"
+      size="small"
+      onClick={toggle}
+      aria-label={`Theme: ${theme}. Switch theme`}
+      title={`Theme: ${theme}`}
+    >
+      {theme === 'light' ? <Moon size={18} /> : theme === 'dim' ? <Contrast size={18} /> : <Sun size={18} />}
     </Button>
   );
 };

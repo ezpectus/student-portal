@@ -20,6 +20,10 @@ export function DisciplinesTable({ disciplines }: Props) {
 
   const { sortedRows, sortHandlers } = useTableSort<Discipline>(disciplines, (row, header) => row[header], ['score']);
 
+  if (disciplines.length === 0) {
+    return <p className="text-muted-foreground py-12 text-center text-sm">{tTable('empty')}</p>;
+  }
+
   return (
     <Table>
       <TableHeader>

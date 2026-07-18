@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { getTerm } from '@/actions/term.actions';
 import { LocaleProps } from '@/types/locale-props';
@@ -17,7 +17,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function SessionPage() {
+export default async function SessionPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const termResults = await getTerm();
 
   const fixedTermResults = {

@@ -61,6 +61,7 @@ typings/
 .env
 .env.*
 !.env.example
+!.env.docker.example
 
 # next.js build output
 .next
@@ -80,3 +81,15 @@ docs/client-functionality-overview.md
 
 # SaaS transformation roadmap (internal planning, not for repo)
 docs/saas-transformation-roadmap.md
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+src/generated/prisma/
+
+# Temporary helper scripts and command diagnostics
+_*.js
+_*.cjs
+_*-out.txt
+npm-version.txt
+npm-install-output.txt

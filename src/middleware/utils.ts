@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { trim } from 'radash';
 import UrlPattern from 'url-pattern';
 import { LOGIN_PATH, NOT_FOUND_PATH, ROOT_PATH } from './constants';
-import { getJWTPayload } from '@/lib/jwt';
+import { getJWTPayload, getVerifiedLocalJWTPayload, LOCAL_JWT_ISSUER } from '@/lib/jwt';
 import { CampusJwtPayload } from '@/types/campus-jwt-payload';
 import { TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
 
@@ -61,10 +61,13 @@ export const getAuthInfo = (request: NextRequest) => {
   }
 
   try {
-    const payload = getJWTPayload<CampusJwtPayload>(token);
+    const decoded = getJWTPayload<CampusJwtPayload & { iss?: string }>(token);
+    const payload = decoded.iss === LOCAL_JWT_ISSUER
+      ? getVerifiedLocalJWTPayload<CampusJwtPayload>(token)
+      : decoded;
 
     return payload ?? undefined;
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };

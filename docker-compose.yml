@@ -4,17 +4,33 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_ENV: ${NEXT_PUBLIC_ENV:-production}
+        NEXT_PUBLIC_LOCAL_AUTH: ${NEXT_PUBLIC_LOCAL_AUTH:-true}
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '${APP_PORT:-3000}:3000'
+    env_file:
+      - .env.docker
     environment:
-      API_BASE_URL: 'http://localhost:5000'
-      NEXT_PUBLIC_ENV: production
-      MAIN_COOKIE_DOMAIN: 'localhost'
-      ROOT_COOKIE_DOMAIN: 'localhost'
+      DATABASE_URL: postgresql://portal:${POSTGRES_PASSWORD:-portal_secret}@postgres:5432/student_portal?schema=public
+      RUN_DB_PUSH: ${RUN_DB_PUSH:-true}
+      SEED_DATABASE: ${SEED_DATABASE:-false}
+      ALLOW_DESTRUCTIVE_SEED: ${ALLOW_DESTRUCTIVE_SEED:-false}
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --no-verbose --tries=1 --spider http://localhost:3000/api/healthz || exit 1']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
 
   postgres:
     image: postgres:17-alpine
@@ -23,9 +39,9 @@ services:
     environment:
       POSTGRES_DB: student_portal
       POSTGRES_USER: portal
-      POSTGRES_PASSWORD: portal_secret
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portal_secret}
     ports:
-      - '5432:5432'
+      '${DB_PORT:-5432}:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -33,6 +49,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+
+  # Dev-only: database admin UI (start with: docker compose --profile dev up)
+  adminer:
+    image: adminer:latest
+    profiles: ['dev']
+    container_name: student-portal-adminer
+    restart: unless-stopped
+    ports:
+      - '${ADMINER_PORT:-8080}:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   pgdata:

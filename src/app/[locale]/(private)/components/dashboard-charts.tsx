@@ -16,45 +16,42 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+import { exportToCsv } from '@/lib/utils/csv-export';
 
-const GPA_DATA = [
-  { semester: '1', gpa: 3.2 },
-  { semester: '2', gpa: 3.5 },
-  { semester: '3', gpa: 3.4 },
-  { semester: '4', gpa: 3.7 },
-  { semester: '5', gpa: 3.8 },
-  { semester: '6', gpa: 3.9 },
-];
+interface Props {
+  gpaTrend: { semester: string; gpa: number }[];
+  gradeDistribution: { name: string; value: number; color: string }[];
+  attendanceData: { month: string; attended: number; missed: number }[];
+}
 
-const GRADE_DISTRIBUTION = [
-  { name: 'A', value: 45, color: '#22c55e' },
-  { name: 'B', value: 30, color: '#3b82f6' },
-  { name: 'C', value: 15, color: '#f59e0b' },
-  { name: 'D', value: 7, color: '#f97316' },
-  { name: 'F', value: 3, color: '#ef4444' },
-];
-
-const ATTENDANCE_DATA = [
-  { month: 'Sep', attended: 28, missed: 2 },
-  { month: 'Oct', attended: 26, missed: 4 },
-  { month: 'Nov', attended: 29, missed: 1 },
-  { month: 'Dec', attended: 24, missed: 6 },
-  { month: 'Jan', attended: 30, missed: 0 },
-  { month: 'Feb', attended: 27, missed: 3 },
-];
-
-export const DashboardCharts = () => {
+export const DashboardCharts = ({ gpaTrend, gradeDistribution, attendanceData }: Props) => {
   const t = useTranslations('private.main.dashboard');
 
   return (
     <div className="grid grid-cols-12 gap-[20px]">
       <Card className="col-span-12 xl:col-span-8">
-        <CardHeader>
+        <CardHeader className="flex-row items-center justify-between">
           <CardTitle>{t('gpa-trend')}</CardTitle>
+          <Button
+            variant="tertiary"
+            size="small"
+            icon={<Download className="h-4 w-4" />}
+            onClick={() =>
+              exportToCsv(
+                'gpa-trend.csv',
+                [t('semester'), t('gpa')],
+                gpaTrend.map((d) => [d.semester, d.gpa]),
+              )
+            }
+          >
+            {t('export')}
+          </Button>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={GPA_DATA}>
+            <AreaChart data={gpaTrend}>
               <defs>
                 <linearGradient id="gpaGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
@@ -96,7 +93,7 @@ export const DashboardCharts = () => {
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
-                data={GRADE_DISTRIBUTION}
+                data={gradeDistribution}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -104,7 +101,7 @@ export const DashboardCharts = () => {
                 paddingAngle={2}
                 dataKey="value"
               >
-                {GRADE_DISTRIBUTION.map((entry) => (
+                {gradeDistribution.map((entry) => (
                   <Cell key={entry.name} fill={entry.color} />
                 ))}
               </Pie>
@@ -114,7 +111,7 @@ export const DashboardCharts = () => {
             </PieChart>
           </ResponsiveContainer>
           <div className="mt-4 flex flex-wrap justify-center gap-4">
-            {GRADE_DISTRIBUTION.map((entry) => (
+            {gradeDistribution.map((entry) => (
               <div key={entry.name} className="flex items-center gap-2">
                 <div
                   className="h-3 w-3 rounded-full"
@@ -130,12 +127,26 @@ export const DashboardCharts = () => {
       </Card>
 
       <Card className="col-span-12">
-        <CardHeader>
+        <CardHeader className="flex-row items-center justify-between">
           <CardTitle>{t('attendance')}</CardTitle>
+          <Button
+            variant="tertiary"
+            size="small"
+            icon={<Download className="h-4 w-4" />}
+            onClick={() =>
+              exportToCsv(
+                'attendance.csv',
+                [t('attended'), t('missed')],
+                attendanceData.map((d) => [d.month, d.attended, d.missed]),
+              )
+            }
+          >
+            {t('export')}
+          </Button>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={ATTENDANCE_DATA}>
+            <BarChart data={attendanceData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />

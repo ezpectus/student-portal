@@ -1,5 +1,9 @@
-import { LoadingScreen } from '@/components/loading-screen';
+import { TableSkeleton } from '@/components/table-skeleton';
 
 export default function Loading() {
-  return <LoadingScreen />;
+  return (
+    <div className="p-6">
+      <TableSkeleton rows={6} columns={3} />
+    </div>
+  );
 }

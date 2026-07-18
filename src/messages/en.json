@@ -13,12 +13,22 @@
       "description": "An unexpected error occurred. Please try again or refresh the page.",
       "retry": "Try again"
     },
+    "session": {
+      "expiring-soon": "Your session will expire in {minutes} min. Please save your work."
+    },
     "navigation": {
-      "back": "Back"
+      "back": "Back",
+      "next": "Next"
+    },
+    "locale-switch": {
+      "switch-to-english": "Switch to English",
+      "switch-to-ukrainian": "Перейти на українську"
     },
     "misc": {
       "download": "Download",
-      "view": "View"
+      "view": "View",
+      "rows-per-page": "Rows per page",
+      "select-page-size": "Select page size"
     },
     "tooltip": {
       "edit": "Edit",
@@ -72,6 +82,7 @@
       "yiystat": "Statistical data",
       "adminpanel": "Admin panel",
       "employment": "Employment system",
+      "admin": "Admin Panel",
       "rating": "Archival SPW Rating",
       "useract": "Bravo Requests",
       "viewcontrol": "Review current control",
@@ -83,7 +94,8 @@
       "main": "Home",
       "profile": "Profile",
       "settings": "Settings",
-      "contacts": "Contacts"
+      "contacts": "Contacts",
+      "admin": "Admin Panel"
     },
     "user-category": {
       "student": "Student",
@@ -155,6 +167,13 @@
         "retake2": "Second retake",
         "individual": "Individual"
       },
+      "employment-type": {
+        "unknown": "Unknown",
+        "full-time": "Full-time",
+        "part-time": "Part-time",
+        "part-time-internal": "Internal part-time",
+        "part-time-external": "External part-time"
+      },
       "status": {
         "passed": "Passed",
         "unknown": "Unknown",
@@ -196,7 +215,8 @@
       "field": {
         "username": "Email address or username",
         "password": "Password",
-        "error": "Invalid credentials"
+        "error": "Invalid credentials",
+        "error-rate-limited": "Too many login attempts. Try again in {minutes} min."
       },
       "button": {
         "login": "Sign in",
@@ -209,10 +229,15 @@
       "field": {
         "name": "Full name",
         "email": "Email address",
+        "school-code": "School code",
         "password": "Password",
         "passwordConfirm": "Confirm password",
+        "role": "I am a...",
+        "role-student": "Student",
+        "role-teacher": "Teacher",
         "error": {
           "email-taken": "An account with this email already exists",
+          "school-not-found": "School not found for the provided code",
           "generic": "Registration failed. Please try again."
         }
       },
@@ -227,7 +252,23 @@
         "password-required": "Password is required",
         "password-min": "Password must be at least 8 characters",
         "password-confirm-required": "Please confirm your password",
+        "school-code-required": "School code is required",
+        "password-strength": {
+          "weak": "Weak password",
+          "fair": "Fair password",
+          "good": "Good password",
+          "strong": "Strong password"
+        },
         "password-match": "Passwords do not match"
+      }
+    },
+    "demo": {
+      "title": "Demo accounts",
+      "description": "For portfolio review only. Click a role to fill the form.",
+      "roles": {
+        "admin": "Administrator",
+        "teacher": "Teacher",
+        "student": "Student"
       }
     },
     "kpi-id": {
@@ -300,7 +341,8 @@
           "date": "Date",
           "status": "Status",
           "actions": "Actions",
-          "download": "Download PDF"
+          "download": "Download PDF",
+          "empty": "You have no certificate orders yet"
         }
       }
     },
@@ -338,7 +380,8 @@
         "count": "Count",
         "attended": "Attended",
         "missed": "Missed",
-        "rate": "Rate"
+        "rate": "Rate",
+        "export": "Export"
       },
       "cards": {
         "information": {
@@ -367,14 +410,27 @@
           }
         },
         "carousel": {
-          "default-link-title": "Go to schedule",
-          "default-slide": {
-            "title-base": "You have entered the <systemname></systemname> system",
-            "title-system-name": "Electronic Campus",
-            "description": "Here you can find methodological support for academic disciplines, results of current control, news of the educational process and other important information.",
-            "link-title": "Learn more"
-          }
+          "slide-1": "Welcome to Student Portal",
+          "slide-2": "Your campus, simplified",
+          "slide-3": "Everything in one place",
+          "slide-4": "Grades, schedules, and more",
+          "slide-5": "Built for students and faculty",
+          "credits-by": "by"
         }
+      }
+    },
+    "profile-completion": {
+      "title": "Profile Completion",
+      "progress": "Progress",
+      "complete-profile": "Complete profile",
+      "fields": {
+        "photo": "Photo",
+        "phone": "Phone",
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "groupName": "Group",
+        "birthDate": "Date of birth",
+        "address": "Address"
       }
     },
     "about": {
@@ -629,6 +685,7 @@
         "pending": "Pending",
         "approved": "Approved"
       },
+      "search-placeholder": "Search by student name, purpose...",
       "table": {
         "created": "Date",
         "documentNumber": "Document number",
@@ -641,7 +698,8 @@
         "purpose": "purpose",
         "actions": "actions",
         "signedSuccess": "Certificate signed successfully",
-        "signedDescription": "The certificate has been signed successfully"
+        "signedDescription": "The certificate has been signed successfully",
+        "empty": "No certificate requests yet"
       }
     },
     "vedomoststud": {
@@ -668,6 +726,9 @@
       "inbox": {
         "selected": "selected:",
         "refresh": "Refresh",
+        "search-placeholder": "Search...",
+        "empty": "No messages",
+        "no-results": "No results found",
         "table": {
           "sender": "Sender",
           "recipient": "Recipient",
@@ -761,7 +822,8 @@
         "lecturer": "Lecturer",
         "control-type": "Type of control",
         "link": "Link",
-        "note": "Note"
+        "note": "Note",
+        "empty": "No data to display"
       }
     },
     "attestation-results": {
@@ -836,7 +898,30 @@
       "section": {
         "photo": "Photo",
         "contacts": "Contacts",
-        "password": "Password"
+        "password": "Password",
+        "preferences": "Preferences",
+        "security": "Security"
+      },
+      "security": {
+        "logout-all": "Log out of all devices",
+        "logout-all-description": "This will end your sessions on all devices where you are currently logged in, including this one."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Choose which notifications you want to receive.",
+        "email": "Email notifications",
+        "email-hint": "Receive important updates via email",
+        "announcements": "Announcements",
+        "announcements-hint": "Notifications about new announcements",
+        "messages": "Messages",
+        "messages-hint": "Notifications about new incoming messages",
+        "saved": "Notification preferences saved"
+      },
+      "preferences": {
+        "theme": "Appearance",
+        "theme-hint": "Cycle through light, dim, and dark themes",
+        "language": "Language",
+        "language-hint": "Choose your portal language"
       },
       "button": {
         "edit": "Edit",
@@ -860,6 +945,14 @@
         "file-type": "Only PNG, JPEG, and JPG files are supported."
       }
     },
+    "notifications": {
+      "title": "Notifications",
+      "open": "Open notifications",
+      "unread": "{count} unread",
+      "mark-all": "Mark all as read",
+      "refresh": "Refresh",
+      "empty": "You are all caught up."
+    },
     "privacy-consent": {
       "title": "Consent to Publish KPI Personal Data on the Internet",
       "description": "Agreement on the use of personal data on the Intellect portal.",
@@ -874,6 +967,104 @@
       "responsibility": "I understand the responsibility and potential negative consequences of this decision, including the possibility of unauthorized use of this data by third parties.",
       "revocation": "This consent is granted indefinitely and may be revoked at any time by submitting a written application.",
       "accept-button": "I give my consent"
+    },
+    "admin": {
+      "title": "Admin Panel",
+      "subtitle": "Manage users, view student profiles, and oversee academic records.",
+      "stats": {
+        "total-users": "Total Users",
+        "students": "Students",
+        "active-students": "Active Students",
+        "avg-gpa": "Average GPA"
+      },
+      "filters": {
+        "search-placeholder": "Search by name, email, or specialty...",
+        "category": "Category",
+        "all-categories": "All Categories",
+        "status": "Status",
+        "all-statuses": "All Statuses",
+        "faculty": "Faculty",
+        "all-faculties": "All Faculties",
+        "role-student": "Student",
+        "role-teacher": "Teacher",
+        "role-admin": "Administrator",
+        "status-studying": "Studying",
+        "status-leave": "On Academic Leave",
+        "status-dismissed": "Dismissed"
+      },
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "category": "Category",
+        "faculty": "Faculty",
+        "status": "Status",
+        "gpa": "GPA",
+        "last-active": "Last Active",
+        "actions": "Actions",
+        "view": "View",
+        "delete": "Delete",
+        "empty": "No users found."
+      },
+      "detail": {
+        "username": "Username",
+        "phone": "Phone",
+        "birth-date": "Date of Birth",
+        "address": "Address",
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "group": "Study Group",
+        "grade-book": "Grade Book #",
+        "study-year": "Study Year",
+        "gpa": "GPA",
+        "created-at": "Registered",
+        "last-active": "Last Active",
+        "courses": "Courses",
+        "credits": "credits",
+        "attendance": "Attendance",
+        "honor-code-signed": "Honor Code Signed",
+        "honor-code-unsigned": "Honor Code Not Signed"
+      },
+      "database": {
+        "title": "Database Explorer",
+        "refresh": "Refresh",
+        "empty": "No records found.",
+        "showing": "Total records: {total}",
+        "previous": "Previous",
+        "next": "Next",
+        "tables": {
+          "users": "Users",
+          "courses": "Courses",
+          "attendance": "Attendance",
+          "notifications": "Notifications"
+        }
+      },
+      "delete": {
+        "title": "Delete User",
+        "description": "Are you sure you want to delete {name}? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "success": "User deleted successfully."
+      },
+      "audit": {
+        "title": "Audit Log",
+        "loading": "Loading audit log...",
+        "empty": "No audit entries found.",
+        "column": {
+          "time": "Time",
+          "user": "User",
+          "action": "Action",
+          "entity": "Entity",
+          "details": "Details"
+        },
+        "action": {
+          "delete": "Delete",
+          "update_status": "Status Update",
+          "change_email": "Email Change",
+          "change_password": "Password Change",
+          "change_photo": "Photo Change",
+          "change_notifications": "Notification Preferences Change"
+        }
+      }
     }
   },
   "landing": {
@@ -943,6 +1134,78 @@
       "messages": "Messages",
       "materials": "Study Materials",
       "announcements": "Announcements"
+    },
+    "shortcuts": {
+      "title": "Keyboard Shortcuts",
+      "groups": {
+        "general": "General",
+        "navigation": "Navigation",
+        "actions": "Actions"
+      },
+      "items": {
+        "command-palette": "Open command palette",
+        "help": "Show keyboard shortcuts",
+        "close": "Close dialog",
+        "home": "Home page",
+        "profile": "Profile",
+        "settings": "Settings",
+        "search-messages": "Search messages"
+      }
+    },
+    "onboarding": {
+      "title": "Welcome to Student Portal",
+      "subtitle": "Fill in your information to get started. You can skip any step.",
+      "skip-all": "Skip all",
+      "steps": {
+        "academic": {
+          "title": "Academic Information",
+          "description": "Tell us about your faculty and program."
+        },
+        "personal": {
+          "title": "Personal Details",
+          "description": "Add your contact information and date of birth."
+        },
+        "photo": {
+          "title": "Profile Photo",
+          "description": "Upload a photo so others can recognize you."
+        }
+      },
+      "field": {
+        "faculty": "Faculty",
+        "speciality": "Speciality",
+        "group": "Group",
+        "study-form": "Study Form",
+        "study-year": "Year",
+        "phone": "Phone",
+        "birth-date": "Date of Birth",
+        "grade-book": "Grade Book Number"
+      },
+      "placeholder": {
+        "faculty": "e.g. FIOT",
+        "speciality": "e.g. Software Engineering",
+        "group": "e.g. IP-01",
+        "study-form": "e.g. Full-time",
+        "phone": "+380...",
+        "grade-book": "e.g. 12345678"
+      },
+      "validation": {
+        "faculty-required": "Faculty is required",
+        "speciality-required": "Speciality is required",
+        "group-required": "Group is required",
+        "study-form-required": "Study form is required",
+        "study-year-required": "Year is required",
+        "study-year-max": "Year must be between 1 and 6"
+      },
+      "button": {
+        "back": "Back",
+        "next": "Next",
+        "skip": "Skip",
+        "finish": "Finish"
+      },
+      "success": {
+        "title": "Profile updated",
+        "description": "Welcome to Student Portal!"
+      }
     }
   }
 }

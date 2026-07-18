@@ -1,6 +1,7 @@
 import { MenuItem } from './menu-item';
 import { getModuleMenuSection } from '@/actions/menu.actions';
 import { CollapsibleMenuItem } from './collapsible-menu-item';
+import { UnreadMailBadge } from './unread-mail-badge';
 import { MenuGroup } from '@/types/menu-item-meta';
 
 export async function ModulesMenuItems() {
@@ -14,6 +15,7 @@ export async function ModulesMenuItems() {
         url={menuGroup.url}
         title={menuGroup.title}
         isExternal={menuGroup.external}
+        badge={menuGroup.name === 'msg' ? <UnreadMailBadge /> : undefined}
       />
     );
   };

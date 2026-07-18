@@ -1,7 +1,6 @@
 import { getMonitoring } from '@/actions/monitoring.actions';
 import { StudySheetContent } from '@/app/[locale]/(private)/module/studysheet/components/study-sheet-content';
-import { LoadingScreen } from '@/components/loading-screen';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LocaleProps } from '@/types/locale-props';
 
 export async function generateMetadata({ params }: LocaleProps) {
@@ -14,17 +13,11 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function StudySheetPage() {
-  let sheet;
-  try {
-    sheet = await getMonitoring();
-  } catch {
-    // silently fail — loading screen will show
-  }
+export default async function StudySheetPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
-  if (!sheet) {
-    return <LoadingScreen />;
-  }
+  const sheet = await getMonitoring();
 
   return <StudySheetContent sheet={sheet} />;
 }

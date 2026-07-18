@@ -1,5 +1,4 @@
 import { clsx, type ClassValue } from 'clsx';
-import dayjs from 'dayjs';
 import { uid } from 'radash';
 import type { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -29,10 +28,6 @@ export const parseContentDispositionFilename = (header: string): string | null =
   return match ? match[2] : null;
 };
 
-export const formatDate = (dateString: string) => dayjs(dateString).format('YYYY-MM-DD');
-
-export const formatTime = (dateString: string) => dayjs(dateString).format('HH:mm');
-
 export function linkifyText(text: string): ReactNode[] {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = text.split(urlRegex);
@@ -40,8 +35,9 @@ export function linkifyText(text: string): ReactNode[] {
   return parts.map((part, index) => {
     if (urlRegex.test(part)) {
       urlRegex.lastIndex = 0;
+      const occurrence = parts.slice(0, index).filter((candidate) => candidate === part).length;
       return (
-        <a key={index} href={part} target="_blank" rel="noopener noreferrer" className="text-basic-blue hover:underline">
+        <a key={`${part}-${occurrence}`} href={part} target="_blank" rel="noopener noreferrer" className="text-basic-blue hover:underline">
           {part}
         </a>
       );

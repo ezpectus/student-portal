@@ -1,7 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
+import Image from 'next/image';
 import { Heading3 } from '@/components/typography/headers';
 import { Paragraph } from '@/components/typography/paragraph';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -41,7 +42,7 @@ export const AnnouncementSlide = ({ title, description, link, linkTitle, image }
       </div>
       <div className={cn('hidden min-w-[300px] basis-[300px] lg:block xl:min-w-[400px] xl:basis-[400px]')}>
         <AspectRatio ratio={4 / 3.5}>
-          {image && <img src={image} alt={title as string} className="h-full w-full rounded-md object-cover" />}
+          {image && <Image src={image} alt={title as string} fill className="h-full w-full rounded-md object-cover" />}
         </AspectRatio>
       </div>
     </div>

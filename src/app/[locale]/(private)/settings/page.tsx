@@ -1,6 +1,6 @@
 import { Description, Heading2 } from '@/components/typography';
 import { SubLayout } from '../sub-layout';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SettingsForm } from '@/app/[locale]/(private)/settings/settings-form';
 import { getUserDetails } from '@/actions/auth.actions';
 import { notFound } from 'next/navigation';
@@ -18,7 +18,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function SettingsPage() {
+export default async function SettingsPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
   const user = await getUserDetails();
 

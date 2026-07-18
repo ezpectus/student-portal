@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model School {
+  id        Int      @id @default(autoincrement())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  users     User[]
+  courses   Course[]
+}
+
+model User {
+  id                Int            @id @default(autoincrement())
+  username          String         @unique
+  email             String         @unique
+  passwordHash      String
+  fullName          String
+  photo             String         @default("")
+  role              Role           @default(STUDENT)
+  faculty           String?
+  speciality        String?
+  groupName         String?
+  studyForm         String?
+  status            String?
+  studyYear         Int            @default(0)
+  gpa               Float          @default(0)
+  phone             String?
+  address           String?
+  birthDate         String?
+  gradeBookNumber   String?
+  codeOfHonorSigned Boolean        @default(false)
+  schoolId          Int?
+  school            School?        @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  taughtCourses     Course[]       @relation("teacherCourses")
+  createdAt         DateTime       @default(now())
+  lastActiveAt      DateTime       @default(now())
+  courses           Course[]
+  attendance        Attendance[]
+  notifications     Notification[]
+  sentNotifications Notification[] @relation("sender")
+
+  @@index([role])
+  @@index([faculty])
+  @@index([status])
+  @@index([lastActiveAt])
+  @@index([schoolId, role])
+}
+
+model Course {
+  id        Int     @id @default(autoincrement())
+  name      String
+  grade     Float
+  credits   Int
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schoolId  Int?
+  school    School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  teacherId Int?
+  teacher   User?   @relation("teacherCourses", fields: [teacherId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([teacherId])
+}
+
+model Attendance {
+  id      Int  @id @default(autoincrement())
+  month   String
+  present Int
+  total   Int
+  userId  Int
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@unique([userId, month])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  message   String
+  type      String   @default("info")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  senderId  Int?
+  sender    User?    @relation("sender", fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([read])
+  @@index([userId, read, createdAt])
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}

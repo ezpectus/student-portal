@@ -1,6 +1,6 @@
 import { Description, Heading2 } from '@/components/typography';
 import { SubLayout } from '../../sub-layout';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
 import { redirectToEmploymentSystem } from '@/actions/auth.actions';
 import { LocaleProps } from '@/types/locale-props';
@@ -17,7 +17,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function EmploymentPage() {
+export default async function EmploymentPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
 
   return (

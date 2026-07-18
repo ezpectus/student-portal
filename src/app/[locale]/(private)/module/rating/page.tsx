@@ -1,7 +1,7 @@
 import React from 'react';
 import { getRatingData } from '@/actions/rating.actions';
 import { LocaleProps } from '@/types/locale-props';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Heading2, Paragraph } from '@/components/typography';
 import { RatingView } from './components/rating-view';
@@ -17,7 +17,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function RatingPage() {
+export default async function RatingPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const ratingData = await getRatingData();
   const t = await getTranslations(INTL_NAMESPACE);
 

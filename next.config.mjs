@@ -74,8 +74,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    // Disable Next.js image optimization and caching; let CDN/browser handle it
-    unoptimized: true,
   },
   env: {
     NEXT_PUBLIC_ENV: process.env.NEXT_PUBLIC_ENV,

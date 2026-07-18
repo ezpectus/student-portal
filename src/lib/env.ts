@@ -7,6 +7,13 @@ const envSchema = z.object({
   MAIN_COOKIE_DOMAIN: z.string().optional(),
   ROOT_COOKIE_DOMAIN: z.string().optional(),
 
+  DATABASE_URL: z.string().default('file:./dev.db'),
+  JWT_SECRET: z.string().default('student-portal-demo-secret'),
+
+  NEXT_PUBLIC_LOCAL_AUTH: z.string().optional().default('true'),
+  NEXT_PUBLIC_SHOW_DEMO_CREDENTIALS: z.string().optional().default('false'),
+  NEXT_PUBLIC_BETA_LOGO: z.string().optional(),
+
   NEXT_PUBLIC_GA_ID: z.string().optional(),
   NEXT_PUBLIC_ENV: z.string().optional(),
   NEXT_PUBLIC_RECAPTCHA_KEY: z.string().optional(),
@@ -35,6 +42,11 @@ const envSchema = z.object({
   NEXT_PUBLIC_LIBRARY_DISCOVERY_URL: z.string().url().optional(),
   NEXT_PUBLIC_UNIVERSITY_NEWS: z.string().url().optional(),
   NEXT_PUBLIC_STUDENT_COUNCIL: z.string().url().optional(),
+
+  NEXT_PUBLIC_FEATURE_DARK_MODE: z.string().optional(),
+  NEXT_PUBLIC_FEATURE_COMMAND_PALETTE: z.string().optional(),
+  NEXT_PUBLIC_FEATURE_REALTIME_NOTIFICATIONS: z.string().optional(),
+  NEXT_PUBLIC_FEATURE_ADMIN_PANEL: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

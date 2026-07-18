@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import {
   getAdminAnnouncements,
@@ -25,16 +25,19 @@ interface PageProps extends LocaleProps {
   searchParams: Promise<{ page: number; search: string; language: LOCALE; }>;
 }
 
-export default async function AnnouncementsPage({ searchParams }: PageProps) {
+export default async function AnnouncementsPage({ params, searchParams }: PageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
 
-  const params = await searchParams;
+  const query = await searchParams;
 
   const adminData = await getAdminAnnouncements({
-    page: params.page,
+    page: query.page,
     pageSize: PAGE_SIZE_DEFAULT,
-    search: params.search,
-    language: params.language,
+    search: query.search,
+    language: query.language,
   });
 
   return (
@@ -46,7 +49,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps) {
         <AnnouncementsListPage
           items={adminData.items}
           total={adminData.total}
-          page={params.page}
+          page={query.page}
           pageSize={PAGE_SIZE_DEFAULT}
         />
       </div>

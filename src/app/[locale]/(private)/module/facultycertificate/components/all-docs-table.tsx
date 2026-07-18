@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Check, EyeBold, PencilRegular, Printer, X } from '@/app/images';
 import { Badge } from '@/components/ui/badge';
 import { printCertificate } from '@/app/[locale]/(private)/module/facultycertificate/utils/print-certificate';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { buttonDisableController } from '@/app/[locale]/(private)/module/facultycertificate/utils/button-state-controller';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 
@@ -67,6 +67,10 @@ export const AllDocsTable = memo(function DocsTable({ certificates, totalCount }
   ]);
 
   const { page } = usePagination(PAGE_SIZE_DEFAULT, certificates);
+
+  if (certificates.length === 0) {
+    return <p className="text-muted-foreground py-12 text-center text-sm">{tTable('empty')}</p>;
+  }
 
   return (
     <>

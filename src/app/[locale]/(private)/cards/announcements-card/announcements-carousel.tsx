@@ -49,8 +49,8 @@ export const AnnouncementsCarousel = ({ announcements }: AnnouncementsCarouselPr
         ))}
       </CarouselContent>
       <div className="absolute -bottom-4 -left-4 flex gap-[8px]">
-        {scrollSnaps.map((_, index) => (
-          <DotButton key={index} onClick={() => onDotButtonClick(index)} selected={selectedIndex === index} />
+        {scrollSnaps.map((snap, index) => (
+          <DotButton key={snap} onClick={() => onDotButtonClick(index)} selected={selectedIndex === index} />
         ))}
       </div>
     </Carousel>

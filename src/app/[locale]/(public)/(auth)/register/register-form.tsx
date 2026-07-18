@@ -12,7 +12,10 @@ import { useTranslations } from 'next-intl';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import PasswordInput from '@/components/ui/password-input';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { DemoCredentials } from '@/components/auth/demo-credentials';
+import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
 
 export const RegisterForm = () => {
   const t = useTranslations('auth.register');
@@ -22,8 +25,10 @@ export const RegisterForm = () => {
   const FormSchema = z.object({
     name: z.string().min(1, { message: t('validation.name-required') }),
     email: z.string().min(1, { message: t('validation.email-required') }).email({ message: t('validation.email-invalid') }),
+    schoolCode: z.string().min(1, { message: t('validation.school-code-required') }),
     password: z.string().min(8, { message: t('validation.password-min') }),
     passwordConfirm: z.string().min(1, { message: t('validation.password-confirm-required') }),
+    role: z.enum(['STUDENT', 'TEACHER']),
   }).refine((data) => data.password === data.passwordConfirm, {
     message: t('validation.password-match'),
     path: ['passwordConfirm'],
@@ -31,13 +36,15 @@ export const RegisterForm = () => {
 
   type FormData = z.infer<typeof FormSchema>;
 
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
       email: '',
+      schoolCode: '',
       password: '',
       passwordConfirm: '',
+      role: 'STUDENT',
     },
   });
 
@@ -45,14 +52,14 @@ export const RegisterForm = () => {
     form.clearErrors();
 
     try {
-      const result = await registerUser(data.name, data.email, data.password);
+      const result = await registerUser(data.name, data.email, data.password, data.role, data.schoolCode);
 
       if (!result.ok) {
         form.setError('root', { message: t(`field.error.${result.error}`) });
         return;
       }
 
-      router.push('/login');
+      router.push('/onboarding');
     } catch {
       errorToast();
     }
@@ -85,11 +92,23 @@ export const RegisterForm = () => {
         />
         <FormField
           control={form.control}
+          name="schoolCode"
+          render={({ field }) => (
+            <FormItem className="mb-6 grid w-full items-center gap-2">
+              <Label htmlFor="schoolCode">{t('field.school-code')}</Label>
+              <Input {...field} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem className="mb-6 grid w-full items-center gap-2">
               <Label htmlFor="password">{t('field.password')}</Label>
               <PasswordInput {...field} />
+              <PasswordStrengthIndicator password={field.value} />
               <FormMessage />
             </FormItem>
           )}
@@ -105,6 +124,30 @@ export const RegisterForm = () => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className="mb-6 grid w-full items-center gap-2">
+              <Label>{t('field.role')}</Label>
+              <RadioGroup
+                value={field.value}
+                onValueChange={field.onChange}
+                className="flex gap-6"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="STUDENT" id="role-student" />
+                  <Label htmlFor="role-student">{t('field.role-student')}</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="TEACHER" id="role-teacher" />
+                  <Label htmlFor="role-teacher">{t('field.role-teacher')}</Label>
+                </div>
+              </RadioGroup>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormMessage>{form.formState.errors.root?.message}</FormMessage>
         <Button size="big" className="my-4 w-full" type="submit" loading={form.formState.isSubmitting}>
           {t('button.register')}
@@ -113,6 +156,7 @@ export const RegisterForm = () => {
           {t('button.login')}
         </Link>
       </form>
+      <DemoCredentials />
     </Form>
   );
 };

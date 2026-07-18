@@ -1,5 +1,6 @@
 import { getContacts, getContactTypes } from '@/actions/profile.actions';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { LocaleProps } from '@/types/locale-props';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { getUserDetails } from '@/actions/auth.actions';
 import { Description, Heading2 } from '@/components/typography';
@@ -7,19 +8,22 @@ import { InfoBlock } from '@/app/[locale]/(private)/profile/components/info-bloc
 import { Card, CardContent } from '@/components/ui/card';
 import { Contacts } from '@/app/[locale]/(private)/profile/components/contacts';
 import { IntellectPublicationInfo } from '@/app/[locale]/(private)/profile/components/intellect-publication-info';
-import { CodeOfHonor } from '@/app/[locale]/(private)/profile/components/code-of-honor';
 
 const INTL_NAMESPACE = 'private.profile';
 
-export async function generateMetadata() {
-  const t = await getTranslations(INTL_NAMESPACE);
+export async function generateMetadata({ params }: LocaleProps) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: INTL_NAMESPACE });
 
   return {
     title: t('title'),
   };
 }
 
-export default async function Page() {
+export default async function Page({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
 
   const user = await getUserDetails();

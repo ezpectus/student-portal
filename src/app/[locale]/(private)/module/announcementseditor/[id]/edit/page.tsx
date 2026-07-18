@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { getAdminAnnouncementById, getCourses, getRoles, getStudyForms } from '@/actions/announcement.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
@@ -23,8 +23,10 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function EditAnnouncement({ params }: PageProps) {
+  const { id, locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
-  const { id } = await params;
 
   const [item, rolesData, studyFormsData, coursesData] = await Promise.all([
     getAdminAnnouncementById(id),

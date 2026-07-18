@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { AnnouncementFormValues, toAnnouncementCreate } from '../../components/schema';
 import { useTranslations } from "next-intl";
 import { updateAnnouncement } from "@/actions/announcement.actions";

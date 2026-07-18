@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Link } from '@/i18n/routing';
 import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
@@ -23,7 +23,10 @@ export async function generateMetadata({ params }: LocaleProps) {
 const SEMESTERS = [1, 2];
 const ATTESTATION_NUMBERS = [1, 2];
 
-export default async function AttestationResultsPage() {
+export default async function AttestationResultsPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const results = await getAttestationResults();
 
   const t = await getTranslations(INTL_NAMESPACE);
@@ -34,7 +37,7 @@ export default async function AttestationResultsPage() {
   };
 
   return (
-    <Card className="rounded-b-6 col-span-full w-full bg-white p-6 xl:col-span-5">
+    <Card className="rounded-b-6 col-span-full w-full bg-card p-6 text-card-foreground xl:col-span-5">
       <Table>
         <TableHeader>
           <TableRow>

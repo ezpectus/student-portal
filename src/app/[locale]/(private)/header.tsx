@@ -15,6 +15,8 @@ import { SignOut } from '@/app/images';
 import { Paragraph } from '@/components/typography/paragraph';
 import { USER_CATEGORIES } from '@/lib/constants/user-category';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { NotificationCenter } from '@/components/notifications/notification-center';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 interface Props {
   user: User;
@@ -35,14 +37,18 @@ export const Header = ({ user }: Props) => {
   // propagated to CDN url via campus backend.
   useEffect(() => {
     const setProfilePhotoUrl = () => setProfilePhoto(getUniqueUserPhotoUrl(user.photo));
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     if (firstRender.current) {
       setProfilePhotoUrl();
       firstRender.current = false;
     } else {
-      const timer = setTimeout(() => setProfilePhotoUrl(), 5000);
-      return () => clearTimeout(timer);
+      timer = setTimeout(() => setProfilePhotoUrl(), 5000);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [user]);
 
   const handleLogout = async () => {
@@ -51,7 +57,7 @@ export const Header = ({ user }: Props) => {
 
   return (
     <header
-      className={cn('bg-basic-white sticky top-0 flex h-[80px] items-center justify-between px-6', {
+      className={cn('bg-background sticky top-0 flex h-[80px] items-center justify-between border-b border-border px-6', {
         'justify-end': !isMobile,
       })}
     >
@@ -61,6 +67,7 @@ export const Header = ({ user }: Props) => {
       <div className="flex items-center gap-8">
         <ThemeToggle />
         <LocaleSwitch />
+        <NotificationCenter />
         <div className="flex items-center gap-3">
           <ProfilePicture size="sm" src={profilePhoto} />
           <div className="hidden flex-col md:flex">
@@ -70,6 +77,9 @@ export const Header = ({ user }: Props) => {
                 {tUserCategory(USER_CATEGORIES[category])}
               </Paragraph>
             ))}
+            {user?.schoolName && (
+              <Paragraph className="m-0 text-xs text-muted-foreground">{user.schoolName}</Paragraph>
+            )}
           </div>
         </div>
         <TooltipProvider>

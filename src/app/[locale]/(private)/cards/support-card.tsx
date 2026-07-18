@@ -6,14 +6,13 @@ import { TextButton } from '@/components/ui/text-button';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { env } from '@/lib/env';
-import { FC } from 'react';
-
 interface Props {
   className?: string;
 }
 
-export const SupportCard: FC<Props> = async ({ className }) => {
+export const SupportCard = async ({ className }: Props) => {
   const t = await getTranslations('private.main.cards.support');
+  const suggestionsUrl = env.NEXT_PUBLIC_SUGGESTIONS_FORM;
 
   return (
     <Card className={cn(className)}>
@@ -23,9 +22,11 @@ export const SupportCard: FC<Props> = async ({ className }) => {
       <CardContent>
         <Paragraph>{t('description')}</Paragraph>
         <Paragraph className="mt-8 mb-0 flex flex-col items-start gap-4">
-          <TextButton size="huge" href={env.NEXT_PUBLIC_SUGGESTIONS_FORM} icon={<ChatsTeardrop />}>
-            {t('button.suggestions-form')}
-          </TextButton>
+          {suggestionsUrl && (
+            <TextButton size="huge" href={suggestionsUrl} icon={<ChatsTeardrop />}>
+              {t('button.suggestions-form')}
+            </TextButton>
+          )}
           <TextButton size="huge" href="mailto:support@student-portal.app" icon={<EnvelopeSimple />}>
             {t('button.email')}
           </TextButton>

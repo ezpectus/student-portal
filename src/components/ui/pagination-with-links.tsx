@@ -10,7 +10,9 @@ import {
   PaginationNext,
 } from './pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { createPagesRange } from '@/lib/pagination.utils';
@@ -114,12 +116,13 @@ function SelectRowsPerPage({
   setPageSize: (newSize: number) => void;
   pageSize: number;
 }) {
+  const t = useTranslations('global');
   return (
     <div className="flex items-center gap-4">
-      <span className="text-sm whitespace-nowrap">Rows per page</span>
+      <span className="text-sm whitespace-nowrap">{t('misc.rows-per-page')}</span>
       <Select value={String(pageSize)} onValueChange={(value) => setPageSize(Number(value))}>
         <SelectTrigger>
-          <SelectValue placeholder="Select page size">{String(pageSize)}</SelectValue>
+          <SelectValue placeholder={t('misc.select-page-size')}>{String(pageSize)}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {options.map((option) => (

@@ -5,7 +5,7 @@ import { Paragraph } from '@/components/typography/paragraph';
 import { Card } from '@/components/ui/card';
 import { getCurator } from '@/actions/curator.actions';
 import { LocaleProps } from '@/types/locale-props';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ProfilePicture } from '@/components/ui/profile-picture';
 import { Show } from '@/components/utils/show';
 import { Description } from '@/components/typography';
@@ -21,7 +21,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function CuratorPage() {
+export default async function CuratorPage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const result = await getCurator();
   const t = await getTranslations(INTL_NAMESPACE);
 

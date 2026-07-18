@@ -7,10 +7,13 @@ import { useTableSort } from '@/hooks/use-table-sort';
 
 import { LecturerItemCell } from '@/app/[locale]/(private)/module/studysheet/[id]/components/lecturer-item-cell';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TermStatusBadge } from '@/app/[locale]/(private)/module/vedomoststud/components/term-status-badge';
 import { Paragraph } from '@/components/typography';
+import { exportToCsv } from '@/lib/utils/csv-export';
+import { Download } from 'lucide-react';
 
 import { Status } from '@/types/enums/session/status';
 import { TermDiscipline } from '@/types/models/term';
@@ -32,8 +35,30 @@ export default function SessionTable({ termResults }: { termResults: TermResults
     ['date', 'mark', 'assessmentType', 'recordType'],
   );
 
+  const handleExportCsv = () => {
+    exportToCsv(
+      'grades.csv',
+      [t('date'), t('subject'), t('score'), t('controlType'), t('sessionType'), t('lecturer'), t('status')],
+      termResults.disciplines.map((d) => [
+        d.date ?? '',
+        d.name,
+        d.mark ?? '',
+        tEnums(`assessment-type.${dash(d.assessmentType)}`),
+        tEnums(`record-type.${dash(d.recordType)}`),
+        d.lecturer?.fullName ?? '',
+        d.status ?? '',
+      ]),
+    );
+  };
+
   return (
-    <Card className="rounded-b-6 col-span-full w-full bg-white p-6 xl:col-span-5">
+    <Card className="rounded-b-6 col-span-full w-full bg-card p-6 text-card-foreground xl:col-span-5">
+      <div className="mb-4 flex items-center justify-end">
+        <Button variant="tertiary" size="small" onClick={handleExportCsv}>
+          <Download className="h-4 w-4" />
+          CSV
+        </Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

@@ -1,11 +1,18 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { AnnouncementCreate } from '@/app/[locale]/(private)/module/announcementseditor/types';
+import { revalidatePath, revalidateTag } from 'next/cache';
+
+import { z } from 'zod';
+
 import { apiFetch } from '@/lib/client';
+import { throwApiError } from '@/lib/api-error';
+import { validateInput } from '@/lib/validate';
+import { ANNOUNCEMENTS_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { isOutdated } from '@/lib/date.utils';
-import { AdminAnnouncementItem, Announcement } from '@/types/models/announcement';
+import { retryWithBackoff } from '@/lib/retry';
 import { LOCALE } from '@/i18n/routing';
+import { AdminAnnouncementItem, Announcement } from '@/types/models/announcement';
+import { AnnouncementCreate } from '@/app/[locale]/(private)/module/announcementseditor/types';
 
 // URL pathname (no [locale] prefix, no route group). Matches the convention
 // used by other actions in the repo, e.g. certificates.actions revalidating
@@ -37,7 +44,9 @@ export const getAdminAnnouncements = async (query: AdminAnnouncementsQuery): Pro
 
     const qs = params.toString();
     const url = qs ? `announcements/admin?${qs}` : 'announcements/admin';
-    const response = await apiFetch<AdminAnnouncementItem[]>(url);
+    const response = await apiFetch<AdminAnnouncementItem[]>(url, {
+      next: { revalidate: 300, tags: [ANNOUNCEMENTS_CACHE_TAG] },
+    });
 
     if (!response.ok) {
       return { items: [], total: 0 };
@@ -57,24 +66,29 @@ export const getAdminAnnouncementById = async (id: number): Promise<AdminAnnounc
     const response = await apiFetch<AdminAnnouncementItem>(`announcements/admin/${id}`);
 
     if (!response.ok) {
-      throw new Error("Failed to fetch announcement");
+      throwApiError(response.status, 'getAdminAnnouncementById');
     }
 
-    return await response.json();
-  } catch {
-    throw new Error("Failed to fetch announcement");
+    return (await response.json()) as AdminAnnouncementItem;
+  } catch (error) {
+    throw error instanceof Error ? error : new Error('Failed to fetch announcement');
   }
 };
 
 export const getAnnouncements = async ({ excludeOutdated = false }: { excludeOutdated?: boolean } = {}) => {
   try {
-    const response = await apiFetch<Announcement[]>('announcements');
+    const response = await retryWithBackoff(() => apiFetch<Announcement[]>('announcements', {
+      next: { revalidate: 300, tags: [ANNOUNCEMENTS_CACHE_TAG] },
+    }), {
+      maxAttempts: 2,
+      baseDelayMs: 200,
+    });
 
     if (!response.ok) {
       return [];
     }
 
-    const announcements = await response.json();
+    const announcements = (await response.json()) as Announcement[];
 
     const sortedAnnouncements = announcements.sort((a, b) => {
       return new Date(b.end || 0).getTime() - new Date(a.end || 0).getTime();
@@ -85,59 +99,78 @@ export const getAnnouncements = async ({ excludeOutdated = false }: { excludeOut
     }
 
     return sortedAnnouncements;
-  } catch (error) {
+  } catch {
     return [];
   }
 };
 
-export const createAnnouncement = async (data: AnnouncementCreate): Promise<number> => {
-  try {
-    const body = JSON.stringify(data);
-    const response = await apiFetch('announcements', {
-      method: 'POST',
-      body,
-    });
+const announcementCreateSchema = z.object({
+  announcement: z.object({
+    title: z.string().min(1).max(255),
+    description: z.string().min(1).max(5000),
+    image: z.string().url().nullable(),
+    link: z.object({ title: z.string().max(255), uri: z.string().url() }).nullable(),
+    start: z.string().min(1),
+    end: z.string().min(1),
+    language: z.string().min(1).max(10),
+  }),
+  filter: z.object({
+    courses: z.array(z.number().int().positive()),
+    roles: z.array(z.string().max(100)),
+    studyForms: z.array(z.string().max(100)),
+  }),
+});
 
-    if (!response.ok) {
-      throw new Error(`Failed to create announcement: ${response.status} ${response.statusText}`);
-    }
-    const responseJson = (await response.json()) as number;
-    revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
-    return responseJson;
-  } catch (error) {
-    throw error;
+const announcementIdSchema = z.object({
+  id: z.number().int().positive(),
+});
+
+export const createAnnouncement = async (data: AnnouncementCreate): Promise<number> => {
+  const validated = validateInput(announcementCreateSchema, data, 'createAnnouncement');
+
+  const response = await apiFetch('announcements', {
+    method: 'POST',
+    body: JSON.stringify(validated),
+  });
+
+  if (!response.ok) {
+    throwApiError(response.status, 'createAnnouncement');
   }
+
+  const responseJson = (await response.json()) as number;
+  revalidateTag(ANNOUNCEMENTS_CACHE_TAG);
+  revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
+  return responseJson;
 };
 
 export const updateAnnouncement = async (id: number, data: AnnouncementCreate): Promise<void> => {
-  try {
-    const response = await apiFetch(`announcements/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+  const validatedId = validateInput(announcementIdSchema, { id }, 'updateAnnouncement');
+  const validatedData = validateInput(announcementCreateSchema, data, 'updateAnnouncement');
 
-    if (!response.ok) {
-      throw new Error(`Failed to update announcement: ${response.status} ${response.statusText}`);
-    }
-    revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
-  } catch (error) {
-    throw error;
+  const response = await apiFetch(`announcements/${validatedId.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(validatedData),
+  });
+
+  if (!response.ok) {
+    throwApiError(response.status, 'updateAnnouncement');
   }
+  revalidateTag(ANNOUNCEMENTS_CACHE_TAG);
+  revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
 };
 
 export const deleteAnnouncement = async (id: number): Promise<void> => {
-  try {
-    const response = await apiFetch(`announcements/${id}`, {
-      method: 'DELETE',
-    });
+  const validated = validateInput(announcementIdSchema, { id }, 'deleteAnnouncement');
 
-    if (!response.ok) {
-      throw new Error(`Failed to delete announcement: ${response.status} ${response.statusText}`);
-    }
-    revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
-  } catch (error) {
-    throw error;
+  const response = await apiFetch(`announcements/${validated.id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throwApiError(response.status, 'deleteAnnouncement');
   }
+  revalidateTag(ANNOUNCEMENTS_CACHE_TAG);
+  revalidatePath(ANNOUNCEMENTS_EDITOR_PATH, 'layout');
 };
 
 export const getRoles = async () => {
@@ -146,7 +179,7 @@ export const getRoles = async () => {
     if (!response.ok) {
       return [];
     }
-    return response.json();
+    return (await response.json()) as string[];
   } catch {
     return [];
   }
@@ -158,7 +191,7 @@ export const getStudyForms = async () => {
     if (!response.ok) {
       return [];
     }
-    return response.json();
+    return (await response.json()) as string[];
   } catch {
     return [];
   }
@@ -170,7 +203,7 @@ export const getCourses = async () => {
     if (!response.ok) {
       return [];
     }
-    return response.json();
+    return (await response.json()) as number[];
   } catch {
     return [];
   }

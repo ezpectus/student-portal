@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LocaleProps } from '@/types/locale-props';
 import { getAllFacultyCertificates, getOtherFacultyCertificate } from '@/actions/certificates.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
@@ -22,7 +22,10 @@ interface Props {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
-export default async function FacultyCertificatePage({ searchParams }: Props) {
+export default async function FacultyCertificatePage({ params, searchParams }: Props & LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const resolvedSearchParams = await searchParams;
   const searchFilter = resolvedSearchParams.search || '';
 

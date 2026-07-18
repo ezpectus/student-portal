@@ -12,7 +12,7 @@ export async function getColleagueContacts() {
       return [];
     }
 
-    return response.json();
+    return (await response.json()) as ColleagueContact[];
   } catch {
     return [];
   }
@@ -26,7 +26,7 @@ export async function getColleagueContactTypes() {
       return [];
     }
 
-    return response.json();
+    return (await response.json()) as ContactType[];
   } catch {
     return [];
   }

@@ -3,7 +3,7 @@
 import { createAnnouncement } from "@/actions/announcement.actions";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { AnnouncementEditorView } from "../components/announcement-editor-view";
 import { AnnouncementFormValues, toAnnouncementCreate } from '../components/schema';
 import { LIST_PATH } from "../constants";

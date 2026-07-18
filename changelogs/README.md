@@ -27,3 +27,12 @@ This folder documents every fix applied during the refactoring process. Each cha
 | [19-final-security-audit-fixes.md](./19-final-security-audit-fixes.md) | SEC-01 JWT validation, SEC-10 IP header sanitization, CSP KPI domain removal — 37/38 audit findings resolved |
 | [20-phase2-cleanup-phase3-registration.md](./20-phase2-cleanup-phase3-registration.md) | Remove KPI pages/cards/code-of-honor, clean footer translations, add registration page with form + server action |
 | [21-user-roles-landing-page.md](./21-user-roles-landing-page.md) | Add Admin role, remove codeOfHonorSignDate from User model, clean KPI menu translations, add landing page with hero/features/CTA |
+| [22-local-stack-launchers-and-prisma-runtime.md](./22-local-stack-launchers-and-prisma-runtime.md) | Add Windows/Unix launchers, Docker bootstrap, Prisma config/schema split, API health logs, and documentation sync |
+| [23-artifact-cleanup-and-database-hardening.md](./23-artifact-cleanup-and-database-hardening.md) | Remove command artifacts, add relational indexes/constraints, protect destructive seed, and sanitize production env placeholders |
+| [24-security-memory-theme-audit.md](./24-security-memory-theme-audit.md) | Harden local JWT claims, remove user data exposure, clean PDF timers, and add light/dim/dark semantic themes |
+| [25-demo-auth-database-contract-and-settings.md](./25-demo-auth-database-contract-and-settings.md) | Add optional demo credentials, document DB ownership, improve Settings preferences, and revoke photo Blob URLs |
+| [26-bug-sweep-demo-flow-and-theme-consistency.md](./26-bug-sweep-demo-flow-and-theme-consistency.md) | Fix username/email login mismatch, stable keys, theme surfaces, and document verification status |
+| [27-notification-center.md](./27-notification-center.md) | Add user-scoped Prisma notifications, unread badge, polling, and read-state actions |
+| [28-typecheck-baseline-fixes.md](./28-typecheck-baseline-fixes.md) | Fix 24 clean-install TypeScript errors across carousel, optional URLs, effects, imports, env validation, and Radix dependencies |
+| [29-school-affiliation.md](./29-school-affiliation.md) | Add School model, teacher/course linkage, registration school code, and school-scoped admin actions |
+| [30-legacy-refactor-actions-and-utils.md](./30-legacy-refactor-actions-and-utils.md) | Remove redundant try/catch, fix import order, consolidate date utils, fix studysheet silent-fail |

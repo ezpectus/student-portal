@@ -18,4 +18,6 @@ export interface User {
   privacyConsentDate?: string | null;
   studentProfile?: StudentProfile;
   employeeProfile?: EmployeeProfile;
+  schoolId?: number | null;
+  schoolName?: string | null;
 }

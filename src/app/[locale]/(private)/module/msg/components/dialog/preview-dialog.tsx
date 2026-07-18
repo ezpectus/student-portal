@@ -1,6 +1,6 @@
 import { Paragraph } from '@/components/typography';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { formatDate, formatTime } from '@/lib/utils';
+import { formatDate, formatTime } from '@/lib/date.utils';
 import { Dispatch } from 'react';
 import { Action } from '../types';
 import { Message } from '@/types/models/message';

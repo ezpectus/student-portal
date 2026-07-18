@@ -5,6 +5,8 @@ import { getUserDetails } from '@/actions/auth.actions';
 import { redirect } from 'next/navigation';
 import { Footer } from '@/components/app-sidebar/footer';
 import { CommandPalette } from '@/components/command-palette/command-palette';
+import { KeyboardShortcutsHelp } from '@/components/command-palette/keyboard-shortcuts-help';
+import { SessionExpiryBanner } from '@/components/session-expiry-banner';
 import React from 'react';
 
 import { PrivacyConsentDialog } from '@/components/privacy-consent-dialog';
@@ -32,6 +34,8 @@ export default async function MainPageLayout({
       </SidebarInset>
 
       <CommandPalette />
+      <KeyboardShortcutsHelp />
+      <SessionExpiryBanner />
       {showPrivacyConsent && <PrivacyConsentDialog />}
     </SidebarProvider>
   );

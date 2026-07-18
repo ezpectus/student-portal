@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { getCourses, getRoles, getStudyForms } from '@/actions/announcement.actions';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
@@ -16,7 +16,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function CreateAnnouncement() {
+export default async function CreateAnnouncement({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
   const [rolesData, studyFormsData, coursesData] = await Promise.all([
     getRoles(),

@@ -1,9 +1,13 @@
 import { EmploymentType } from '@/types/enums/employment-type';
 
-export const EMPLOYMENT_TYPE = {
-  [EmploymentType.Unknown]: 'невідомо',
-  [EmploymentType.FullTime]: 'основне',
-  [EmploymentType.PartTime]: 'сумісник',
-  [EmploymentType.PartTimeInternal]: 'внутрішній сумісник',
-  [EmploymentType.PartTimeExternal]: 'зовнішній сумісник',
+const EMPLOYMENT_TYPE_KEYS: Record<EmploymentType, string> = {
+  [EmploymentType.Unknown]: 'unknown',
+  [EmploymentType.FullTime]: 'full-time',
+  [EmploymentType.PartTime]: 'part-time',
+  [EmploymentType.PartTimeInternal]: 'part-time-internal',
+  [EmploymentType.PartTimeExternal]: 'part-time-external',
 };
+
+export function getEmploymentTypeKey(type: EmploymentType): string {
+  return EMPLOYMENT_TYPE_KEYS[type] ?? 'unknown';
+}

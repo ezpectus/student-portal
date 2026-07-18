@@ -1,22 +1,26 @@
-'use server';
+import 'server-only';
 
-import { cookies } from 'next/headers';
+import { cookies, headers as nextHeaders } from 'next/headers';
 import { getLocale } from 'next-intl/server';
-import { TOKEN_COOKIE_NAME } from './constants/cookies';
+
 import { DEFAULT_LOCALE } from '@/i18n/routing';
-import { headers as nextHeaders } from 'next/headers';
-import { env } from './env';
+import { env } from '@/lib/env';
+import { withCircuitBreaker, CircuitBreakerOpenError } from '@/lib/circuit-breaker';
+import { logger } from '@/lib/logger';
+import { TOKEN_COOKIE_NAME } from './constants/cookies';
+
+const apiLogger = logger.createScoped('api');
 
 const getLocaleSafe = async () => {
   try {
     return getLocale();
-  } catch (error) {
+  } catch {
     return DEFAULT_LOCALE;
   }
 };
 
-const Client = (basePath: string) => {
-  return async <T>(url: string | URL, options: RequestInit = {}) => {
+const createApiFetch = (basePath: string) => {
+  return async <T = unknown>(url: string | URL, options: RequestInit = {}): Promise<Response> => {
     const { headers = {}, ...otherOptions } = options;
     const resolvedCookies = await cookies();
     const jwt = resolvedCookies.get(TOKEN_COOKIE_NAME)?.value;
@@ -37,23 +41,57 @@ const Client = (basePath: string) => {
         ? {}
         : { next: { revalidate: 300 } as const };
 
-    const response = await fetch<T>(input, {
-      ...cacheOption,
-      signal: AbortSignal.timeout(10000),
-      headers: {
-        Accept: 'application/json',
-        Authorization: jwt ? `Bearer ${jwt}` : '',
-        'Content-Type': contentType,
-        'Accept-Language': locale,
-        'X-Forwarded-For': sanitizedForwardedFor,
-        'X-Real-IP': sanitizedRealIp,
-        ...headers,
+    const response = await withCircuitBreaker(
+      'external-api',
+      () =>
+        fetch(input, {
+          ...cacheOption,
+          signal: AbortSignal.timeout(10000),
+          headers: {
+            Accept: 'application/json',
+            Authorization: jwt ? `Bearer ${jwt}` : '',
+            'Content-Type': contentType,
+            'Accept-Language': locale,
+            'X-Forwarded-For': sanitizedForwardedFor,
+            'X-Real-IP': sanitizedRealIp,
+            ...headers,
+          },
+          ...otherOptions,
+        }).catch((error: unknown) => {
+          apiLogger.error('API request failed', {
+            url: input,
+            error: error instanceof Error ? error.message : 'unknown',
+          });
+          throw error;
+        }),
+      {
+        failureThreshold: 5,
+        resetTimeoutMs: 30_000,
       },
-      ...otherOptions,
+    ).then((res) => {
+      if (res.status >= 500) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+      return res;
+    }).catch((error: unknown) => {
+      if (error instanceof CircuitBreakerOpenError) {
+        apiLogger.warn('Circuit breaker open, failing fast', {
+          url: input,
+          retryAfterMs: String(error.retryAfterMs),
+        });
+      }
+      throw error;
     });
+
+    if (!response.ok) {
+      apiLogger.warn('API returned non-OK status', {
+        url: input,
+        status: String(response.status),
+      });
+    }
 
     return response;
   };
 };
 
-export const apiFetch = Client(env.API_BASE_URL);
+export const apiFetch = createApiFetch(env.API_BASE_URL);

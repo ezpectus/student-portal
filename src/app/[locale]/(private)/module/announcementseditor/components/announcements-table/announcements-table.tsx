@@ -23,15 +23,14 @@ export const AnnouncementsTable = ({ items, onDelete }: Props) => {
   const t = useTranslations('private.announcementseditor');
   const noRestriction = t('table.noRestriction');
 
-  const { sortedRows, sortHandlers } = useTableSort(
+  const { sortedRows, sortHandlers } = useTableSort<AdminAnnouncementItem, 'title' | 'start'>(
     items,
     (row, header) => {
-      const key = header as 'title' | 'start';
-      return key === 'title'
+      return header === 'title'
         ? row.announcement.title
         : dayjs(row.announcement.start).valueOf();
     },
-    ['title', 'start'] as unknown as Array<keyof AdminAnnouncementItem & string>,
+    ['title', 'start'],
   );
 
   if (items.length === 0) {

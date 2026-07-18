@@ -8,6 +8,8 @@ export interface State {
   selectedMail: Message | null;
   openedDialog: DialogType;
   isRefreshing: boolean;
+  isLoadingMail: boolean;
+  searchQuery: string;
 }
 
 export type Action =
@@ -15,5 +17,7 @@ export type Action =
   | { type: 'setSelectedRows'; selectedRows: number[] }
   | { type: 'setSelectedMail'; selectedMail: Message | null }
   | { type: 'setIsRefreshing'; isRefreshing: boolean }
+  | { type: 'setIsLoadingMail'; isLoadingMail: boolean }
   | { type: 'setMails'; mails: Message[] }
-  | { type: 'markMailAsRead'; mailId: number };
+  | { type: 'markMailAsRead'; mailId: number }
+  | { type: 'setSearchQuery'; searchQuery: string };

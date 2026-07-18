@@ -4,19 +4,28 @@ import { useTranslations } from 'next-intl';
 import { Card, CardContent } from '@/components/ui/card';
 import { TrendingUp, CreditCard, BookOpen, CalendarCheck } from 'lucide-react';
 
-const METRICS = [
-  { key: 'average-score', value: '3.8', icon: <TrendingUp /> },
-  { key: 'credits-earned', value: '168', icon: <CreditCard /> },
-  { key: 'courses-active', value: '6', icon: <BookOpen /> },
-  { key: 'attendance-rate', value: '92%', icon: <CalendarCheck /> },
-] as const;
+interface Props {
+  metrics: {
+    averageScore: number;
+    creditsEarned: number;
+    coursesActive: number;
+    attendanceRate: number;
+  };
+}
 
-export const DashboardMetrics = () => {
+export const DashboardMetrics = ({ metrics }: Props) => {
   const t = useTranslations('private.main.dashboard');
+
+  const items = [
+    { key: 'average-score', value: metrics.averageScore.toString(), icon: <TrendingUp /> },
+    { key: 'credits-earned', value: metrics.creditsEarned.toString(), icon: <CreditCard /> },
+    { key: 'courses-active', value: metrics.coursesActive.toString(), icon: <BookOpen /> },
+    { key: 'attendance-rate', value: `${metrics.attendanceRate}%`, icon: <CalendarCheck /> },
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-[20px] lg:grid-cols-4">
-      {METRICS.map((metric) => (
+      {items.map((metric) => (
         <Card key={metric.key}>
           <CardContent className="flex items-center gap-4 p-5">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-neutral-100">

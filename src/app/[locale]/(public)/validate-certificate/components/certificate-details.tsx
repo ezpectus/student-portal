@@ -5,14 +5,13 @@ import { dash } from 'radash';
 import { DetailRow } from '@/app/[locale]/(public)/validate-certificate/components/detail-row';
 import { useTranslations } from 'next-intl';
 import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
-import { FC } from 'react';
 
 interface Props {
   result: CertificateVerificationResult;
   t: ReturnType<typeof useTranslations<string>>;
 }
 
-export const CertificateDetails: FC<Props> = ({ result, t }) => {
+export const CertificateDetails = ({ result, t }: Props) => {
   const tEnums = useTranslations('global.enums.certificate-type');
 
   return (

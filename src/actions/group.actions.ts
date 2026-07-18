@@ -14,7 +14,7 @@ export async function searchByGroupName(search: string) {
       return [];
     }
 
-    return response.json();
+    return (await response.json()) as Group[];
   } catch {
     return [];
   }

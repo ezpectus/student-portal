@@ -5,6 +5,9 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { Toaster } from '@/components/ui/toaster';
 import { LocaleProps } from '@/types/locale-props';
+import { exo2Font } from '@/app/font';
+import { GoogleAnalytics } from '@next/third-parties/google';
+import { env } from '@/lib/env';
 
 interface Props extends LocaleProps {
   children: React.ReactNode;
@@ -57,8 +60,13 @@ export default async function RootLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      {children} <Toaster />
-    </NextIntlClientProvider>
+    <html lang={locale}>
+      <body className={exo2Font.className}>
+        <NextIntlClientProvider messages={messages}>
+          {children} <Toaster />
+        </NextIntlClientProvider>
+      </body>
+      {env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={env.NEXT_PUBLIC_GA_ID} />}
+    </html>
   );
 }

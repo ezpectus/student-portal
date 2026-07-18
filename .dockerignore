@@ -1,0 +1,61 @@
+# Build artifacts
+.next/
+out/
+dist/
+
+# Dependencies
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files (secrets must not be in image)
+.env
+.env.*
+!.env.example
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+
+# Docs & skills (not needed in runtime image)
+docs/
+hft-skills/
+_audit*.cjs
+_audit-out.txt
+
+# Scripts not needed in image
+scripts/start-no-docker.bat
+scripts/start-docker.bat
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+vitest.config.ts
+vitest.setup.ts
+playwright.config.ts
+
+# Misc
+README.md
+CLAUDE.md
+AGENTS.md
+*.md
+!prisma*/README.md
+
+# Prisma generated client (regenerated in build)
+prisma/generated/
+
+# OS files
+.DS_Store
+Thumbs.db

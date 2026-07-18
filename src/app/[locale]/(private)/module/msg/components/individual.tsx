@@ -89,6 +89,8 @@ export function Individual({ groupOptions }: Props) {
     } else if (recipientType === 'student') {
       setUserOptions([]);
     }
+
+    return undefined;
   }, [selectedGroups, recipientType]);
 
   const handleEmployeeSearch = useCallback(async (value: string) => {

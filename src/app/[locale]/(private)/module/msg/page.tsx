@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { LocaleProps } from '@/types/locale-props';
 import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Description, Heading2 } from '@/components/typography';
@@ -6,8 +6,9 @@ import { getMails } from '@/actions/msg.actions';
 import { getUserDetails } from '@/actions/auth.actions';
 import { MessageTranslationKeys } from './constants';
 import { Card } from '@/components/ui/card';
-import { TabSheetTrigger } from '@/components/ui/tabs';
-import { Tabs, TabsList, TabsContent } from '@radix-ui/react-tabs';
+import { Tabs, TabsList, TabsContent, TabSheetTrigger } from '@/components/ui/tabs';
+import { Suspense } from 'react';
+import { LoadingScreen } from '@/components/loading-screen';
 import Inbox from './components/inbox';
 import { MailFilter } from '@/types/enums/mail-filter';
 import { ProfileArea } from '@/types/enums/profile-area';
@@ -25,7 +26,10 @@ export async function generateMetadata({ params }: LocaleProps) {
   };
 }
 
-export default async function MessagePage() {
+export default async function MessagePage({ params }: LocaleProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const t = await getTranslations(INTL_NAMESPACE);
   const [incomingMails, sentMails, importantMails, user] = await Promise.all([
     getMails(MailFilter.Incoming),
@@ -50,7 +54,7 @@ export default async function MessagePage() {
                 </TabSheetTrigger>
               ))}
             </TabsList>
-            <Card className="rounded-b-6 col-span-full w-full rounded-t-none bg-white p-6 xl:col-span-5">
+            <Card className="rounded-b-6 col-span-full w-full rounded-t-none bg-card p-6 text-card-foreground xl:col-span-5">
               <TabsContent value={MessageTranslationKeys.Sent}>
                 <Inbox mails={sentMails} filter={MailFilter.Outgoing} />
               </TabsContent>
@@ -61,7 +65,9 @@ export default async function MessagePage() {
                 <Inbox mails={importantMails} filter={MailFilter.Important} />
               </TabsContent>
               <TabsContent value={MessageTranslationKeys.Compose}>
-                <Compose profileArea={profileArea} />
+                <Suspense fallback={<LoadingScreen />}>
+                  <Compose profileArea={profileArea} />
+                </Suspense>
               </TabsContent>
             </Card>
           </Tabs>

@@ -13,7 +13,15 @@ function printPdfBlob(blob: Blob, filename?: string): Promise<void> {
     iframe.style.border = '0';
     iframe.src = url;
 
+    let printTimer: ReturnType<typeof setTimeout> | undefined;
+    let cleanupTimer: ReturnType<typeof setTimeout> | undefined;
+    let settled = false;
+
     const cleanup = () => {
+      if (settled) return;
+      settled = true;
+      if (printTimer) clearTimeout(printTimer);
+      if (cleanupTimer) clearTimeout(cleanupTimer);
       URL.revokeObjectURL(url);
       iframe.remove();
     };
@@ -25,10 +33,10 @@ function printPdfBlob(blob: Blob, filename?: string): Promise<void> {
         } catch {
           // Cross-origin iframe — title assignment is best-effort
         }
-        setTimeout(() => {
+        printTimer = setTimeout(() => {
           iframe.contentWindow?.focus();
           iframe.contentWindow?.print();
-          setTimeout(() => {
+          cleanupTimer = setTimeout(() => {
             cleanup();
             resolve();
           }, 10000);

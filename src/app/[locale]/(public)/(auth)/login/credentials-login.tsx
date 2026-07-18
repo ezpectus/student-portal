@@ -13,7 +13,8 @@ import { useTranslations } from 'next-intl';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import PasswordInput from '@/components/ui/password-input';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
+import { DemoCredentials } from '@/components/auth/demo-credentials';
 
 export const CredentialsLogin = () => {
   const t = useTranslations('auth.login');
@@ -28,7 +29,7 @@ export const CredentialsLogin = () => {
 
   type FormData = z.infer<typeof FormSchema>;
 
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       username: '',
@@ -42,6 +43,12 @@ export const CredentialsLogin = () => {
 
     try {
       const response = await loginWithCredentials(data.username, data.password, data.rememberMe);
+
+      if (response && typeof response === 'object' && 'error' in response && response.error === 'rate-limited') {
+        const minutes = Math.ceil(response.retryAfterMs / 60000);
+        form.setError('root', { message: t('field.error-rate-limited', { minutes }) });
+        return;
+      }
 
       if (!response) {
         form.setError('root', { message: t('field.error') });
@@ -96,6 +103,10 @@ export const CredentialsLogin = () => {
           {t('button.login')}
         </Button>
       </form>
+      <DemoCredentials onSelect={(username, password) => {
+        form.setValue('username', username);
+        form.setValue('password', password);
+      }} />
     </Form>
   );
 };

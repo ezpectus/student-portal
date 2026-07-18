@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { Command } from 'cmdk';
 import { House, UserCircle, Gear, ChatsTeardrop, Books, CalendarBlank, EnvelopeSimple, ChartBarHorizontal, MagnifyingGlassBold } from '@/app/images';
+import { Shield } from 'lucide-react';
 
 type CommandItem = {
   label: string;
@@ -47,7 +48,8 @@ export const CommandPalette = () => {
     { label: tCmd('items.schedule'), icon: <CalendarBlank />, action: () => navigate('/module/schedule'), group: tCmd('groups.modules') },
     { label: tCmd('items.messages'), icon: <EnvelopeSimple />, action: () => navigate('/module/msg'), group: tCmd('groups.modules') },
     { label: tCmd('items.materials'), icon: <Books />, action: () => navigate('/module/mob'), group: tCmd('groups.modules') },
-    { label: tCmd('items.announcements'), icon: <Bell />, action: () => navigate('/module/announcementseditor'), group: tCmd('groups.modules') },
+    { label: tCmd('items.announcements'), icon: <ChatsTeardrop />, action: () => navigate('/module/announcementseditor'), group: tCmd('groups.modules') },
+    { label: t('admin'), icon: <Shield size={16} />, action: () => navigate('/module/admin'), group: tCmd('groups.navigation') },
   ];
 
   if (!open) return null;
@@ -57,10 +59,10 @@ export const CommandPalette = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-[15vh]" onClick={() => setOpen(false)}>
       <Command
-        className="mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl"
+        className="mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 border-b border-neutral-200 px-4">
+        <div className="flex items-center gap-3 border-b border-border px-4">
           <MagnifyingGlassBold />
           <Command.Input
             placeholder={tCmd('placeholder')}
@@ -80,7 +82,7 @@ export const CommandPalette = () => {
                   <Command.Item
                     key={item.label}
                     onSelect={() => item.action()}
-                    className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2.5 text-sm text-neutral-700 data-[selected=true]:bg-neutral-100 data-[selected=true]:text-neutral-900"
+                    className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2.5 text-sm text-foreground data-[selected=true]:bg-muted data-[selected=true]:text-foreground"
                   >
                     <span className="text-neutral-400">{item.icon}</span>
                     {item.label}
@@ -89,7 +91,7 @@ export const CommandPalette = () => {
             </Command.Group>
           ))}
         </Command.List>
-        <div className="flex items-center justify-between border-t border-neutral-200 px-4 py-2 text-xs text-neutral-400">
+        <div className="flex items-center justify-between border-t border-border px-4 py-2 text-xs text-muted-foreground">
           <span>{tCmd('hint')}</span>
           <kbd className="rounded border border-neutral-200 px-1.5 py-0.5 font-sans text-xs">ESC</kbd>
         </div>

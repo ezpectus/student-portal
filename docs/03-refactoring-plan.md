@@ -5,6 +5,15 @@
 
 ---
 
+## Current Status — 18.07.2026
+
+- **Completed:** security cleanup batches, SaaS rebrand, local Prisma auth, Student/Teacher registration, Admin Panel, DB Explorer, Docker/PostgreSQL bootstrap, Windows/Unix launchers.
+- **Verified:** the source tree no longer contains `as any`, `as never`, `dangerouslySetInnerHTML`, or `console.error` matches under `src`.
+- **In progress:** automated tests, session hardening, notification center, multi-tenant boundaries, CI/CD, and final deployment verification.
+- **Quality checklist:** see `docs/engineering-quality-baseline.md`.
+
+---
+
 ## Principles
 
 > **Reference:** `hft-skills/coding-skills/refactoring-strategies/SKILL.md` — Safe Refactoring Workflow:
@@ -175,10 +184,10 @@ Ready for production
 
 ## Definition of Done
 
-- [ ] `npm run build` passes without errors
+- [ ] `npm run build` passes without errors (last CLI bridge run returned exit code 0; capture output in a normal terminal)
 - [ ] `npm run lint` passes without errors
-- [ ] `npm run test` — all tests green
-- [ ] `npm run e2e` — all e2e tests green
+- [ ] `npm run test` — Vitest configured and all tests green
+- [ ] `npm run e2e` — Playwright configured and all E2E tests green
 - [ ] Security headers present (verify via securityheaders.com)
 - [ ] Cookies have `secure` and `sameSite` in production
 - [ ] JWT payload validated (not just decoded)

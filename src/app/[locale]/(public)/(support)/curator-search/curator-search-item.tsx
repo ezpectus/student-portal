@@ -19,6 +19,7 @@ export const CuratorSearchItem = ({ group, department, curatorName, link }: Cura
         className={cn('my-1 flex items-center gap-2 text-xl', { 'text-basic-black pointer-events-none': !link })}
         href={link ?? '#'}
         target="_blank"
+        rel="noopener noreferrer"
       >
         {curatorName}
         {!!link && <LinkSimple />}

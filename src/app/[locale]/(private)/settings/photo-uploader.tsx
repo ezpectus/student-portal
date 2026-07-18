@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ProfilePicture } from '@/components/ui/profile-picture';
 import { Paragraph } from '@/components/typography/paragraph';
@@ -22,6 +22,10 @@ export function PhotoUploader({ photoSrc, onFileUpload }: PhotoUploaderProps) {
   const [photoPreview, setPhotoPreview] = useState(photoSrc);
 
   const [error, setError] = useState('');
+
+  useEffect(() => () => {
+    if (photoPreview.startsWith('blob:')) URL.revokeObjectURL(photoPreview);
+  }, [photoPreview]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('');

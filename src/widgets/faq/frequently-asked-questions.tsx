@@ -11,6 +11,7 @@ interface FrequentlyAskedQuestionsProps {
 
 export const FrequentlyAskedQuestions = async ({ i18nNamespace, sections }: FrequentlyAskedQuestionsProps) => {
   const t = await getTranslations(i18nNamespace);
+  const documentUrl = env.NEXT_PUBLIC_CAMPUS_DOCUMENT_TEMPLATE;
 
   return (
     <>
@@ -21,8 +22,8 @@ export const FrequentlyAskedQuestions = async ({ i18nNamespace, sections }: Freq
             {(tags) =>
               t.rich(`sections.${section}.content`, {
                 ...tags,
-                documentlink: (chunks) => (
-                  <Link href={env.NEXT_PUBLIC_CAMPUS_DOCUMENT_TEMPLATE} target="_blank" rel="noopener noreferrer">
+                documentlink: (chunks) => documentUrl && (
+                  <Link href={documentUrl} target="_blank" rel="noopener noreferrer">
                     {chunks}
                   </Link>
                 ),

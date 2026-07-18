@@ -26,6 +26,12 @@ export default async function ContactsPage({ params }: LocaleProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations(INTL_NAMESPACE);
+  const addressUrl = env.NEXT_PUBLIC_ADDRESS_URL;
+  const githubUrl = env.NEXT_PUBLIC_GITHUB_URL;
+  const facebookUrl = env.NEXT_PUBLIC_FACEBOOK_URL;
+  const twitterUrl = env.NEXT_PUBLIC_TWITTER_URL;
+  const instagramUrl = env.NEXT_PUBLIC_INSTAGRAM_URL;
+  const suggestionsUrl = env.NEXT_PUBLIC_SUGGESTIONS_FORM;
 
   return (
     <SubLayout pageTitle={t('title')}>
@@ -36,33 +42,33 @@ export default async function ContactsPage({ params }: LocaleProps) {
             t.rich('content', {
               ...tags,
               h3: (chunks) => <Heading3 className="mt-14">{chunks}</Heading3>,
-              addresslink: (chunks) => (
-                <Link href={env.NEXT_PUBLIC_ADDRESS_URL} target="_blank" rel="noopener noreferrer">
+              addresslink: (chunks) => addressUrl && (
+                <Link href={addressUrl} target="_blank" rel="noopener noreferrer">
                   {chunks}
                 </Link>
               ),
-              githublink: (chunks) => (
-                <Link href={env.NEXT_PUBLIC_GITHUB_URL} target="_blank" rel="noopener noreferrer">
+              githublink: (chunks) => githubUrl && (
+                <Link href={githubUrl} target="_blank" rel="noopener noreferrer">
                   {chunks}
                 </Link>
               ),
-              facebooklink: (chunks) => (
-                <Link href={env.NEXT_PUBLIC_FACEBOOK_URL} target="_blank" rel="noopener noreferrer">
+              facebooklink: (chunks) => facebookUrl && (
+                <Link href={facebookUrl} target="_blank" rel="noopener noreferrer">
                   {chunks}
                 </Link>
               ),
-              twitterlink: (chunks) => (
-                <Link href={env.NEXT_PUBLIC_TWITTER_URL} target="_blank" rel="noopener noreferrer">
+              twitterlink: (chunks) => twitterUrl && (
+                <Link href={twitterUrl} target="_blank" rel="noopener noreferrer">
                   {chunks}
                 </Link>
               ),
-              instagramlink: (chunks) => (
-                <Link href={env.NEXT_PUBLIC_INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+              instagramlink: (chunks) => instagramUrl && (
+                <Link href={instagramUrl} target="_blank" rel="noopener noreferrer">
                   {chunks}
                 </Link>
               ),
-              suggestionslink: (chunks) => (
-                <TextButton size="huge" href={env.NEXT_PUBLIC_SUGGESTIONS_FORM} icon={<ChatsTeardrop />}>
+              suggestionslink: (chunks) => suggestionsUrl && (
+                <TextButton size="huge" href={suggestionsUrl} icon={<ChatsTeardrop />}>
                   {chunks}
                 </TextButton>
               ),

@@ -1,6 +1,7 @@
 'use server';
 
 import qs from 'query-string';
+import { z } from 'zod';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { apiFetch } from '@/lib/client';
@@ -10,6 +11,13 @@ import { AuthResponse } from '@/types/models/auth-response';
 import { SID_COOKIE_NAME, TOKEN_COOKIE_NAME } from '@/lib/constants/cookies';
 import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { env } from '@/lib/env';
+import { checkRateLimit, resetRateLimit } from '@/lib/rate-limit';
+import { throwApiError } from '@/lib/api-error';
+import { PermanentError } from '@/lib/errors';
+import { validateInput } from '@/lib/validate';
+import { logger } from '@/lib/logger';
+
+const authLogger = logger.createScoped('auth');
 
 const MAIN_COOKIE_DOMAIN = env.MAIN_COOKIE_DOMAIN;
 const ROOT_COOKIE_DOMAIN = env.ROOT_COOKIE_DOMAIN;
@@ -40,14 +48,36 @@ export async function setLoginCookies(token: string, sessionId: string, remember
   });
 }
 
+const loginSchema = z.object({
+  username: z.string().min(1).max(100),
+  password: z.string().min(1).max(128),
+  rememberMe: z.boolean(),
+});
+
 export async function loginWithCredentials(username: string, password: string, rememberMe: boolean) {
+  const validated = validateInput(loginSchema, { username, password, rememberMe }, 'loginWithCredentials');
+
+  const rateLimit = checkRateLimit(validated.username);
+  if (!rateLimit.allowed) {
+    return { ok: false, error: 'rate-limited' as const, retryAfterMs: rateLimit.retryAfterMs };
+  }
+
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { localLogin } = await import('./local-auth.actions');
+    const localResult = await localLogin(validated.username, validated.password, validated.rememberMe);
+    if (localResult) {
+      resetRateLimit(validated.username);
+      return true;
+    }
+  }
+
   const payload = {
-    username,
-    password,
+    username: validated.username,
+    password: validated.password,
     grant_type: 'password',
   };
 
-  const response = await apiFetch<AuthResponse>('oauth/token', {
+  const response = await apiFetch('oauth/token', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -56,18 +86,21 @@ export async function loginWithCredentials(username: string, password: string, r
   });
 
   if (!response.ok) {
+    authLogger.warn('Login failed: non-OK response', { status: String(response.status) });
     return null;
   }
 
-  const jsonResponse = await response.json();
+  const jsonResponse = (await response.json()) as AuthResponse;
 
   if (!jsonResponse) {
+    authLogger.warn('Login failed: empty response body');
     return null;
   }
 
   const { sessionId, access_token } = jsonResponse;
 
   await setLoginCookies(access_token, sessionId, rememberMe);
+  resetRateLimit(username);
   return true;
 }
 
@@ -80,11 +113,23 @@ export async function logout() {
   redirect('/');
 }
 
+const resetPasswordSchema = z.object({
+  username: z.string().min(1).max(100),
+  recaptchaToken: z.string().min(1).max(1000),
+});
+
 export async function resetPassword(username: string, recaptchaToken: string) {
+  const validated = validateInput(resetPasswordSchema, { username, recaptchaToken }, 'resetPassword');
+
+  const rateLimit = checkRateLimit(validated.username, 'password-reset');
+  if (!rateLimit.allowed) {
+    return { ok: false, error: 'rate-limited' as const, retryAfterMs: rateLimit.retryAfterMs };
+  }
+
   try {
     const payload = {
-      Captcha: recaptchaToken,
-      UserIdentifier: username,
+      Captcha: validated.recaptchaToken,
+      UserIdentifier: validated.username,
     };
 
     const response = await apiFetch('account/recovery', {
@@ -93,20 +138,25 @@ export async function resetPassword(username: string, recaptchaToken: string) {
     });
 
     if (response.status < 200 || response.status >= 300) {
-      throw new Error(`${response.status} Error`);
+      throwApiError(response.status, 'password-reset');
     }
 
+    resetRateLimit(username, 'password-reset');
     return null;
   } catch (error) {
     if (error instanceof Error) throw error;
-    throw new Error('Unknown error during password reset');
+    throw new PermanentError('Unknown error during password reset', 'UNKNOWN');
   }
 }
 
+export async function getUserDetails(): Promise<User | null> {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { getLocalUser } = await import('./local-auth.actions');
+    const localUser = await getLocalUser();
+    if (localUser) return localUser as unknown as User;
+  }
 
-
-export async function getUserDetails() {
-  const userResponse = await apiFetch<User>('profile', {
+  const userResponse = await apiFetch('profile', {
     next: { tags: [USER_PROFILE_CACHE_TAG] },
   });
 
@@ -114,32 +164,38 @@ export async function getUserDetails() {
     return null;
   }
 
-  return userResponse.json();
+  return (await userResponse.json()) as User;
 }
 
 export async function redirectToEmploymentSystem() {
-  const response = await apiFetch<string>('employment-system/auth');
+  const response = await apiFetch('employment-system/auth');
 
   if (!response.ok) {
-    throw new Error(`Failed to get employment system URL: ${response.status}`);
+    throwApiError(response.status, 'redirectToEmploymentSystem');
   }
 
-  const url = await response.json();
+  const url = (await response.json()) as string;
 
   try {
     const parsed = new URL(url);
     const allowedHost = env.API_BASE_URL ? new URL(env.API_BASE_URL).hostname : '';
     if (allowedHost && !parsed.hostname.endsWith(allowedHost)) {
-      throw new Error('Untrusted redirect URL');
+      throw new PermanentError('Untrusted redirect URL', 'UNTRUSTED_REDIRECT');
     }
   } catch {
-    throw new Error('Invalid redirect URL');
+    throw new PermanentError('Invalid redirect URL', 'INVALID_REDIRECT');
   }
 
   redirect(url);
 }
 
-export async function registerUser(name: string, email: string, password: string) {
+export async function registerUser(name: string, email: string, password: string, role: 'STUDENT' | 'TEACHER' = 'STUDENT', schoolCode?: string) {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { localRegister } = await import('./local-auth.actions');
+    const localResult = await localRegister({ fullName: name, email, password, role, schoolCode: schoolCode ?? '' });
+    return localResult;
+  }
+
   const payload = {
     name,
     email,

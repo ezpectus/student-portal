@@ -1,127 +1,160 @@
 'use server';
 
-import { Contact, ContactType } from '@/types/models/contact';
-import { apiFetch } from '@/lib/client';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { z } from 'zod';
 
+import { apiFetch } from '@/lib/client';
+import { throwApiError } from '@/lib/api-error';
+import { validateInput } from '@/lib/validate';
+import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { Contact, ContactType } from '@/types/models/contact';
+
+/**
+ * @returns Safe default on error: []. Never throws.
+ */
 export async function getContacts() {
   try {
-    const response = await apiFetch<Contact[]>('profile/contacts');
+    const response = await apiFetch<Contact[]>('profile/contacts', {
+      next: { revalidate: 300, tags: [USER_PROFILE_CACHE_TAG] },
+    });
 
     if (!response.ok) return [];
-    return response.json();
-  } catch (error) {
+    return (await response.json()) as Contact[];
+  } catch {
     return [];
   }
 }
 
+/**
+ * @returns Safe default on error: []. Never throws.
+ */
 export async function getContactTypes() {
   try {
-    const response = await apiFetch<ContactType[]>('profile/contacts/types');
+    const response = await apiFetch<ContactType[]>('profile/contacts/types', {
+      next: { revalidate: 3600, tags: [USER_PROFILE_CACHE_TAG] },
+    });
 
     if (!response.ok) return [];
-    return response.json();
-  } catch (error) {
+    return (await response.json()) as ContactType[];
+  } catch {
     return [];
   }
 }
 
+const createContactSchema = z.object({
+  typeId: z.number().int().positive(),
+  value: z.string().min(1).max(500),
+});
+
+/**
+ * @throws {ValidationError} If typeId or value are invalid.
+ * @throws {ActionError} On API failure.
+ */
 export async function createContact(typeId: number, value: string) {
-  try {
-    const response = await apiFetch('profile/contacts', {
-      method: 'POST',
-      body: JSON.stringify({ typeId, value }),
-    });
+  const validated = validateInput(createContactSchema, { typeId, value }, 'createContact');
 
-    if (!response.ok) {
-      throw new Error(`Failed to create contact: ${response.status}`);
-    }
+  const response = await apiFetch('profile/contacts', {
+    method: 'POST',
+    body: JSON.stringify({ typeId: validated.typeId, value: validated.value }),
+  });
 
-    revalidateTag(USER_PROFILE_CACHE_TAG);
-  } catch (error) {
-    throw new Error('Error while creating contact', { cause: error });
+  if (!response.ok) {
+    throwApiError(response.status, 'createContact');
   }
+
+  revalidateTag(USER_PROFILE_CACHE_TAG);
 }
 
+const updateContactSchema = z.object({
+  id: z.number().int().positive(),
+  typeId: z.number().int().positive(),
+  value: z.string().min(1).max(500),
+});
+
+/**
+ * @throws {ValidationError} If id, typeId, or value are invalid.
+ * @throws {ActionError} On API failure.
+ */
 export async function updateContact(id: number, typeId: number, value: string) {
-  try {
-    const response = await apiFetch(`profile/contacts/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify({ typeId, value }),
-    });
+  const validated = validateInput(updateContactSchema, { id, typeId, value }, 'updateContact');
 
-    if (!response.ok) {
-      throw new Error(`Failed to update contact: ${response.status}`);
-    }
+  const response = await apiFetch(`profile/contacts/${validated.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ typeId: validated.typeId, value: validated.value }),
+  });
 
-    revalidateTag(USER_PROFILE_CACHE_TAG);
-  } catch (error) {
-    throw new Error('Error while updating contact', { cause: error });
+  if (!response.ok) {
+    throwApiError(response.status, 'updateContact');
   }
+
+  revalidateTag(USER_PROFILE_CACHE_TAG);
 }
 
+const deleteContactSchema = z.object({
+  id: z.number().int().positive(),
+});
+
+/**
+ * @throws {ValidationError} If id is invalid.
+ * @throws {ActionError} On API failure.
+ */
 export async function deleteContact(id: number) {
-  try {
-    const response = await apiFetch(`profile/contacts/${id}`, {
-      method: 'DELETE',
-    });
+  const validated = validateInput(deleteContactSchema, { id }, 'deleteContact');
 
-    if (!response.ok) {
-      throw new Error(`Failed to delete contact: ${response.status}`);
-    }
+  const response = await apiFetch(`profile/contacts/${validated.id}`, {
+    method: 'DELETE',
+  });
 
-    revalidateTag(USER_PROFILE_CACHE_TAG);
-  } catch (error) {
-    throw new Error('Error while deleting contact', { cause: error });
+  if (!response.ok) {
+    throwApiError(response.status, 'deleteContact');
   }
+
+  revalidateTag(USER_PROFILE_CACHE_TAG);
 }
 
+const intellectInfoSchema = z.object({
+  credo: z.string().max(1000),
+  scientificInterests: z.string().max(2000),
+});
 
+/**
+ * @throws {ValidationError} If credo or scientificInterests exceed limits.
+ * @throws {ActionError} On API failure.
+ */
 export async function updateIntellectInfo(credo: string, scientificInterests: string) {
-  try {
-    const response = await apiFetch('profile/intellect', {
-      method: 'PUT',
-      body: JSON.stringify({ credo, scientificInterests }),
-    });
+  const validated = validateInput(intellectInfoSchema, { credo, scientificInterests }, 'updateIntellectInfo');
 
-    if (!response.ok) {
-      throw new Error(`Failed to update intellect info: ${response.status}`);
-    }
-    revalidateTag(USER_PROFILE_CACHE_TAG);
-  } catch (error) {
-    throw new Error('Error while updating intellect info', { cause: error });
+  const response = await apiFetch('profile/intellect', {
+    method: 'PUT',
+    body: JSON.stringify({ credo: validated.credo, scientificInterests: validated.scientificInterests }),
+  });
+
+  if (!response.ok) {
+    throwApiError(response.status, 'updateIntellectInfo');
   }
+  revalidateTag(USER_PROFILE_CACHE_TAG);
 }
 
 export async function acceptCodeOfHonor() {
-  try {
-    const response = await apiFetch('profile/code-of-honor', {
-      method: 'PUT',
-    });
+  const response = await apiFetch('profile/code-of-honor', {
+    method: 'PUT',
+  });
 
-    if (!response.ok) {
-      throw new Error(`Failed to accept code of honor: ${response.status}`);
-    }
-  } catch (error) {
-    throw new Error('Error while accepting code of honor', { cause: error });
+  if (!response.ok) {
+    throwApiError(response.status, 'acceptCodeOfHonor');
   }
   redirect('/');
 }
 
 export async function acceptPrivacyConsent() {
-  try {
-    const response = await apiFetch('profile/privacy-consent', {
-      method: 'POST',
-    });
+  const response = await apiFetch('profile/privacy-consent', {
+    method: 'POST',
+  });
 
-    if (!response.ok) {
-      throw new Error(`Failed to accept privacy consent: ${response.status}`);
-    }
-    revalidateTag(USER_PROFILE_CACHE_TAG);
-  } catch (error) {
-    throw new Error('Error while accepting privacy consent', { cause: error });
+  if (!response.ok) {
+    throwApiError(response.status, 'acceptPrivacyConsent');
   }
+  revalidateTag(USER_PROFILE_CACHE_TAG);
 }

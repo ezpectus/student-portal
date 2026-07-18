@@ -11,6 +11,7 @@ import { User } from '@/types/models/user';
 import { updateIntellectInfo } from '@/actions/profile.actions';
 import { useTranslations } from 'next-intl';
 import { Show } from '@/components/utils/show';
+import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 
 interface Props {
   user: User;

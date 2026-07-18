@@ -16,6 +16,8 @@ import { usePagination } from '@/hooks/use-pagination';
 import { Certificate } from '@/types/models/certificate/certificate';
 import saveAs from 'file-saver';
 import { PAGE_SIZE_SMALL } from '@/lib/constants/page-size';
+import { exportToCsv } from '@/lib/utils/csv-export';
+import { Download } from 'lucide-react';
 
 interface Props {
   certificates: Certificate[];
@@ -33,9 +35,30 @@ export function HistoryTable({ certificates }: Props) {
     saveAs(blob, filename);
   };
 
+  const handleExportCsv = () => {
+    exportToCsv(
+      'certificates.csv',
+      [tTable('type'), tTable('date'), tTable('status')],
+      certificates.map((c) => [
+        tEnums(dash(c.type)),
+        dayjs(c.created).format('DD.MM.YYYY'),
+        c.status,
+      ]),
+    );
+  };
+
   return (
-    <Card className="rounded-b-6 col-span-full flex w-full flex-[2] basis-4/7 flex-col gap-4 bg-white p-4 sm:gap-6 sm:p-6 md:p-9 xl:col-span-5">
-      <Heading6>{tTable('title')}</Heading6>
+    <Card className="rounded-b-6 col-span-full flex w-full flex-[2] basis-4/7 flex-col gap-4 bg-card p-4 text-card-foreground sm:gap-6 sm:p-6 md:p-9 xl:col-span-5">
+      <div className="flex items-center justify-between">
+        <Heading6>{tTable('title')}</Heading6>
+        <Button variant="tertiary" size="small" onClick={handleExportCsv}>
+          <Download className="h-4 w-4" />
+          CSV
+        </Button>
+      </div>
+      {certificates.length === 0 ? (
+        <p className="text-muted-foreground py-12 text-center text-sm">{tTable('empty')}</p>
+      ) : (
       <Table>
         <TableHeader>
           <TableRow>
@@ -72,6 +95,7 @@ export function HistoryTable({ certificates }: Props) {
           })}
         </TableBody>
       </Table>
+      )}
       <Show when={certificates.length > PAGE_SIZE_SMALL}>
         <PaginationWithLinks page={page} pageSize={PAGE_SIZE_SMALL} totalCount={certificates.length} />
       </Show>

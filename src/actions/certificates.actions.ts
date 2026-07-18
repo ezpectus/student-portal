@@ -1,20 +1,25 @@
 'use server';
 
-import { apiFetch } from '@/lib/client';
-import { Certificate } from '@/types/models/certificate/certificate';
-import { revalidatePath } from 'next/cache';
-import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
-import { parseContentDispositionFilename } from '@/lib/utils';
-import { CertificateStatus } from '@/types/models/certificate/status';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import qs from 'query-string';
 
+import { apiFetch } from '@/lib/client';
+import { throwApiError } from '@/lib/api-error';
+import { CERTIFICATES_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { parseContentDispositionFilename } from '@/lib/utils';
+import { Certificate } from '@/types/models/certificate/certificate';
+import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
+import { CertificateStatus } from '@/types/models/certificate/status';
+
 export async function getCertificateTypes() {
-  const response = await apiFetch<string[]>('/certificates/types');
+  const response = await apiFetch<string[]>('/certificates/types', {
+    next: { revalidate: 3600, tags: [CERTIFICATES_CACHE_TAG] },
+  });
   if (!response.ok) {
-    throw new Error(`${response.status} Error`);
+    throwApiError(response.status);
   }
 
-  return response.json();
+  return (await response.json()) as string[];
 }
 export type UpdateCertificateBody = {
   approve: boolean;
@@ -28,8 +33,9 @@ export async function updateCertificate(id: number, body: UpdateCertificateBody)
   });
 
   if (!res.ok) {
-    throw new Error(res.statusText);
+    throwApiError(res.status, 'updateCertificate');
   }
+  revalidateTag(CERTIFICATES_CACHE_TAG);
   revalidatePath('/module/facultycertificate', 'layout');
 }
 type CertificateRequestBody = {
@@ -46,64 +52,67 @@ export async function createCertificateRequest(body: CertificateRequestBody) {
   });
 
   if (!response.ok) {
-    throw new Error(`${response.status} Error`);
+    throwApiError(response.status);
   }
 
+  revalidateTag(CERTIFICATES_CACHE_TAG);
   revalidatePath('/module/certificates');
 }
 
 export async function getCertificateList() {
-  const response = await apiFetch<Certificate[]>('/certificates');
+  const response = await apiFetch<Certificate[]>('/certificates', {
+    next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
+  });
   if (!response.ok) {
-    throw new Error(`${response.status} Error`);
+    throwApiError(response.status);
   }
 
-  return response.json();
+  return (await response.json()) as Certificate[];
 }
 
 export async function getAllFacultyCertificates(query: FacultyCertificatesQuery = {}) {
   const queryParams = qs.stringify(query);
-  const res = await apiFetch<Certificate[]>(`/certificates/all?${queryParams}`);
+  const res = await apiFetch<Certificate[]>(`/certificates/all?${queryParams}`, {
+    next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
+  });
   if (!res.ok) {
-    throw new Error(`${res.status} Error`);
+    throwApiError(res.status);
   }
-  const allCertificates = await res.json();
+  const allCertificates = (await res.json()) as Certificate[];
 
   const totalCount = parseInt(res.headers.get('x-total-count') || '0', 10);
   return { allCertificates, totalCount };
 }
 
 export async function getCertificatePDF(id: number) {
-  try {
-    const response = await apiFetch(`/certificates/${id}/pdf`, {
-      headers: {
-        Accept: 'application/pdf',
-      },
-    });
+  const response = await apiFetch(`/certificates/${id}/pdf`, {
+    headers: {
+      Accept: 'application/pdf',
+    },
+  });
 
-    if (!response.ok) {
-      throw new Error(`Failed to download PDF: ${response.status} ${response.statusText}`);
-    }
-
-    const cd = response.headers.get('Content-Disposition') || '';
-    const filename = parseContentDispositionFilename(cd) ?? `certificate.pdf`;
-    const blob = await response.blob();
-
-    return {
-      filename,
-      blob,
-    };
-  } catch (error) {
-    throw error;
+  if (!response.ok) {
+    throwApiError(response.status, 'getCertificatePDF');
   }
+
+  const cd = response.headers.get('Content-Disposition') || '';
+  const filename = parseContentDispositionFilename(cd) ?? `certificate.pdf`;
+  const blob = await response.blob();
+
+  return {
+    filename,
+    blob,
+  };
 }
 
 export async function getCertificate(id: number) {
-  const res = await apiFetch<Certificate>(`/certificates/${id}`);
+  const res = await apiFetch<Certificate>(`/certificates/${id}`, {
+    next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
+  });
   if (!res.ok) {
-    throw new Error(`${res.status} Error`);
+    throwApiError(res.status);
   }
-  return res.json();
+  return (await res.json()) as Certificate;
 }
 
 export async function verifyCertificate(id: string) {
@@ -112,7 +121,7 @@ export async function verifyCertificate(id: string) {
     return 'error';
   }
 
-  return response.json();
+  return (await response.json()) as CertificateVerificationResult;
 }
 
 export interface FacultyCertificatesQuery {
@@ -123,20 +132,29 @@ export interface FacultyCertificatesQuery {
 }
 
 export async function getOtherFacultyCertificate() {
-  const res = await apiFetch<Certificate[]>('/certificates/all');
+  const res = await apiFetch<Certificate[]>('/certificates/all', {
+    next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
+  });
 
   if (!res.ok) {
-    throw new Error(`${res.status} Error`);
+    throwApiError(res.status);
   }
 
-  const data = await res.json();
-  const rejectedCertificates = data.filter((item) => item.approved === false);
-  const approvedCertificates = data.filter(
-    (item) => item.approved === true && item.status === CertificateStatus.Processed,
-  );
-  const createdCertificates = data.filter(
-    (item) => item.approved === null && item.status === CertificateStatus.Created,
-  );
+  const data = (await res.json()) as Certificate[];
+
+  const rejectedCertificates: Certificate[] = [];
+  const approvedCertificates: Certificate[] = [];
+  const createdCertificates: Certificate[] = [];
+
+  for (const item of data) {
+    if (item.approved === false) {
+      rejectedCertificates.push(item);
+    } else if (item.approved === true && item.status === CertificateStatus.Processed) {
+      approvedCertificates.push(item);
+    } else if (item.approved === null && item.status === CertificateStatus.Created) {
+      createdCertificates.push(item);
+    }
+  }
 
   return { rejectedCertificates, approvedCertificates, createdCertificates };
 }
@@ -147,8 +165,9 @@ export async function signCertificate(id: number) {
   });
 
   if (!response.ok) {
-    throw new Error(`${response.status} Error`);
+    throwApiError(response.status);
   }
 
+  revalidateTag(CERTIFICATES_CACHE_TAG);
   revalidatePath('/module/facultycertificate', 'layout');
 }

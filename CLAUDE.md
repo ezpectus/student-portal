@@ -1,19 +1,21 @@
-# CLAUDE.md - eCampus KPI Project Guide
+# CLAUDE.md - Student Portal Project Guide
 
 ## Project Overview
 
-Electronic Campus (eCampus) for Igor Sikorsky Kyiv Polytechnic Institute - a full-stack web application for educational management. Supports study sheet management, certificates, employment tracking, grading, announcements, and academic modules.
+Student Portal is a SaaS-oriented educational management frontend. It supports student modules, local demo authentication, Prisma-backed user management, an admin database explorer, and an optional external REST API integration.
 
 ## Tech Stack
 
-- **Framework**: Next.js 15.4.7 (App Router with Turbopack)
-- **React**: 19.1.0 with Server Components
+- **Framework**: Next.js 15.5.20 (App Router with Turbopack)
+- **React**: 19.2.0 with Server Components
 - **Language**: TypeScript 5+ (strict mode)
 - **Styling**: Tailwind CSS 4.1.10
 - **UI Components**: shadcn/ui (Radix UI primitives)
 - **Forms**: React Hook Form + Zod validation
 - **i18n**: next-intl (Ukrainian default, English)
-- **Backend**: External Campus API (REST with JWT auth)
+- **Data**: Prisma 6.19.3 with SQLite locally and PostgreSQL/Neon in deployment
+- **Auth**: bcryptjs + JWT in httpOnly cookies, with external REST API fallback
+- **Backend**: External REST API is configurable; this repository does not host an API server
 
 ## Quick Commands
 
@@ -23,7 +25,14 @@ npm run build        # Production build
 npm run start        # Run production server
 npm run lint         # Run ESLint
 npm run tsc          # Type check only
-npm run storybook    # Start Storybook on port 6006
+npm run db:generate  # Generate local SQLite Prisma client
+npm run db:push      # Apply local schema
+npm run db:seed      # Seed demo users and academic data
+npm run db:studio    # Open Prisma Studio
+scripts\\start-no-docker.bat # Start local windows with separate logs
+scripts\\start-docker.bat    # Start Docker stack
+./scripts/start-no-docker.sh  # Unix no-Docker launcher
+./scripts/start-docker.sh     # Unix Docker launcher
 ```
 
 ## Project Structure
@@ -71,8 +80,8 @@ Strict mode enabled with:
 
 ### API Client
 ```typescript
-import { campusFetch } from '@/lib/client';
-// Automatically injects JWT from cookies
+import { apiFetch } from '@/lib/client';
+// Automatically injects the configured auth token from cookies
 ```
 
 ### Translations
@@ -88,11 +97,12 @@ import iconUrl from './icon.svg?url'; // As URL string
 ## Environment Variables
 
 Required in `.env.development` / `.env.production`:
-- `CAMPUS_API_BASE_PATH` - Backend API URL
+- `API_BASE_URL` - Optional external REST API URL
+- `DATABASE_URL` - SQLite or Neon PostgreSQL connection string
+- `JWT_SECRET` - Secret for local demo JWTs
+- `NEXT_PUBLIC_LOCAL_AUTH` - Enables Prisma-backed local auth
 - `MAIN_COOKIE_DOMAIN`, `ROOT_COOKIE_DOMAIN` - Cookie domains
-- `OLD_CAMPUS_URL` - Legacy campus URL
-- `NEXT_PUBLIC_RECAPTCHA_KEY` - reCAPTCHA v3 key
-- `NEXT_PUBLIC_KPI_ID_APP_ID` - OAuth app ID
+- `NEXT_PUBLIC_RECAPTCHA_KEY` - Optional password-reset reCAPTCHA key
 
 ## Authentication
 
@@ -109,14 +119,14 @@ Required in `.env.development` / `.env.production`:
 
 ## Deployment
 
-- Docker multi-stage build (Node 18-alpine)
-- Standalone output mode
-- GitHub Actions CI/CD
-- Image: `kpiua/ecampus.kpi.ua`
+- Docker multi-stage build (Node 22-alpine)
+- Standalone Next.js output
+- PostgreSQL service with healthcheck in Docker Compose
+- Local no-Docker launchers for Windows and Unix shells
 
-## Testing
+## Quality and Testing
 
-No testing framework currently configured.
+The anti-pattern checklist and current risks are tracked in `docs/engineering-quality-baseline.md`. TypeScript and lint scripts are configured. Automated Vitest/Playwright coverage is still planned.
 
 ## Useful Paths
 

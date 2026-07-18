@@ -1,1 +1,9 @@
 export const USER_PROFILE_CACHE_TAG = 'user-profile';
+export const MESSAGES_CACHE_TAG = 'messages';
+export const CERTIFICATES_CACHE_TAG = 'certificates';
+export const ANNOUNCEMENTS_CACHE_TAG = 'announcements';
+export const RATING_CACHE_TAG = 'rating';
+export const MONITORING_CACHE_TAG = 'monitoring';
+export const TERM_CACHE_TAG = 'term';
+export const CURATOR_CACHE_TAG = 'curator';
+export const ATTESTATION_CACHE_TAG = 'attestation';

@@ -5,15 +5,17 @@ import { SidebarMenuButton, SidebarMenuItem, useSidebar } from '../ui/sidebar';
 import { menuIcon } from './menu-icon';
 import { ArrowSquareOutRegular, Question } from '@/app/images';
 import { Show } from '../utils/show';
+import { ReactNode } from 'react';
 
 interface MenuItemProps {
   name: string;
   title: string;
   url: string;
   isExternal?: boolean;
+  badge?: ReactNode;
 }
 
-export const MenuItem = ({ name, title, url, isExternal = false }: MenuItemProps) => {
+export const MenuItem = ({ name, title, url, isExternal = false, badge }: MenuItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const sidebar = useSidebar();
@@ -37,11 +39,14 @@ export const MenuItem = ({ name, title, url, isExternal = false }: MenuItemProps
           <Icon />
           {title}
         </span>
-        <Show when={isExternal}>
-          <span className="[&>svg]:size-[18px]">
-            <ArrowSquareOutRegular />
-          </span>
-        </Show>
+        <span className="flex items-center gap-2">
+          <Show when={!!badge}>{badge}</Show>
+          <Show when={isExternal}>
+            <span className="[&>svg]:size-[18px]">
+              <ArrowSquareOutRegular />
+            </span>
+          </Show>
+        </span>
       </SidebarMenuButton>
     </SidebarMenuItem>
   );
