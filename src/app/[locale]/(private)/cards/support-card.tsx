@@ -1,0 +1,43 @@
+import { Chats, ChatsTeardrop, EnvelopeSimple } from '@/app/images';
+import { Heading3 } from '@/components/typography/headers';
+import { Paragraph } from '@/components/typography/paragraph';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { TextButton } from '@/components/ui/text-button';
+import { cn } from '@/lib/utils';
+import { getTranslations } from 'next-intl/server';
+import { FC } from 'react';
+
+interface Props {
+  className?: string;
+}
+
+export const SupportCard: FC<Props> = async ({ className }) => {
+  const t = await getTranslations('private.main.cards.support');
+
+  return (
+    <Card className={cn(className)}>
+      <CardHeader className="pb-0">
+        <Heading3>{t('title')}</Heading3>
+      </CardHeader>
+      <CardContent>
+        <Paragraph>{t('description')}</Paragraph>
+        <Paragraph className="mt-8 mb-0 flex flex-col items-start gap-4">
+          <TextButton size="huge" href={process.env.NEXT_PUBLIC_SUGGESTIONS_FORM!} icon={<ChatsTeardrop />}>
+            {t('button.suggestions-form')}
+          </TextButton>
+          <TextButton size="huge" href="mailto:ecampus@kpi.ua" icon={<EnvelopeSimple />}>
+            {t('button.email')}
+          </TextButton>
+          <TextButton
+            size="huge"
+            target="_blank"
+            href={process.env.NEXT_PUBLIC_WHATSAPP_SUPPORT_LINK!}
+            icon={<Chats />}
+          >
+            {t('button.chat')}
+          </TextButton>
+        </Paragraph>
+      </CardContent>
+    </Card>
+  );
+};

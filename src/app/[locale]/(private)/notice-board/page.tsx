@@ -1,0 +1,39 @@
+import { SubLayout } from '../sub-layout';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getAnnouncements } from '@/actions/announcement.actions';
+import { NoticeList } from '@/app/[locale]/(private)/notice-board/components/notice-list';
+import { Description, Heading2 } from '@/components/typography';
+import { Suspense } from 'react';
+import { LocaleProps } from '@/types/locale-props';
+
+const INTL_NAMESPACE = 'private.notice-board';
+
+export async function generateMetadata({ params }: LocaleProps) {
+  const { locale } = await params;
+
+  const t = await getTranslations({ locale, namespace: INTL_NAMESPACE });
+
+  return {
+    title: t('title'),
+  };
+}
+
+export default async function NoticeBoardPage({ params }: LocaleProps) {
+  const { locale } = await params;
+
+  setRequestLocale(locale);
+  const t = await getTranslations(INTL_NAMESPACE);
+
+  const announcements = await getAnnouncements();
+  return (
+    <SubLayout pageTitle={t('title')}>
+      <div className="col-span-6">
+        <Heading2>{t('title')}</Heading2>
+        <Description>{t('subtitle')}</Description>
+        <Suspense>
+          <NoticeList announcements={announcements} />
+        </Suspense>
+      </div>
+    </SubLayout>
+  );
+}
