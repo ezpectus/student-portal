@@ -27,7 +27,7 @@ const IMAGES: CarouselImage[] = [
 ];
 
 export const LoginCarousel = () => {
-  const t = useTranslations('public.auth.carousel');
+  const t = useTranslations('public.cards.carousel');
   return (
     <Carousel
       opts={{

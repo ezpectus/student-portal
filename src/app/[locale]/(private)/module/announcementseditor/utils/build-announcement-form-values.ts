@@ -24,6 +24,8 @@ export const buildAnnouncementFormValues = (item: AdminAnnouncementItem): Announ
     start: toIsoDate(item.announcement.start),
     end: toIsoDate(item.announcement.end),
     language: item.announcement.language ?? 'uk',
+    scheduledAt: item.announcement.scheduledAt ? toIsoDate(item.announcement.scheduledAt) : '',
+    autoTranslate: item.announcement.autoTranslate ?? false,
   },
   filter: {
     roles: item.filter.roles ?? [],

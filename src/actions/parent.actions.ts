@@ -2,7 +2,7 @@
 
 import { unstable_cache } from 'next/cache';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { PARENT_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { displayGrade, type GradeType } from '@/lib/grade-utils';
 import { prisma } from '@/lib/prisma';
@@ -44,7 +44,7 @@ export interface ChildAttendance {
  */
 export const getChildren = unstable_cache(
   async (): Promise<ParentChild[]> => {
-    const user = await getLocalUser();
+    const user = await getLocalUserLite();
     if (!user || user.role !== 'PARENT') return [];
 
     try {
@@ -94,7 +94,7 @@ export const getChildren = unstable_cache(
  */
 export const getChildCourses = unstable_cache(
   async (studentId: number): Promise<ChildCourse[]> => {
-    const user = await getLocalUser();
+    const user = await getLocalUserLite();
     if (!user || user.role !== 'PARENT') return [];
 
     try {
@@ -134,7 +134,7 @@ export const getChildCourses = unstable_cache(
  */
 export const getChildAttendance = unstable_cache(
   async (studentId: number): Promise<ChildAttendance[]> => {
-    const user = await getLocalUser();
+    const user = await getLocalUserLite();
     if (!user || user.role !== 'PARENT') return [];
 
     try {

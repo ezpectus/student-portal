@@ -43,7 +43,7 @@ export const getModuleMenuSection = async (): Promise<MenuGroup[]> => {
       return [];
     }
 
-    const jwtPayload = getJWTPayload<CampusJwtPayload>(jwt);
+    const jwtPayload = await getJWTPayload<CampusJwtPayload>(jwt);
 
     if (!jwtPayload) {
       return [];
@@ -63,7 +63,7 @@ export const getModuleMenuSection = async (): Promise<MenuGroup[]> => {
     const composeMenuGroup = getMenuGroupComposer(t);
     const composeModuleMenuItem = getModuleMenuItemComposer(t);
 
-    const menuItems = Object.entries(groups).reduce((acc: MenuGroup[], [group, modules]) => {
+    const menuItems = Object.entries(groups).reduce((acc: MenuGroup[], [groupName, modules]) => {
       if (!modules) {
         return acc;
       }
@@ -77,9 +77,9 @@ export const getModuleMenuSection = async (): Promise<MenuGroup[]> => {
       return [
         ...acc,
         {
-          name: `_group.${group}`,
-          title: t(`_groups.${group}`),
-          url: `#${group}`,
+          name: `_group.${groupName}`,
+          title: t(`_groups.${groupName}`),
+          url: `#${groupName}`,
           submenu: menuGroupItems,
         } satisfies MenuGroup,
       ];

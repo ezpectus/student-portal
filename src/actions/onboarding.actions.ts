@@ -2,8 +2,10 @@
 
 import { revalidateTag } from 'next/cache';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
+import { env } from '@/lib/env';
 import { UnauthorizedError } from '@/lib/errors';
 import { fileUpload } from '@/lib/file-upload';
 import { prisma } from '@/lib/prisma';
@@ -18,7 +20,8 @@ export async function updateOnboardingProfile(data: {
   birthDate?: string;
   gradeBookNumber?: string;
 }) {
-  const user = await getLocalUser();
+  await requireCsrf();
+  const user = await getLocalUserLite();
   if (!user) throw new UnauthorizedError();
 
   await prisma.user.update({
@@ -39,15 +42,31 @@ export async function updateOnboardingProfile(data: {
 }
 
 export async function uploadOnboardingPhoto(formData: FormData) {
-  const user = await getLocalUser();
+  await requireCsrf();
+  const user = await getLocalUserLite();
   if (!user) throw new UnauthorizedError();
 
-  await fileUpload('profile/photo', formData);
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const file = formData.get('file') as File | null;
+    if (!file) throw new Error('No file provided');
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const base64 = `data:${file.type};base64,${buffer.toString('base64')}`;
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { photo: base64 },
+    });
+  } else {
+    await fileUpload('profile/photo', formData);
+  }
+
   revalidateTag(USER_PROFILE_CACHE_TAG);
 }
 
 export async function completeOnboarding() {
-  const user = await getLocalUser();
+  await requireCsrf();
+  const user = await getLocalUserLite();
   if (!user) throw new UnauthorizedError();
 
   revalidateTag(USER_PROFILE_CACHE_TAG);

@@ -1,10 +1,11 @@
 'use server';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
+import { requireCsrf } from '@/lib/csrf';
 import { prisma } from '@/lib/prisma';
 
 const getLocalUserId = async () => {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   return user?.id ?? null;
 };
 
@@ -33,6 +34,7 @@ export async function getNotifications() {
 }
 
 export async function markNotificationRead(id: number) {
+  await requireCsrf();
   const userId = await getLocalUserId();
   if (!userId) return { ok: false };
 
@@ -43,8 +45,8 @@ export async function markNotificationRead(id: number) {
 
   return { ok: result.count === 1 };
 }
-
 export async function markAllNotificationsRead() {
+  await requireCsrf();
   const userId = await getLocalUserId();
   if (!userId) return { ok: false };
 

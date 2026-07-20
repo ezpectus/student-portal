@@ -3,13 +3,13 @@
 import { unstable_cache } from 'next/cache';
 
 import { getUserDetails } from '@/actions/auth.actions';
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { ANALYTICS_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { prisma } from '@/lib/prisma';
 import { UserCategory } from '@/types/enums/user-category';
 
 const requireAdmin = async () => {
-  const localUser = await getLocalUser();
+  const localUser = await getLocalUserLite();
   if (localUser?.role === 'ADMIN') {
     return { schoolId: localUser.schoolId ?? undefined };
   }
@@ -60,6 +60,37 @@ export interface GradeDistribution {
   color: string;
 }
 
+export interface CohortData {
+  year: number;
+  students: number;
+  avgGpa: number;
+}
+
+export interface CourseRisk {
+  courseName: string;
+  totalStudents: number;
+  failures: number;
+  failureRate: number;
+}
+
+export interface TeacherEffectiveness {
+  teacherName: string;
+  courseCount: number;
+  avgGrade: number;
+  failureRate: number;
+  failures: number;
+  students: number;
+}
+
+export interface RiskStudent {
+  studentName: string;
+  groupName: string | null;
+  gpa: number;
+  attendanceRate: number;
+  failingCourses: number;
+  riskScore: number;
+}
+
 export interface AnalyticsData {
   overview: AnalyticsOverview;
   roleDistribution: RoleDistribution[];
@@ -67,6 +98,10 @@ export interface AnalyticsData {
   facultyDistribution: FacultyDistribution[];
   activityData: ActivityData[];
   gradeDistribution: GradeDistribution[];
+  cohorts: CohortData[];
+  courseRisk: CourseRisk[];
+  teacherEffectiveness: TeacherEffectiveness[];
+  riskStudents: RiskStudent[];
 }
 
 /**
@@ -84,6 +119,10 @@ export const getAnalytics = unstable_cache(
         facultyDistribution: [],
         activityData: [],
         gradeDistribution: [],
+        cohorts: [],
+        courseRisk: [],
+        teacherEffectiveness: [],
+        riskStudents: [],
       };
     }
 
@@ -97,7 +136,7 @@ export const getAnalytics = unstable_cache(
       const [
         totalUsers, students, teachers, parents, admins,
         activeStudents, newUsersThisMonth, studentGpas,
-        roleGroups, recentUsers, facultyData, recentActivity, allCourses,
+        roleGroups, recentUsers, facultyData, recentActivity, allCourses, cohortData, teachersWithCourses, studentsAtRisk,
       ] = await Promise.all([
         prisma.user.count({ where: schoolFilter }),
         prisma.user.count({ where: { role: 'STUDENT', ...schoolFilter } }),
@@ -111,7 +150,10 @@ export const getAnalytics = unstable_cache(
         prisma.user.findMany({ where: { createdAt: { gte: new Date(now.getFullYear() - 1, 0, 1) }, ...schoolFilter }, select: { createdAt: true } }),
         prisma.user.groupBy({ by: ['faculty'], where: { role: 'STUDENT', faculty: { not: null }, ...schoolFilter }, _count: true, _avg: { gpa: true } }),
         prisma.user.findMany({ where: { lastActiveAt: { gte: monthAgo }, ...schoolFilter }, select: { lastActiveAt: true } }),
-        prisma.course.findMany({ where: schoolId !== undefined ? { schoolId } : {}, select: { grade: true } }),
+        prisma.course.findMany({ where: schoolId !== undefined ? { schoolId } : {}, select: { name: true, grade: true, gradeType: true } }),
+        prisma.user.groupBy({ by: ['studyYear'], where: { role: 'STUDENT', studyYear: { gt: 0 }, ...schoolFilter }, _count: true, _avg: { gpa: true } }),
+        prisma.user.findMany({ where: { role: 'TEACHER', ...schoolFilter }, select: { fullName: true, username: true, taughtCourses: { select: { grade: true } } } }),
+        prisma.user.findMany({ where: { role: 'STUDENT', ...schoolFilter }, select: { fullName: true, username: true, groupName: true, gpa: true, attendance: { select: { present: true, total: true } }, courses: { select: { grade: true } } } }),
       ]);
 
       const avgGpa = studentGpas.length > 0
@@ -152,7 +194,7 @@ export const getAnalytics = unstable_cache(
         .map(([date, activeUsers]) => ({ date, activeUsers }));
 
       const buckets = { A: 0, B: 0, C: 0, D: 0, F: 0 };
-      for (const c of allCourses as { grade: number }[]) {
+      for (const c of allCourses as { name: string; grade: number; gradeType: string }[]) {
         if (c.grade >= 90) buckets.A++;
         else if (c.grade >= 80) buckets.B++;
         else if (c.grade >= 70) buckets.C++;
@@ -167,6 +209,78 @@ export const getAnalytics = unstable_cache(
         { grade: 'F (<60)', count: buckets.F, color: '#ef4444' },
       ];
 
+      const cohorts: CohortData[] = (cohortData as { studyYear: number; _count: number; _avg: { gpa: number | null } }[])
+        .map((c) => ({
+          year: c.studyYear,
+          students: c._count,
+          avgGpa: c._avg.gpa ? Math.round(c._avg.gpa * 100) / 100 : 0,
+        }))
+        .sort((a, b) => a.year - b.year);
+
+      const courseRiskMap = new Map<string, { totalStudents: number; failures: number }>();
+      for (const c of allCourses as { name: string; grade: number; gradeType: string }[]) {
+        const current = courseRiskMap.get(c.name) ?? { totalStudents: 0, failures: 0 };
+        current.totalStudents++;
+        if (c.grade < 60) {
+          current.failures++;
+        }
+        courseRiskMap.set(c.name, current);
+      }
+      const courseRisk: CourseRisk[] = Array.from(courseRiskMap.entries())
+        .map(([courseName, { totalStudents, failures }]) => ({
+          courseName,
+          totalStudents,
+          failures,
+          failureRate: totalStudents > 0 ? Math.round((failures / totalStudents) * 100) : 0,
+        }))
+        .sort((a, b) => b.failureRate - a.failureRate || b.failures - a.failures)
+        .slice(0, 10);
+
+      const teacherEffectiveness: TeacherEffectiveness[] = (teachersWithCourses as { fullName: string; username: string; taughtCourses: { grade: number }[] }[])
+        .map((t) => {
+          const courseCount = t.taughtCourses.length;
+          const failures = t.taughtCourses.filter((c) => c.grade < 60).length;
+          const avgGrade = courseCount > 0
+            ? Math.round((t.taughtCourses.reduce((sum, c) => sum + c.grade, 0) / courseCount) * 100) / 100
+            : 0;
+
+          return {
+            teacherName: t.fullName || t.username,
+            courseCount,
+            avgGrade,
+            failureRate: courseCount > 0 ? Math.round((failures / courseCount) * 100) : 0,
+            failures,
+            students: courseCount,
+          };
+        })
+        .filter((t) => t.courseCount > 0)
+        .sort((a, b) => b.failureRate - a.failureRate || a.avgGrade - b.avgGrade)
+        .slice(0, 10);
+
+      const riskStudents: RiskStudent[] = (studentsAtRisk as { fullName: string; username: string; groupName: string | null; gpa: number; attendance: { present: number; total: number }[]; courses: { grade: number }[] }[])
+        .map((s) => {
+          const attendanceTotal = s.attendance.reduce((sum, a) => sum + a.total, 0);
+          const attendancePresent = s.attendance.reduce((sum, a) => sum + a.present, 0);
+          const attendanceRate = attendanceTotal > 0 ? Math.round((attendancePresent / attendanceTotal) * 100) / 100 : 1;
+          const failingCourses = s.courses.filter((c) => c.grade < 60).length;
+          const attendanceRisk = (1 - attendanceRate) * 40;
+          const gpaRisk = (1 - s.gpa / 100) * 40;
+          const courseRisk = failingCourses * 10;
+          const riskScore = Math.min(100, Math.round(attendanceRisk + gpaRisk + courseRisk));
+
+          return {
+            studentName: s.fullName || s.username,
+            groupName: s.groupName,
+            gpa: s.gpa,
+            attendanceRate,
+            failingCourses,
+            riskScore,
+          };
+        })
+        .filter((s) => s.riskScore > 0)
+        .sort((a, b) => b.riskScore - a.riskScore)
+        .slice(0, 15);
+
       return {
         overview: { totalUsers, students, teachers, parents, admins, activeStudents, newUsersThisMonth, avgGpa },
         roleDistribution,
@@ -174,6 +288,10 @@ export const getAnalytics = unstable_cache(
         facultyDistribution,
         activityData,
         gradeDistribution,
+        cohorts,
+        courseRisk,
+        teacherEffectiveness,
+        riskStudents,
       };
     } catch {
       return {
@@ -183,6 +301,10 @@ export const getAnalytics = unstable_cache(
         facultyDistribution: [],
         activityData: [],
         gradeDistribution: [],
+        cohorts: [],
+        courseRisk: [],
+        teacherEffectiveness: [],
+        riskStudents: [],
       };
     }
   },

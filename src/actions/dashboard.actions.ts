@@ -2,7 +2,7 @@
 
 import { unstable_cache } from 'next/cache';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { DASHBOARD_CACHE_TAG } from '@/lib/constants/cache-tags';
 import { prisma } from '@/lib/prisma';
 
@@ -39,7 +39,7 @@ interface DashboardData {
 
 export const getDashboardData = unstable_cache(
   async (): Promise<DashboardData> => {
-    const user = await getLocalUser();
+    const user = await getLocalUserLite();
     if (!user) {
       return {
         metrics: { averageScore: 0, creditsEarned: 0, coursesActive: 0, attendanceRate: 0 },

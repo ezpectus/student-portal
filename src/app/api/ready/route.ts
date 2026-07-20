@@ -4,6 +4,8 @@ import { getCircuitState } from '@/lib/circuit-breaker';
 import { env } from '@/lib/env';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 type CheckResult = {
   name: string;
   status: 'healthy' | 'degraded' | 'unhealthy';

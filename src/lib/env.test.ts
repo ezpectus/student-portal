@@ -16,12 +16,12 @@ describe('env schema validation', () => {
     vi.stubEnv('NODE_ENV', 'test');
     vi.stubEnv('API_BASE_URL', 'https://api.example.com');
     vi.stubEnv('DATABASE_URL', '');
-    vi.stubEnv('JWT_SECRET', '');
+    vi.stubEnv('JWT_SECRET', 'a-valid-test-secret-at-least-16-chars');
     vi.stubEnv('NEXT_PUBLIC_LOCAL_AUTH', '');
 
     const { env } = await import('@/lib/env');
     expect(env.DATABASE_URL).toBe('file:./dev.db');
-    expect(env.JWT_SECRET).toBe('student-portal-demo-secret');
+    expect(env.JWT_SECRET).toBe('a-valid-test-secret-at-least-16-chars');
     expect(env.NEXT_PUBLIC_LOCAL_AUTH).toBe('true');
   });
 
@@ -35,12 +35,12 @@ describe('env schema validation', () => {
   it('accepts valid configuration', async () => {
     vi.stubEnv('NODE_ENV', 'test');
     vi.stubEnv('API_BASE_URL', 'https://api.example.com');
-    vi.stubEnv('JWT_SECRET', 'my-secret');
+    vi.stubEnv('JWT_SECRET', 'a-valid-test-secret-at-least-16-chars');
     vi.stubEnv('DATABASE_URL', 'file:./test.db');
 
     const { env } = await import('@/lib/env');
     expect(env.API_BASE_URL).toBe('https://api.example.com');
-    expect(env.JWT_SECRET).toBe('my-secret');
+    expect(env.JWT_SECRET).toBe('a-valid-test-secret-at-least-16-chars');
   });
 
   it('validates optional URL fields', async () => {
@@ -54,6 +54,7 @@ describe('env schema validation', () => {
   it('defaults NODE_ENV to development', async () => {
     vi.stubEnv('NODE_ENV', '');
     vi.stubEnv('API_BASE_URL', 'https://api.example.com');
+    vi.stubEnv('JWT_SECRET', 'a-valid-test-secret-at-least-16-chars');
 
     const { env } = await import('@/lib/env');
     expect(env.NODE_ENV).toBe('development');

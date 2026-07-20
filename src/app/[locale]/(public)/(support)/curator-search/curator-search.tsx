@@ -42,7 +42,7 @@ export const CuratorSearch = () => {
         setIsLoading(false);
       }
     }
-  }, []);
+  }, [errorToast]);
 
   useEffect(() => {
     searchGroups(search);

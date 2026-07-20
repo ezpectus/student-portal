@@ -14,4 +14,9 @@ export const MODULES: Module[] = [
   { name: 'employment', isExternal: false },
   { name: 'grading', isExternal: false },
   { name: 'admin', isExternal: false },
+  { name: 'analytics', isExternal: false },
+  { name: 'calendar', isExternal: false },
+  { name: 'chat', isExternal: false },
+  { name: 'feed', isExternal: false },
+  { name: 'ai-chat', isExternal: false },
 ];

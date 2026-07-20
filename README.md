@@ -44,14 +44,14 @@ A production-grade SaaS web application for educational institutions. Built with
 - **Test Users** — pre-seeded admin, teacher, student, and parent accounts for instant demo
 - **Demo Shortcuts** — optional role buttons on login/register when `NEXT_PUBLIC_SHOW_DEMO_CREDENTIALS=true`
 - **Remote API Fallback** — seamlessly falls back to external API when local auth is disabled
-- **Rate Limiting** — login (10/min) and registration (5/hour) throttled to prevent brute-force attacks
+- **Rate Limiting** — login (10 per 15min) and password reset (5 per 15min) throttled to prevent brute-force attacks
 
 ### Platform
 - **Authentication** — JWT-based with httpOnly cookies, middleware route protection, user registration
 - **Database** — Prisma 7 ORM with SQLite (dev) / Neon Postgres (prod), driver adapters
 - **Multi-locale** — Ukrainian (default) and English, extensible to any locale
 - **Server-Side Rendering** — all pages SSR with ISR caching (5-min revalidate)
-- **Security** — CSP headers, HSTS, cookie security flags, env validation (Zod), URL allow-listing
+- **Security** — CSP headers, HSTS, cookie security flags, CSRF protection (middleware + server-side validation), env validation (Zod), URL allow-listing
 - **Responsive** — mobile-first design with TailwindCSS, works on all breakpoints
 - **Accessible** — ARIA labels, keyboard navigation, semantic HTML
 - **Dark Mode** — theme toggle with TailwindCSS dark: variants and localStorage persistence
@@ -68,6 +68,7 @@ A production-grade SaaS web application for educational institutions. Built with
 | Language | TypeScript 5.9 (strict mode) |
 | Database | Prisma 7 ORM + SQLite (dev) / Neon Postgres (prod) |
 | Auth | bcryptjs password hashing + JWT in httpOnly cookies |
+| Security | CSRF protection (double-submit cookie + Origin validation), school-scoped data isolation, audit logging |
 | Forms | React Hook Form 7 + Zod 4 validation |
 | i18n | next-intl (Ukrainian / English) |
 | Charts | Recharts 3 (dashboard analytics) |
@@ -330,15 +331,22 @@ All environment variables are validated through a Zod schema at startup. No `pro
 
 - **Password hashing** — bcryptjs with 10 rounds
 - **JWT** stored in httpOnly cookies (not accessible via JavaScript)
-- **JWT validation** — Zod schema validates exp, modules, iss on every request
-- **Cookie flags** — `secure` and `sameSite: 'lax'` in production
+- **Refresh token rotation** — short-lived access tokens (15min) + long-lived refresh tokens (30d) with automatic rotation and reuse detection
+- **JWKS support** — remote JWT signature verification via jose library when `JWKS_URI` is configured
+- **JWT validation** — Zod schema validates exp, modules, iss on every request; expired external tokens rejected
+- **JWT_SECRET** — minimum 16 characters, no insecure defaults (app fails fast if missing)
+- **Cookie flags** — `httpOnly: true`, `secure` in production, `sameSite: 'lax'`
+- **CSRF protection** — double-submit cookie + Origin header validation in middleware; `requireCsrf()` guard in all mutating server actions
+- **School isolation** — all data access scoped to `schoolId`; cross-school reads, mutations, and messaging blocked
 - **CSP** — Content-Security-Policy header on all routes
 - **HSTS** — Strict-Transport-Security with preload
-- **Rate limiting** — login (10/min, 5min lockout) and registration (5/hour) throttled
+- **Rate limiting** — login (10 per 15min, 5min lockout) and password reset (5 per 15min) throttled
 - **Fetch timeout** — AbortSignal.timeout(10s) on all external API calls
 - **Circuit breaker** — 5xx errors trip circuit, fast-fail after 5 failures
 - **Smart retry** — TransientError retried with backoff, PermanentError/ValidationError/NotFoundError fast-fail
-- **Audit logging** — all admin and grade mutations logged with user, action, metadata
+- **Audit logging** — all admin and grade mutations logged with user, action, metadata; failures logged but non-blocking
+- **File upload safety** — 5MB size limit, MIME type allow-list (JPEG/PNG/WebP/GIF) for avatar uploads
+- **SQLite WAL mode** — write-ahead logging enabled to prevent SQLITE_BUSY under concurrent writes
 - **Environment validation** — Zod schema, no unvalidated env access
 - **URL allow-listing** — external redirects validated against trusted domains
 - **IP header sanitization** — X-Forwarded-For and X-Real-IP headers sanitized against spoofing
@@ -361,6 +369,27 @@ All environment variables are validated through a Zod schema at startup. No `pro
 | `npm run db:generate` | Regenerate Prisma client |
 | `npm test` | Run unit tests (Vitest) |
 | `npm run test:e2e` | Run E2E tests (Playwright) |
+
+---
+
+## Documentation
+
+### Infrastructure (`docs/infrastructure/`)
+- `01-stack-overview.md` — Full technology stack with versions and rationale
+- `02-architecture-diagram.md` — High-level architecture, directory structure, route groups, access control matrix
+- `03-request-pipeline.md` — Request lifecycle, server action patterns, external API data flow, cache invalidation
+- `04-database-layer.md` — Dual-database strategy, Prisma singleton, WAL mode, schema, school isolation
+- `05-auth-security.md` — Auth flows, JWT/JWKS, refresh token rotation, CSRF, CSP, cookies, rate limiting
+- `06-deployment-docker.md` — Docker architecture, multi-stage build, Compose, volumes, health checks
+- `07-frontend-components.md` — Component hierarchy, server/client components, shadcn/ui, table/form patterns
+- `08-monitoring-health.md` — Health endpoints, circuit breaker, retry, structured logging, resilience
+
+### Theory (`docs/theory/`)
+- `01-patterns-architecture.md` — 13 design patterns with code examples and rationale
+- `02-react-server-components.md` — RSC concepts, hydration, server actions, caching, error boundaries
+- `03-security-concepts.md` — 12 security concepts with project-specific examples
+- `04-database-concepts.md` — ORM, Prisma, SQLite vs PostgreSQL, WAL, transactions, indexing
+- `05-development-workflow.md` — Dev cycle, HMR, TypeScript strict, ESLint, Vitest, Playwright, TDD, CI/CD
 
 ---
 

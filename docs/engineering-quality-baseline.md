@@ -1,7 +1,7 @@
 # Engineering Quality Baseline
 
 **Status:** Active review checklist  
-**Updated:** 18.07.2026
+**Updated:** 20.07.2026
 
 ## Architecture rules
 
@@ -31,24 +31,26 @@
 - **Timer cleanup:** PDF iframe printing now clears delayed timers and revokes the Blob URL through idempotent cleanup.
 - **Theme incompleteness:** light, dim, and dark semantic tokens are now explicit; shared tables use theme-aware surfaces.
 
-- **Redundant try/catch rethrow:** removed `try { ... } catch (error) { throw error; }` from announcement, profile, and certificates actions.
-- **Import order:** sorted imports in announcement, profile, certificates, msg actions and client.ts to match eslint-plugin-simple-import-sort.
-- **Date utility consolidation:** moved `formatDate`/`formatTime` from `lib/utils.tsx` to `lib/date.utils.ts` — all date helpers in one place.
-- **Silent-fail studysheet:** removed try/catch + infinite LoadingScreen pattern; errors now propagate to the error boundary with a retry button.
-- **Certificate grouping optimization:** `getOtherFacultyCertificate` replaced 3× `Array.filter` passes with a single `for...of` loop.
-- **Client factory naming:** renamed `Client` → `createApiFetch` for clarity; consolidated `next/headers` imports.
+- **CSRF protection:** `requireCsrf()` guard added to all mutating server actions (admin, settings, grading, calendar, feed, chat, msg, QR attendance). Middleware validates CSRF cookie + Origin header on POST requests with `Next-Action` header.
+- **School isolation:** all data access scoped to `schoolId` — cross-school reads, mutations, messaging, chat room creation, feed deletion, grade history, event CRUD, and QR attendance blocked.
+- **JWT_SECRET enforcement:** removed insecure default; minimum 16 characters required; app fails fast if missing.
+- **External JWT expiration check:** `getJWTPayload` now rejects expired external tokens even without signature verification.
+- **SQLite WAL mode:** enabled via `PRAGMA journal_mode = WAL` to prevent SQLITE_BUSY under concurrent writes.
+- **Photo storage:** avatar uploads stored as files in `/public/uploads/avatars/` instead of base64 in DB; 5MB limit + MIME type allow-list.
+- **Audit logging resilience:** `logAuditEvent` wrapped in try/catch — failures logged to console, non-blocking for main mutation.
+- **Prisma query logging:** restricted to development only; production logs `error` and `warn` levels.
+- **File upload safety:** 5MB size limit + MIME type allow-list (JPEG/PNG/WebP/GIF) for avatar uploads.
 
 ## Remaining risks
 
-- Local JWT uses a static development fallback secret when `JWT_SECRET` is absent; production must provide a strong secret.
-- Remote API token verification still depends on the external backend's public key/issuer contract; configure JWKS/issuer validation before treating remote JWT claims as authoritative.
+- ~~Local JWT uses a static development fallback secret when `JWT_SECRET` is absent~~ **Fixed:** JWT_SECRET now requires minimum 16 characters, no default.
+- Remote API token verification still depends on the external backend's public key/issuer contract; configure JWKS/issuer validation before treating remote JWT claims as authoritative. External JWT expiration is now checked.
 - Admin action authorization supports remote API fallback but should eventually use a single verified session abstraction.
 - Password reset, refresh-token rotation remain. Rate limiting (in-memory) and logout-all-devices are implemented.
-- Audit log model added to Prisma schema; admin actions (delete user, update status) are logged.
+- Audit log model added to Prisma schema; admin actions (delete user, update status) are logged. Audit failures are now non-blocking.
 - Vitest unit tests configured: circuit-breaker, retry, validate, errors, features, logger, csv-export, password-strength, audit actions. Playwright E2E tests configured: auth, grades, messages.
-- A clean-install baseline exposed 24 TypeScript errors; fixes are documented in changelog 28.
-- The lockfile must be regenerated after the Next/Radix dependency update; do not use `npm audit fix --force` because it conflicts with the pinned override.
 - The Docker demo seeds data on every container recreation when `SEED_DATABASE=true`; use a persistent volume and disable reseeding for production.
+- Photos stored as files in `/public/uploads/avatars/` — ensure this directory is persisted in Docker deployments (volume mount).
 
 ## Verification commands
 

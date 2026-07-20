@@ -6,6 +6,8 @@ export const PUBLIC_PATHS = [
   '/register',
   '/landing',
   '/password-reset',
+  '/password-reset/new-password',
+  '/password-reset/success',
   '/curator-search',
   '/suggestions',
   '/support',

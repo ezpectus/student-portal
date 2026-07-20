@@ -1,4 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Suspense } from 'react';
 
 import { AuthNavLayout } from '@/app/[locale]/(public)/auth-nav-layout';
 import { LocaleProps } from '@/types/locale-props';
@@ -21,7 +22,9 @@ export default async function Verify({ params }: LocaleProps) {
     <AuthNavLayout header={t('header')} className="flex w-full grow flex-col items-start">
       <section className="leading-lg mt-8 w-full text-lg">
         <div className="flex w-full flex-col gap-6">
-          <CertificateVerifier />
+          <Suspense fallback={<div className="text-neutral-500">Loading...</div>}>
+            <CertificateVerifier />
+          </Suspense>
         </div>
       </section>
     </AuthNavLayout>

@@ -44,6 +44,10 @@ const announcementFormSchema = z.object({
   start: rfc3339LikeDate('Start date is required'),
   end: rfc3339LikeDate('End date is required'),
   language: z.string().length(2, 'Language must be a 2-letter code'),
+  scheduledAt: z.union([z.literal(''), z.null(), z.string().refine((s) => !s || !Number.isNaN(Date.parse(s)), {
+    message: 'Must be a valid ISO / RFC 3339 date',
+  })]),
+  autoTranslate: z.boolean(),
 });
 
 const filterFormSchema = z.object({
@@ -74,6 +78,10 @@ export const toAnnouncementCreate = (values: AnnouncementFormValues): Announceme
       ...rest,
       image: image === '' ? null : image,
       link: hasLink ? { title: link.title.trim(), uri: link.uri.trim() } : null,
+      scheduledAt: announcement.scheduledAt === '' || announcement.scheduledAt === null
+        ? null
+        : announcement.scheduledAt,
+    autoTranslate: announcement.autoTranslate,
     },
     filter,
   };

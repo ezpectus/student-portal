@@ -7,7 +7,7 @@ import { useCallback,useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { getEmployeeOptions, getStudentOptions, sendMail } from '@/actions/msg.actions';
+import { getEmployeeOptions, getParentOptionsForTeacher, getStudentOptions, sendMail, sendMailToParents } from '@/actions/msg.actions';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -27,8 +27,9 @@ interface Props {
 
 export function Individual({ groupOptions }: Props) {
   const hasGroupOptions = groupOptions.length > 0;
-  const [recipientType, setRecipientType] = useState<'employee' | 'student'>('employee');
+  const [recipientType, setRecipientType] = useState<'employee' | 'student' | 'parent'>('employee');
   const [userOptions, setUserOptions] = useState<EntityIdName[]>([]);
+  const [parentOptions, setParentOptions] = useState<EntityIdName[]>([]);
 
   const { toast } = useToast();
   const { errorToast } = useServerErrorToast();
@@ -54,11 +55,20 @@ export function Individual({ groupOptions }: Props) {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await sendMail({
-        recipients: data.userIds.map((option) => Number(option.value)),
-        subject: data.subject,
-        content: data.content,
-      });
+      const recipientIds = data.userIds.map((option) => Number(option.value));
+      if (recipientType === 'parent') {
+        await sendMailToParents({
+          recipients: recipientIds,
+          subject: data.subject,
+          content: data.content,
+        });
+      } else {
+        await sendMail({
+          recipients: recipientIds,
+          subject: data.subject,
+          content: data.content,
+        });
+      }
       toast({
         title: t('toast.success-title'),
         description: t('toast.success-description'),
@@ -75,6 +85,21 @@ export function Individual({ groupOptions }: Props) {
   useEffect(() => {
     form.setValue('userIds', []);
   }, [recipientType, form]);
+
+  useEffect(() => {
+    if (recipientType === 'parent') {
+      let isCancelled = false;
+      getParentOptionsForTeacher().then((parents) => {
+        if (!isCancelled) {
+          setParentOptions(parents);
+        }
+      });
+      return () => {
+        isCancelled = true;
+      };
+    }
+    return undefined;
+  }, [recipientType]);
 
   useEffect(() => {
     if (recipientType === 'student' && selectedGroups.length > 0) {
@@ -115,7 +140,7 @@ export function Individual({ groupOptions }: Props) {
             <RadioGroup
               className="flex"
               defaultValue="employee"
-              onValueChange={(value) => setRecipientType(value as 'employee' | 'student')}
+              onValueChange={(value) => setRecipientType(value as 'employee' | 'student' | 'parent')}
             >
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="employee" id="r1" />
@@ -124,6 +149,10 @@ export function Individual({ groupOptions }: Props) {
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="student" id="r2" />
                 <Label htmlFor="r2">{t('recipient-type.student')}</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="parent" id="r3" />
+                <Label htmlFor="r3">{t('recipient-type.parent')}</Label>
               </div>
             </RadioGroup>
           </div>
@@ -163,6 +192,14 @@ export function Individual({ groupOptions }: Props) {
                   placeholder={t('form.search-placeholder')}
                   emptyIndicator={t('form.search-empty')}
                   triggerSearchOnFocus={false}
+                />
+              ) : recipientType === 'parent' ? (
+                <MultipleSelector
+                  value={field.value}
+                  options={parentOptions.map((parent) => ({ value: parent.id.toString(), label: parent.name }))}
+                  onChange={field.onChange}
+                  placeholder={t('form.select-parent-placeholder')}
+                  emptyIndicator={t('form.no-parents')}
                 />
               ) : (
                 <MultipleSelector

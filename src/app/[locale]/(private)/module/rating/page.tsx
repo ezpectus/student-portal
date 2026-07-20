@@ -6,6 +6,7 @@ import { SubLayout } from '@/app/[locale]/(private)/sub-layout';
 import { Heading2, Paragraph } from '@/components/typography';
 import { LocaleProps } from '@/types/locale-props';
 
+import { GradePredictionsWidget } from './components/grade-predictions-widget';
 import { RatingView } from './components/rating-view';
 
 const INTL_NAMESPACE = 'private.rating';
@@ -34,6 +35,9 @@ export default async function RatingPage({ params }: LocaleProps) {
           {t('subtitle')}
         </Paragraph>
         <RatingView ratingData={ratingData} />
+        <div className="mt-6">
+          <GradePredictionsWidget />
+        </div>
       </div>
     </SubLayout>
   );

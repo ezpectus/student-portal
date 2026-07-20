@@ -1,5 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
+import { Suspense } from 'react';
 
 import {
   CalendarBlank,
@@ -49,7 +50,9 @@ export default async function LandingPage({ params }: LocaleProps) {
       <header className="flex items-center justify-between px-6 py-4 md:px-12">
         <Logo />
         <div className="flex items-center gap-4">
-          <LocaleSwitch />
+          <Suspense fallback={<span className="text-xs uppercase text-neutral-500">···</span>}>
+            <LocaleSwitch />
+          </Suspense>
           <Link href="/login">
             <Button variant="secondary" size="small">{t('nav.login')}</Button>
           </Link>

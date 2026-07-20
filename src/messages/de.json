@@ -360,6 +360,16 @@
       "not-found": "No results found",
       "search-default": "Enter your group name above to find a curator.",
       "unknown-value": "Unknown"
+    },
+    "cards": {
+      "carousel": {
+        "slide-1": "Welcome to Student Portal",
+        "slide-2": "Your campus, simplified",
+        "slide-3": "Everything in one place",
+        "slide-4": "Grades, schedules, and more",
+        "slide-5": "Built for students and faculty",
+        "credits-by": "by"
+      }
     }
   },
   "private": {

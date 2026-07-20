@@ -3,12 +3,16 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { AnnouncementCreate } from '@/app/[locale]/(private)/module/announcementseditor/types';
 import { LOCALE } from '@/i18n/routing';
 import { throwApiError } from '@/lib/api-error';
 import { apiFetch } from '@/lib/client';
 import { ANNOUNCEMENTS_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
 import { isOutdated } from '@/lib/date.utils';
+import { env } from '@/lib/env';
+import { prisma } from '@/lib/prisma';
 import { retryWithBackoff } from '@/lib/retry';
 import { validateInput } from '@/lib/validate';
 import { AdminAnnouncementItem, Announcement } from '@/types/models/announcement';
@@ -31,6 +35,10 @@ export interface AdminAnnouncementsResult {
 }
 
 export const getAdminAnnouncements = async (query: AdminAnnouncementsQuery): Promise<AdminAnnouncementsResult> => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return { items: [], total: 0 };
+  }
+
   try {
     const params = new URLSearchParams();
     if (query.search) params.set('search', query.search);
@@ -61,6 +69,10 @@ export const getAdminAnnouncements = async (query: AdminAnnouncementsQuery): Pro
 };
 
 export const getAdminAnnouncementById = async (id: number): Promise<AdminAnnouncementItem> => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Announcements are not available in local auth mode');
+  }
+
   try {
     const response = await apiFetch(`announcements/admin/${id}`);
 
@@ -75,6 +87,10 @@ export const getAdminAnnouncementById = async (id: number): Promise<AdminAnnounc
 };
 
 export const getAnnouncements = async ({ excludeOutdated = false }: { excludeOutdated?: boolean } = {}) => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return [];
+  }
+
   try {
     const response = await retryWithBackoff(() => apiFetch('announcements', {
       next: { revalidate: 300, tags: [ANNOUNCEMENTS_CACHE_TAG] },
@@ -112,6 +128,8 @@ const announcementCreateSchema = z.object({
     start: z.string().min(1),
     end: z.string().min(1),
     language: z.string().min(1).max(10),
+    scheduledAt: z.string().nullable().optional(),
+    autoTranslate: z.boolean().optional().default(false),
   }),
   filter: z.object({
     courses: z.array(z.number().int().positive()),
@@ -125,6 +143,11 @@ const announcementIdSchema = z.object({
 });
 
 export const createAnnouncement = async (data: AnnouncementCreate): Promise<number> => {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Announcement management is not available in local auth mode');
+  }
+
   const validated = validateInput(announcementCreateSchema, data, 'createAnnouncement');
 
   const response = await apiFetch('announcements', {
@@ -143,6 +166,11 @@ export const createAnnouncement = async (data: AnnouncementCreate): Promise<numb
 };
 
 export const updateAnnouncement = async (id: number, data: AnnouncementCreate): Promise<void> => {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Announcement management is not available in local auth mode');
+  }
+
   const validatedId = validateInput(announcementIdSchema, { id }, 'updateAnnouncement');
   const validatedData = validateInput(announcementCreateSchema, data, 'updateAnnouncement');
 
@@ -159,6 +187,11 @@ export const updateAnnouncement = async (id: number, data: AnnouncementCreate): 
 };
 
 export const deleteAnnouncement = async (id: number): Promise<void> => {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Announcement management is not available in local auth mode');
+  }
+
   const validated = validateInput(announcementIdSchema, { id }, 'deleteAnnouncement');
 
   const response = await apiFetch(`announcements/${validated.id}`, {
@@ -173,6 +206,10 @@ export const deleteAnnouncement = async (id: number): Promise<void> => {
 };
 
 export const getRoles = async () => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return ['STUDENT', 'TEACHER', 'PARENT', 'ADMIN'];
+  }
+
   try {
     const response = await apiFetch('roles');
     if (!response.ok) {
@@ -185,6 +222,10 @@ export const getRoles = async () => {
 };
 
 export const getStudyForms = async () => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return [];
+  }
+
   try {
     const response = await apiFetch('study-forms');
     if (!response.ok) {
@@ -197,6 +238,20 @@ export const getStudyForms = async () => {
 };
 
 export const getCourses = async () => {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    try {
+      const user = await getLocalUserLite();
+      if (!user) return [];
+      const courses = await prisma.course.findMany({
+        where: { teacherId: user.id },
+        select: { id: true },
+      });
+      return courses.map((c) => c.id);
+    } catch {
+      return [];
+    }
+  }
+
   try {
     const response = await apiFetch('courses');
     if (!response.ok) {

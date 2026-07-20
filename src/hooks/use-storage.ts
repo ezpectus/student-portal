@@ -9,20 +9,23 @@ export const useLocalStorage = <T extends Object>(
   defaultValue?: DefaultValue<T>,
 ): [T | undefined, Dispatch<SetStateAction<T | undefined>>, () => void] => {
   const [value, setValue] = useState<T | undefined>(() => {
-    try {
-      let jsonValue = typeof defaultValue === 'function' ? ((defaultValue as Function)() as T) : defaultValue;
-
-      if (typeof window !== 'undefined') {
-        const storageValue = window.localStorage.getItem(key);
-
-        jsonValue = storageValue ? (JSON.parse(storageValue) as T) : undefined;
-      }
-
-      return jsonValue;
-    } catch (err) {
-      return undefined;
+    if (typeof defaultValue === 'function') {
+      return (defaultValue as Function)() as T;
     }
+    return defaultValue;
   });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const storageValue = window.localStorage.getItem(key);
+      if (storageValue) {
+        setValue(JSON.parse(storageValue) as T);
+      }
+    } catch {
+      // ignore
+    }
+  }, [key]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {

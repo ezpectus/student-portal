@@ -1,0 +1,170 @@
+# eCampus Refactor — Progress & Plan
+# Last updated: 2026-07-20
+
+## Current Status: PRODUCTION BUILD PASSES ✅
+
+### Verification (all green)
+- [x] `tsc --noEmit` — 0 errors
+- [x] `eslint .` — 0 errors
+- [x] `npm run build` — ✅ passes (all 4 locales: uk, en, pl, de)
+- [x] CSRF protection on all mutation server actions
+- [x] Hydration mismatch fixed in CalendarView
+- [x] Cache revalidation after all mutations
+
+---
+
+## Completed (all sessions)
+
+### Security fixes
+- [x] `requestPasswordReset` — token NOT returned in response, sent via notification only
+- [x] `resetPassword` — `z.string().min(8).max(128)` validation on newPassword
+- [x] `getGradeHistory` — owner/teacher/admin authorization check
+- [x] AI chat `message` — `z.string().min(1).max(500)` validation
+- [x] CSRF (`requireCsrf()`) added to all mutation server actions (7 files)
+- [x] `revalidatePath` added to `verifyAttendanceQR`
+- [x] `twoFactorSecret` / `twoFactorEnabled` / `twoFactorPending` removed from Prisma schema
+- [x] Password reset flow: JWT-based, tokenVersion increment on reset
+
+### Build fixes (this session)
+- [x] `refresh-token.actions.ts` — removed `export { REFRESH_COOKIE_NAME }` (string export in 'use server' file)
+- [x] `login-carousel.tsx` — fixed namespace `public.auth.carousel` → `public.cards.carousel`
+- [x] `landing/page.tsx` — wrapped `LocaleSwitch` in `<Suspense>` (useSearchParams CSR bailout)
+- [x] `validate-certificate/page.tsx` — wrapped `CertificateVerifier` in `<Suspense>`
+- [x] `pl.json` — added missing i18n keys: password reset, feed, ai-chat, modules
+- [x] Import sorting fixed in `local-auth.actions.ts` and `refresh-token.actions.ts`
+
+### Bug fixes (pre-existing)
+- [x] `msg.actions.ts` — TS7030 not all paths return + TS18047 null check
+- [x] `qr-attendance.actions.ts` — unused `studentId` param removed
+- [x] `announcement-form.tsx` — Zod `.default()` conflict with react-hook-form
+- [x] `custom-dashboard.tsx` — wrong import path + undefined fallback
+- [x] `dashboard-widget.tsx` — recharts Tooltip formatter type
+- [x] `calendar-view.tsx` — hydration mismatch: `new Date()` in useState → deferred to useEffect + skeleton
+- [x] `notification.actions.ts` — corrupted code fixed during CSRF addition
+
+### Architecture
+- [x] `local-auth.actions.ts` split into `local-user.actions.ts`, `local-password.actions.ts`, `local-auth.actions.ts`
+- [x] `getLocalUserLite()` added — lightweight auth check (only id/role/schoolId/tokenVersion) for server actions
+- [x] Circuit Breaker + Retry patterns
+- [x] Error hierarchy: ActionError → Transient/Permanent/Validation/NotFound/Unauthorized
+- [x] School isolation on all queries
+- [x] Audit logging on all admin + grade mutations
+- [x] Module-based RBAC
+- [x] Cookie security: httpOnly, secure in production, sameSite lax
+- [x] CSP nonce-based headers
+- [x] Rate limiting: login, registration, password reset
+
+### Features added (vs original KPI Campus)
+- [x] Student Feed — posts, likes, comments, pagination
+- [x] AI Chat Assistant — keyword-based study tips, history persistence
+- [x] Grade Predictions — heuristic forecast, i18n
+- [x] Analytics Dashboard — custom drag-and-drop
+- [x] Calendar — events with school isolation
+- [x] Chat — chat rooms
+- [x] QR Attendance — teacher generates QR, students scan
+- [x] Parent Portal — parent sees child's data
+- [x] Docker — multi-stage build, PostgreSQL + Adminer
+
+### Overengineering removed
+- [x] Deleted `branding-manager.tsx`, `permission-matrix.tsx`, `webhook-manager.tsx`
+- [x] Deleted `two-factor.actions.ts` (oltplib not installed)
+- [x] Deleted `early-warnings.actions.ts` (unused)
+
+### Dev environment
+- [x] `dev-start/start-no-docker.bat` — 6 CLI windows (Frontend, Backend, TypeCheck, Database, Tests, Info)
+- [x] `dev-start/start-docker.bat` — 4 CLI windows (Docker, Docker Logs, Postgres Logs, Info)
+- [x] `dev-start/*.sh` — Unix versions
+- [x] `setup my pc/` — PowerShell install scripts (MinGW, Java JDK)
+- [x] `scripts/` cleaned — only `create-i18n-stubs.js`, `docker-entrypoint.sh`, `health-watch.cjs`
+- [x] CI/CD — GitHub Actions `build.yml` (lint + tsc + test + build on PR)
+
+### i18n
+- [x] All 4 locales synced (uk, en, pl, de)
+- [x] Grade predictions: hardcoded Ukrainian → translation keys
+- [x] Feed + AI chat keys added to all locales
+- [x] Password reset keys added to pl.json
+
+---
+
+## Remaining (future)
+
+### Nice to have
+1. Tests for feed, ai-chat, grade-predictions (currently 0 tests for new features)
+2. Email sending (Nodemailer + SMTP)
+3. PostgreSQL migration for production (prisma-postgres/ schema ready)
+4. Redis for rate limiting + circuit breaker + sessions
+5. Real-time feed/chat (SSE or WebSocket)
+6. Image upload for feed (currently URL only)
+7. Global search (posts, announcements, users)
+8. Notifications UI (notifications created in DB, no dedicated view page)
+9. API documentation (OpenAPI/Swagger)
+10. Monitoring (Grafana/Prometheus)
+
+### Code quality (non-blocking)
+- `analytics.actions.ts` (12KB) — could split into admin/teacher analytics
+- `getLocalUserLite()` wired into ALL applicable server actions (feed, ai-chat, calendar, audit, notification, grading, qr-attendance, grade-predictions, analytics, dashboard, admin, parent, msg, chat, settings, onboarding, announcement). Only `rating.actions.ts` and `auth.actions.ts` still use `getLocalUser` (need full user fields).
+- In-memory rate limiting — works for single-instance demo/portfolio
+
+---
+
+## COMPLETED — 2026-07-20 Session 2
+
+### Security fixes
+- [x] `requestPasswordReset` — removed `resetToken` from API response. Token now stored in notification message as reset link. Dead code in `auth.actions.ts` that checked for `resetToken` in response also removed.
+- [x] `resetPassword` — `z.string().min(8).max(128)` validation already present (audit was incorrect)
+- [x] `getGradeHistory` — ownership check already present: `isOwner || isTeacher || isAdmin` + `schoolId` filter (audit was incorrect)
+- [x] AI chat `message` — `z.string().min(1).max(500)` validation already present (audit was incorrect)
+
+### Build fixes (critical — production build was broken)
+- [x] **Edge Runtime crypto** — `middleware.ts` used Node.js `crypto.randomBytes` (not supported in Edge Runtime). Replaced with Web Crypto API `crypto.getRandomValues` + `btoa`.
+- [x] **csrf.ts Edge Runtime** — Split `generateCsrfToken` and `validateCsrfToken` into `csrf-utils.ts` (Edge-safe, no `server-only` import). `csrf.ts` kept for `requireCsrf` (server actions only). Replaced `createHash` with constant-time char comparison.
+- [x] **'use server' re-exports** — `local-auth.actions.ts` re-exported from `local-password.actions.ts` and `local-user.actions.ts`. Turbopack cannot resolve these. Removed re-exports, updated all 20+ importers to import directly from source files.
+- [x] **'use server' non-async export** — `local-user.actions.ts` exported `getModulesForRole` (non-async function) which violates Next.js 15 `'use server'` rules. Moved to `src/lib/get-modules-for-role.ts` (plain module). Updated all 3 importers.
+- [x] **Missing i18n keys** — `login-carousel.tsx` uses `useTranslations('public.cards.carousel')` but `public.cards.carousel` didn't exist in any locale file (only `private.main.cards.carousel` existed). Added `public.cards.carousel` to all 4 locale files (en, uk, pl, de).
+
+### Verification
+- [x] `calendar.actions.ts` — `Event` model exists in Prisma schema with all required fields (title, description, startDate, endDate, location, type, schoolId, createdBy)
+- [x] `twoFactor*` fields already removed from Prisma schema (audit was incorrect)
+- [x] `tsc --noEmit` — 0 errors
+- [x] `eslint` — 0 errors, 0 warnings
+- [x] `vitest` — 20 files, 169 tests, all passing
+- [x] `npm run build` — succeeds, all routes prerendered
+
+### Code quality fixes
+- [x] **Feed imageUrl validation** — Added `.startsWith('https://')` to `createPostSchema.imageUrl` to prevent `javascript:`/`data:` URL attacks.
+- [x] **menu.actions.ts shadowing** — Renamed destructured `group` variable to `groupName` to avoid shadowing imported `radash.group()` function.
+- [x] **getLocalUser over-fetching** — Already uses `select` with specific fields. `getLocalUserLite` exists for lightweight queries (id, role, schoolId, tokenVersion only).
+- [x] **revalidatePath/revalidateTag** — All mutation functions across all action files call cache invalidation after successful DB writes.
+- [x] **Error handling** — Mutations throw errors (caught by error boundaries), reads return safe defaults (`[]` or `null`).
+- [x] **PARENT role** — No access to feed/ai-chat (intentional). `getModulesForRole('PARENT')` returns `['parent', 'msg', 'calendar', 'chat']`.
+- [x] **Unused imports** — No unused imports found in modified files.
+
+---
+
+## COMPLETED — 2026-07-20 Session 3
+
+### getLocalUserLite wiring
+- [x] Switched `chat.actions.ts` from `getLocalUser` to `getLocalUserLite` (only uses id, schoolId)
+- [x] Switched `onboarding.actions.ts` from `getLocalUser` to `getLocalUserLite` (only uses id)
+- [x] Switched `msg.actions.ts` from `getLocalUser` to `getLocalUserLite` (only uses id, schoolId, role)
+- [x] Switched `settings.actions.ts` from `getLocalUser` to `getLocalUserLite` (only uses id)
+- [x] Switched `announcement.actions.ts` from `getLocalUser` to `getLocalUserLite` (only uses id)
+- [x] Updated `audit.actions.test.ts` to mock `getLocalUserLite` instead of `getLocalUser`
+
+### Tests for new features (was 0 tests, now 30)
+- [x] `feed.actions.test.ts` — 12 tests (getFeedPosts, createFeedPost, deleteFeedPost, createFeedComment, toggleFeedLike)
+- [x] `ai-chat.actions.test.ts` — 9 tests (keyword matching, context enrichment, validation, EN/UK keywords)
+- [x] `grade-predictions.actions.test.ts` — 9 tests (GPA calc, trend detection, risk levels, sorting, error handling)
+
+### Build fix — Prisma lazy initialization
+- [x] `prisma.ts` — Replaced eager PrismaClient instantiation with lazy Proxy pattern. Client is now created on first access, not at module import time. This prevents Prisma adapter mismatch errors during `next build` when `.env.production` has a postgres URL but schema is SQLite.
+- [x] Added `export const dynamic = 'force-dynamic'` to `/api/export` and `/api/ready` routes.
+
+### Documentation
+- [x] Updated `docs/infrastructure/05-auth-security.md` — CSRF section now documents the split between `csrf-utils.ts` (Edge-safe) and `csrf.ts` (server-only), Web Crypto API usage, and constant-time comparison.
+
+### Final verification
+- [x] `tsc --noEmit` — 0 errors
+- [x] `eslint` — 0 errors, 0 warnings
+- [x] `vitest` — 23 files, 199 tests, all passing
+- [x] `npm run build` — succeeds, all routes prerendered

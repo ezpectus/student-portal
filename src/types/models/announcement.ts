@@ -12,6 +12,9 @@ export interface Announcement {
   start: Date;
   end: Date;
   language: string;
+  scheduledAt?: string | null;
+  autoTranslate?: boolean;
+  isPublished?: boolean;
 }
 
 /**

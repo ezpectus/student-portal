@@ -16,6 +16,8 @@ export interface AnnouncementCreateData {
   start: string;
   end: string;
   language: string;
+  scheduledAt?: string | null;
+  autoTranslate?: boolean;
 }
 
 export interface AnnouncementCreate {

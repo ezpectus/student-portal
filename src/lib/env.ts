@@ -8,7 +8,9 @@ const envSchema = z.object({
   ROOT_COOKIE_DOMAIN: z.string().optional(),
 
   DATABASE_URL: z.string().default('file:./dev.db'),
-  JWT_SECRET: z.string().default('student-portal-demo-secret'),
+  JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
+  JWKS_URI: z.string().url().optional(),
+  JWT_ISSUER: z.string().optional(),
 
   NEXT_PUBLIC_LOCAL_AUTH: z.string().default('true'),
   NEXT_PUBLIC_SHOW_DEMO_CREDENTIALS: z.string().optional().default('false'),
@@ -47,6 +49,8 @@ const envSchema = z.object({
   NEXT_PUBLIC_FEATURE_COMMAND_PALETTE: z.string().optional(),
   NEXT_PUBLIC_FEATURE_REALTIME_NOTIFICATIONS: z.string().optional(),
   NEXT_PUBLIC_FEATURE_ADMIN_PANEL: z.string().optional(),
+
+  CRON_SECRET: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

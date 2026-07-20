@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { throwApiError } from '@/lib/api-error';
 import { apiFetch } from '@/lib/client';
 import { USER_PROFILE_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
 import { validateInput } from '@/lib/validate';
 import { Contact, ContactType } from '@/types/models/contact';
 
@@ -52,6 +53,7 @@ const createContactSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function createContact(typeId: number, value: string) {
+  await requireCsrf();
   const validated = validateInput(createContactSchema, { typeId, value }, 'createContact');
 
   const response = await apiFetch('profile/contacts', {
@@ -77,6 +79,7 @@ const updateContactSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function updateContact(id: number, typeId: number, value: string) {
+  await requireCsrf();
   const validated = validateInput(updateContactSchema, { id, typeId, value }, 'updateContact');
 
   const response = await apiFetch(`profile/contacts/${validated.id}`, {
@@ -100,6 +103,7 @@ const deleteContactSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function deleteContact(id: number) {
+  await requireCsrf();
   const validated = validateInput(deleteContactSchema, { id }, 'deleteContact');
 
   const response = await apiFetch(`profile/contacts/${validated.id}`, {
@@ -123,6 +127,7 @@ const intellectInfoSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function updateIntellectInfo(credo: string, scientificInterests: string) {
+  await requireCsrf();
   const validated = validateInput(intellectInfoSchema, { credo, scientificInterests }, 'updateIntellectInfo');
 
   const response = await apiFetch('profile/intellect', {
@@ -137,6 +142,7 @@ export async function updateIntellectInfo(credo: string, scientificInterests: st
 }
 
 export async function acceptCodeOfHonor() {
+  await requireCsrf();
   const response = await apiFetch('profile/code-of-honor', {
     method: 'PUT',
   });
@@ -148,6 +154,7 @@ export async function acceptCodeOfHonor() {
 }
 
 export async function acceptPrivacyConsent() {
+  await requireCsrf();
   const response = await apiFetch('profile/privacy-consent', {
     method: 'POST',
   });

@@ -36,3 +36,4 @@ This folder documents every fix applied during the refactoring process. Each cha
 | [28-typecheck-baseline-fixes.md](./28-typecheck-baseline-fixes.md) | Fix 24 clean-install TypeScript errors across carousel, optional URLs, effects, imports, env validation, and Radix dependencies |
 | [29-school-affiliation.md](./29-school-affiliation.md) | Add School model, teacher/course linkage, registration school code, and school-scoped admin actions |
 | [30-legacy-refactor-actions-and-utils.md](./30-legacy-refactor-actions-and-utils.md) | Remove redundant try/catch, fix import order, consolidate date utils, fix studysheet silent-fail |
+| [61-audit-fixes-csrf-hydration-revalidation.md](./61-audit-fixes-csrf-hydration-revalidation.md) | Fix CalendarView hydration mismatch (new Date in useState), add CSRF to 6 mutation actions, add revalidatePath to QR attendance |

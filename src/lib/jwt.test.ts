@@ -10,31 +10,31 @@ function signToken(payload: Record<string, unknown>, secret: string = TEST_SECRE
 }
 
 describe('getJWTPayload', () => {
-  it('decodes a valid token with exp and modules', () => {
+  it('decodes a valid token with exp and modules', async () => {
     const token = signToken({ exp: Math.floor(Date.now() / 1000) + 3600, modules: ['admin', 'rating'] });
-    const payload = getJWTPayload<{ exp: number; modules: string[] }>(token);
+    const payload = await getJWTPayload<{ exp: number; modules: string[] }>(token);
     expect(payload.exp).toBeGreaterThan(Date.now() / 1000);
     expect(payload.modules).toEqual(['admin', 'rating']);
   });
 
-  it('defaults modules to empty array when missing', () => {
+  it('defaults modules to empty array when missing', async () => {
     const token = signToken({ exp: Math.floor(Date.now() / 1000) + 3600 });
-    const payload = getJWTPayload<{ exp: number; modules: string[] }>(token);
+    const payload = await getJWTPayload<{ exp: number; modules: string[] }>(token);
     expect(payload.modules).toEqual([]);
   });
 
-  it('throws on invalid token string', () => {
-    expect(() => getJWTPayload('not-a-jwt')).toThrow('unable to decode');
+  it('throws on invalid token string', async () => {
+    await expect(getJWTPayload('not-a-jwt')).rejects.toThrow('unable to decode');
   });
 
-  it('throws on token missing exp', () => {
+  it('throws on token missing exp', async () => {
     const token = JWT.sign({ modules: ['admin'] }, TEST_SECRET, { issuer: LOCAL_JWT_ISSUER });
-    expect(() => getJWTPayload(token)).toThrow('Invalid JWT payload');
+    await expect(getJWTPayload(token)).rejects.toThrow('Invalid JWT payload');
   });
 
-  it('throws on token with wrong modules type', () => {
+  it('throws on token with wrong modules type', async () => {
     const token = signToken({ exp: Math.floor(Date.now() / 1000) + 3600, modules: 'not-an-array' });
-    expect(() => getJWTPayload(token)).toThrow('Invalid JWT payload');
+    await expect(getJWTPayload(token)).rejects.toThrow('Invalid JWT payload');
   });
 });
 

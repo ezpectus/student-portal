@@ -89,7 +89,12 @@
       "pk2026": "Admission 2026 (Master's)",
       "pk2026admin": "Admission 2026 (Administrator)",
       "studbonuspoints": "Bonus points",
-      "grading": "Grade Book"
+      "grading": "Grade Book",
+      "analytics": "Analytics",
+      "calendar": "Calendar",
+      "chat": "Chat",
+      "feed": "Student Feed",
+      "ai-chat": "AI Assistant"
     },
     "menu": {
       "main": "Home",
@@ -99,7 +104,9 @@
       "admin": "Admin Panel",
       "grading": "Grade Book",
       "parent": "Parent Portal",
-      "analytics": "Analytics"
+      "analytics": "Analytics",
+      "calendar": "Calendar",
+      "chat": "Chat"
     },
     "user-category": {
       "student": "Student",
@@ -301,11 +308,23 @@
       "header": "Reset your password",
       "description": "Enter your email address and we'll send you a link to reset your password.",
       "button": {
-        "reset": "Reset password"
+        "reset": "Reset password",
+        "set-new-password": "Set new password"
       },
       "field": {
-        "username": "Username or email address"
+        "username": "Username or email address",
+        "token": "Reset token",
+        "new-password": "New password"
       },
+      "placeholder": {
+        "token": "Enter reset token",
+        "new-password": "Enter new password"
+      },
+      "set-new-password": "New password",
+      "set-new-password-description": "Enter your reset token and new password.",
+      "success-message": "Password successfully changed",
+      "invalid-token": "Invalid reset token",
+      "redirecting": "Redirecting to login...",
       "success": {
         "header": "Check your inbox",
         "description": "We've sent you a link to reset your password on email {username}. Click below to sign in to your account.",
@@ -362,6 +381,16 @@
       "not-found": "No results found",
       "search-default": "Enter your group name above to find a curator.",
       "unknown-value": "Unknown"
+    },
+    "cards": {
+      "carousel": {
+        "slide-1": "Welcome to Student Portal",
+        "slide-2": "Your campus, simplified",
+        "slide-3": "Everything in one place",
+        "slide-4": "Grades, schedules, and more",
+        "slide-5": "Built for students and faculty",
+        "credits-by": "by"
+      }
     }
   },
   "private": {
@@ -530,6 +559,8 @@
           "linkUrl": "Link URL",
           "startDate": "Start Date",
           "endDate": "End Date",
+          "scheduledAt": "Schedule Publication",
+          "autoTranslate": "Auto-translate to other languages",
           "language": "Language",
           "studyForms": "Study Forms",
           "roles": "Roles",
@@ -773,7 +804,8 @@
         "broadcast": "Broadcast",
         "recipient-type": {
           "employee": "Employee",
-          "student": "Student"
+          "student": "Student",
+          "parent": "Parent"
         },
         "form": {
           "subdivision": "Subdivision",
@@ -787,7 +819,9 @@
           "search-placeholder": "Enter at least 5 characters to search...",
           "search-empty": "No results found",
           "select-recipient-placeholder": "Select recipient...",
-          "select-group-first": "Select study group first"
+          "select-group-first": "Select study group first",
+          "select-parent-placeholder": "Select parent...",
+          "no-parents": "No parents found"
         },
         "validation": {
           "group-required": "Select a group",
@@ -897,6 +931,34 @@
         "quantity": "Quantity",
         "percent": "Share, %",
         "result": "Result"
+      }
+    },
+    "predictions": {
+      "title": "Grade Forecast",
+      "current-gpa": "Current GPA",
+      "predicted-gpa": "Predicted GPA",
+      "credits": "Credits",
+      "at-risk": "at risk",
+      "now": "Now",
+      "forecast": "Forecast",
+      "risk": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "reasons": {
+        "below-passing": "predicted grade below passing threshold",
+        "critical-attendance": "critically low attendance",
+        "grades-declining": "grades are declining",
+        "stable-growth": "stable growth",
+        "stable": "stable performance"
+      },
+      "summary": {
+        "excellent": "Excellent forecast! All courses are in the green zone.",
+        "good": "Good forecast. There is some room for improvement.",
+        "satisfactory": "Satisfactory forecast, but there is room to grow.",
+        "critical": "Critical situation — more than half of the courses are at risk. An urgent change in study approach is needed.",
+        "at-risk": "{atRiskCount} course(s) at risk. Focus on them to improve your results."
       }
     },
     "settings": {
@@ -1243,6 +1305,14 @@
         "edit": "Edit",
         "save": "Save",
         "cancel": "Cancel"
+      },
+      "qr": {
+        "title": "QR Code for Attendance",
+        "description": "Generate a QR code for students to mark their attendance",
+        "generate": "Generate QR Code",
+        "regenerate": "Regenerate",
+        "generated": "QR code generated",
+        "expires-in": "Valid for:"
       }
     },
     "parent": {
@@ -1279,8 +1349,138 @@
         "role-distribution": "Role Distribution",
         "registrations": "Monthly Registrations",
         "faculty-distribution": "Students by Faculty",
+        "cohorts": "Cohorts by Study Year",
+        "curriculum-analytics": "Courses with High Failure Rate",
+        "teacher-effectiveness": "Teacher Effectiveness",
+        "at-risk-students": "At-Risk Students",
+        "risk-score": "Risk score",
+        "failure-rate": "Failure rate",
+        "avg-grade": "Average grade",
         "grade-distribution": "Grade Distribution"
+      },
+      "warnings": {
+        "send": "Send Warnings",
+        "sent": "Warnings sent",
+        "description": "Students: {students}, Parents: {parents}"
+      },
+      "dashboard": {
+        "edit-mode": "Edit Mode",
+        "widgets": "Widgets",
+        "reset": "Reset",
+        "saved": "Saved",
+        "widget-titles": {
+          "metrics": "Metrics",
+          "user-activity": "User Activity",
+          "role-distribution": "Role Distribution",
+          "registrations": "Registrations",
+          "faculty-distribution": "Faculty Distribution",
+          "grade-distribution": "Grade Distribution",
+          "cohorts": "Cohorts",
+          "curriculum-analytics": "Curriculum Analytics",
+          "teacher-effectiveness": "Teacher Effectiveness",
+          "at-risk-students": "At-Risk Students"
+        }
       }
+    },
+    "calendar": {
+      "title": "Event Calendar",
+      "upcoming": "Upcoming Events",
+      "no-events": "No events",
+      "more": "more",
+      "weekdays": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      },
+      "actions": {
+        "create": "Create Event"
+      },
+      "form": {
+        "create": "New Event",
+        "edit": "Edit Event",
+        "created": "Event created",
+        "updated": "Event updated",
+        "deleted": "Event deleted",
+        "fields": {
+          "title": "Title",
+          "description": "Description",
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "location": "Location",
+          "type": "Event Type"
+        },
+        "types": {
+          "general": "General",
+          "exam": "Exam",
+          "conference": "Conference",
+          "holiday": "Holiday",
+          "deadline": "Deadline"
+        },
+        "buttons": {
+          "create": "Create",
+          "update": "Update",
+          "delete": "Delete"
+        }
+      }
+    },
+    "chat": {
+      "title": "Group Chat",
+      "rooms": "Rooms",
+      "no-rooms": "No chat rooms yet",
+      "no-messages": "No messages",
+      "select-room": "Select a room to start chatting",
+      "message-placeholder": "Type a message...",
+      "send": "Send",
+      "you": "You",
+      "members": "members",
+      "create": {
+        "button": "Create",
+        "title": "New Chat",
+        "room-name": "Room Name",
+        "room-name-placeholder": "Enter room name",
+        "members": "Members",
+        "members-placeholder": "Select members",
+        "no-users": "No available users",
+        "cancel": "Cancel",
+        "create": "Create",
+        "success": "Chat room created"
+      }
+    },
+    "feed": {
+      "title": "Student Feed",
+      "share-something": "Share something",
+      "post-placeholder": "What's on your mind?",
+      "image-url-placeholder": "Image URL (optional)",
+      "post": "Post",
+      "post-created": "Post created",
+      "post-deleted": "Post deleted",
+      "empty": "No posts yet. Be the first!",
+      "delete": "Delete",
+      "comment": "Comment",
+      "comment-placeholder": "Write a comment..."
+    },
+    "ai-chat": {
+      "title": "AI Assistant",
+      "welcome": "Hi! I'm your study assistant. I can help with exam preparation, time management, motivation and more. What would you like to know?",
+      "placeholder": "Ask something...",
+      "thinking": "Thinking...",
+      "suggestions": {
+        "exam": "How to prepare for an exam?",
+        "grade": "How to improve my grades?",
+        "deadline": "How to not miss a deadline?",
+        "stress": "How to deal with stress?",
+        "motivation": "I have no motivation to study"
+      }
+    },
+    "attendance": {
+      "title": "Attendance",
+      "success": "Attendance marked!",
+      "error": "QR code is invalid or expired",
+      "no-token": "QR code not found. Ask your teacher to generate a new code."
     }
   }
 }

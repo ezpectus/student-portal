@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { getUserDetails } from '@/actions/auth.actions';
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUser } from '@/actions/local-user.actions';
 import { Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar';
 import { UserCategory } from '@/types/enums/user-category';
 

@@ -1,8 +1,10 @@
 import { NextRequest } from 'next/server';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUser } from '@/actions/local-user.actions';
 import { type CsvColumn,csvResponse, toCsv } from '@/lib/csv-export';
 import { prisma } from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const user = await getLocalUser();

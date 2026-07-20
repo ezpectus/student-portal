@@ -24,7 +24,7 @@ const MAIN_COOKIE_DOMAIN = env.MAIN_COOKIE_DOMAIN;
 const ROOT_COOKIE_DOMAIN = env.ROOT_COOKIE_DOMAIN;
 
 export async function setLoginCookies(token: string, sessionId: string, rememberMe: boolean) {
-  const tokenData = getJWTPayload<{ exp: number }>(token);
+  const tokenData = await getJWTPayload<{ exp: number }>(token);
   // exp is in seconds, Date expects milliseconds
   const tokenExpiresAt = new Date(tokenData.exp * 1000);
 
@@ -122,6 +122,12 @@ const resetPasswordSchema = z.object({
 export async function resetPassword(username: string, recaptchaToken: string) {
   const validated = validateInput(resetPasswordSchema, { username, recaptchaToken }, 'resetPassword');
 
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { requestPasswordReset } = await import('./local-password.actions');
+    await requestPasswordReset(validated.username);
+    return null;
+  }
+
   const rateLimit = checkRateLimit(validated.username, 'password-reset');
   if (!rateLimit.allowed) {
     return { ok: false, error: 'rate-limited' as const, retryAfterMs: rateLimit.retryAfterMs };
@@ -152,7 +158,7 @@ export async function resetPassword(username: string, recaptchaToken: string) {
 
 export async function getUserDetails(): Promise<User | null> {
   if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
-    const { getLocalUser } = await import('./local-auth.actions');
+    const { getLocalUser } = await import('./local-user.actions');
     const localUser = await getLocalUser();
     if (localUser) return localUser as unknown as User;
   }
@@ -169,6 +175,10 @@ export async function getUserDetails(): Promise<User | null> {
 }
 
 export async function redirectToEmploymentSystem() {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new PermanentError('Employment system is not available in local auth mode', 'LOCAL_AUTH_UNSUPPORTED');
+  }
+
   const response = await apiFetch('employment-system/auth');
 
   if (!response.ok) {

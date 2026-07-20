@@ -6,12 +6,18 @@ import qs from 'query-string';
 import { throwApiError } from '@/lib/api-error';
 import { apiFetch } from '@/lib/client';
 import { CERTIFICATES_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
+import { env } from '@/lib/env';
 import { parseContentDispositionFilename } from '@/lib/utils';
 import { Certificate } from '@/types/models/certificate/certificate';
 import { CertificateVerificationResult } from '@/types/models/certificate/certificate-verification-result';
 import { CertificateStatus } from '@/types/models/certificate/status';
 
 export async function getCertificateTypes() {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return [];
+  }
+
   const response = await apiFetch('/certificates/types', {
     next: { revalidate: 3600, tags: [CERTIFICATES_CACHE_TAG] },
   });
@@ -27,6 +33,11 @@ export type UpdateCertificateBody = {
 };
 
 export async function updateCertificate(id: number, body: UpdateCertificateBody) {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Certificates are not available in local auth mode');
+  }
+
   const res = await apiFetch(`/certificates/${id}/status`, {
     method: 'PUT',
     body: JSON.stringify({ ...body }),
@@ -46,6 +57,11 @@ type CertificateRequestBody = {
 };
 
 export async function createCertificateRequest(body: CertificateRequestBody) {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Certificates are not available in local auth mode');
+  }
+
   const response = await apiFetch('/certificates', {
     method: 'POST',
     body: JSON.stringify({ ...body }),
@@ -60,6 +76,10 @@ export async function createCertificateRequest(body: CertificateRequestBody) {
 }
 
 export async function getCertificateList() {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return [];
+  }
+
   const response = await apiFetch('/certificates', {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
@@ -71,6 +91,10 @@ export async function getCertificateList() {
 }
 
 export async function getAllFacultyCertificates(query: FacultyCertificatesQuery = {}) {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return { allCertificates: [], totalCount: 0 };
+  }
+
   const queryParams = qs.stringify(query);
   const res = await apiFetch(`/certificates/all?${queryParams}`, {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
@@ -85,6 +109,10 @@ export async function getAllFacultyCertificates(query: FacultyCertificatesQuery 
 }
 
 export async function getCertificatePDF(id: number) {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Certificates are not available in local auth mode');
+  }
+
   const response = await apiFetch(`/certificates/${id}/pdf`, {
     headers: {
       Accept: 'application/pdf',
@@ -106,6 +134,10 @@ export async function getCertificatePDF(id: number) {
 }
 
 export async function getCertificate(id: number) {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Certificates are not available in local auth mode');
+  }
+
   const res = await apiFetch(`/certificates/${id}`, {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
@@ -116,6 +148,10 @@ export async function getCertificate(id: number) {
 }
 
 export async function verifyCertificate(id: string) {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return 'error';
+  }
+
   const response = await apiFetch(`/certificates/validate/${id}`);
   if (!response.ok) {
     return 'error';
@@ -132,6 +168,10 @@ export interface FacultyCertificatesQuery {
 }
 
 export async function getOtherFacultyCertificate() {
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    return { rejectedCertificates: [], approvedCertificates: [], createdCertificates: [] };
+  }
+
   const res = await apiFetch('/certificates/all', {
     next: { revalidate: 300, tags: [CERTIFICATES_CACHE_TAG] },
   });
@@ -160,6 +200,11 @@ export async function getOtherFacultyCertificate() {
 }
 
 export async function signCertificate(id: number) {
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    throw new Error('Certificates are not available in local auth mode');
+  }
+
   const response = await apiFetch(`/certificates/${id}/signed`, {
     method: 'PUT',
   });

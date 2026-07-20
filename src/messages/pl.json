@@ -89,7 +89,11 @@
       "pk2026": "Admission 2026 (Master's)",
       "pk2026admin": "Admission 2026 (Administrator)",
       "studbonuspoints": "Bonus points",
-      "grading": "Grade Book"
+      "grading": "Grade Book",
+      "feed": "Student Feed",
+      "ai-chat": "AI Assistant",
+      "calendar": "Calendar",
+      "chat": "Chat"
     },
     "menu": {
       "main": "Home",
@@ -299,11 +303,19 @@
       "header": "Reset your password",
       "description": "Enter your email address and we'll send you a link to reset your password.",
       "button": {
-        "reset": "Reset password"
+        "reset": "Reset password",
+        "set-new-password": "Set new password"
       },
       "field": {
-        "username": "Username or email address"
+        "username": "Username or email address",
+        "token": "Enter reset token",
+        "new-password": "Enter new password"
       },
+      "set-new-password": "New password",
+      "set-new-password-description": "Enter your reset token and new password.",
+      "success-message": "Password successfully changed",
+      "invalid-token": "Invalid reset token",
+      "redirecting": "Redirecting to login...",
       "success": {
         "header": "Check your inbox",
         "description": "We've sent you a link to reset your password on email {username}. Click below to sign in to your account.",
@@ -360,6 +372,16 @@
       "not-found": "No results found",
       "search-default": "Enter your group name above to find a curator.",
       "unknown-value": "Unknown"
+    },
+    "cards": {
+      "carousel": {
+        "slide-1": "Welcome to Student Portal",
+        "slide-2": "Your campus, simplified",
+        "slide-3": "Everything in one place",
+        "slide-4": "Grades, schedules, and more",
+        "slide-5": "Built for students and faculty",
+        "credits-by": "by"
+      }
     }
   },
   "private": {
@@ -1070,6 +1092,24 @@
           "change_notifications": "Notification Preferences Change"
         }
       }
+    },
+    "feed": {
+      "title": "Student Feed",
+      "share-something": "Share something",
+      "post-placeholder": "What's on your mind?",
+      "publish": "Publish",
+      "like": "Like",
+      "unlike": "Unlike",
+      "comment": "Comment",
+      "comment-placeholder": "Write a comment..."
+    },
+    "ai-chat": {
+      "title": "AI Assistant",
+      "welcome": "Hi! I'm your study assistant. I can help with exam preparation, time management, motivation and more. What would you like to know?",
+      "placeholder": "Ask something...",
+      "send": "Send",
+      "clear": "Clear history",
+      "empty": "No messages yet. Ask something to get started!"
     }
   },
   "landing": {

@@ -4,8 +4,9 @@ import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
 import { logAuditEvent } from '@/actions/audit.actions';
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { DASHBOARD_CACHE_TAG, RATING_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
 import { prisma } from '@/lib/prisma';
 import { validateInput } from '@/lib/validate';
 
@@ -31,7 +32,7 @@ export interface CourseStudent {
  * @returns Safe default on error: []. Never throws.
  */
 export async function getTeacherCourses(): Promise<TeacherCourse[]> {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user || user.role !== 'TEACHER') return [];
 
   try {
@@ -65,7 +66,7 @@ export async function getTeacherCourses(): Promise<TeacherCourse[]> {
  * @returns Safe default on error: []. Never throws.
  */
 export async function getCourseStudents(courseName: string): Promise<CourseStudent[]> {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user || user.role !== 'TEACHER') return [];
 
   try {
@@ -112,9 +113,10 @@ const updateGradeSchema = z.object({
  * @throws {Error} If course doesn't belong to teacher or update fails.
  */
 export async function updateGrade(input: z.infer<typeof updateGradeSchema>) {
+  await requireCsrf();
   const validated = validateInput(updateGradeSchema, input, 'updateGrade');
 
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user || user.role !== 'TEACHER') {
     throw new Error('Only teachers can update grades');
   }
@@ -167,8 +169,23 @@ export interface GradeHistoryEntry {
  * @returns Safe default on error: []. Never throws.
  */
 export async function getGradeHistory(courseId: number): Promise<GradeHistoryEntry[]> {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user) return [];
+
+  const course = await prisma.course.findFirst({
+    where: {
+      id: courseId,
+      ...(user.schoolId ? { schoolId: user.schoolId } : {}),
+    },
+    select: { userId: true, teacherId: true },
+  });
+
+  if (!course) return [];
+
+  const isOwner = course.userId === user.id;
+  const isTeacher = course.teacherId === user.id;
+  const isAdmin = user.role === 'ADMIN';
+  if (!isOwner && !isTeacher && !isAdmin) return [];
 
   try {
     const history = await prisma.gradeHistory.findMany({

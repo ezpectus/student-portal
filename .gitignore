@@ -76,6 +76,9 @@ build/
 # Reference skills library (not part of project)
 hft-skills/
 
+# Local dev environment setup scripts (per-user, not for repo)
+setup my pc/
+
 # Client-facing functionality doc (not for repo)
 docs/client-functionality-overview.md
 
@@ -85,7 +88,12 @@ docs/saas-transformation-roadmap.md
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
+prisma/dev.db-wal
+prisma/dev.db-shm
 src/generated/prisma/
+
+# User uploads (avatar photos)
+public/uploads/
 
 # Temporary helper scripts and command diagnostics
 _*.js

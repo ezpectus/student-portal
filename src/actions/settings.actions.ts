@@ -1,11 +1,16 @@
 'use server';
 
+import bcrypt from 'bcryptjs';
+import { randomBytes } from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
 import { revalidatePath } from 'next/cache';
+import path from 'path';
 import { z } from 'zod';
 
 import { logAuditEvent } from '@/actions/audit.actions';
 import { throwApiError } from '@/lib/api-error';
 import { apiFetch } from '@/lib/client';
+import { requireCsrf } from '@/lib/csrf';
 import { env } from '@/lib/env';
 import { UnauthorizedError } from '@/lib/errors';
 import { fileUpload } from '@/lib/file-upload';
@@ -21,15 +26,32 @@ const emailSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function changeEmail(email: string) {
+  await requireCsrf();
   const validated = validateInput(emailSchema, { email }, 'changeEmail');
 
-  const response = await apiFetch('settings/email', {
-    method: 'PUT',
-    body: JSON.stringify({ email: validated.email }),
-  });
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { getLocalUserLite } = await import('./local-user.actions');
+    const user = await getLocalUserLite();
+    if (!user) throw new UnauthorizedError();
 
-  if (!response.ok) {
-    throwApiError(response.status);
+    const existing = await prisma.user.findFirst({
+      where: { email: validated.email, NOT: { id: user.id } },
+    });
+    if (existing) throw new Error('Email already in use');
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { email: validated.email },
+    });
+  } else {
+    const response = await apiFetch('settings/email', {
+      method: 'PUT',
+      body: JSON.stringify({ email: validated.email }),
+    });
+
+    if (!response.ok) {
+      throwApiError(response.status);
+    }
   }
 
   await logAuditEvent({ action: 'change_email', entity: 'User' });
@@ -37,7 +59,41 @@ export async function changeEmail(email: string) {
 }
 
 export async function changePhoto(formData: FormData) {
-  await fileUpload('profile/photo', formData);
+  await requireCsrf();
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { getLocalUserLite } = await import('./local-user.actions');
+    const user = await getLocalUserLite();
+    if (!user) throw new UnauthorizedError();
+
+    const file = formData.get('file') as File | null;
+    if (!file) throw new Error('No file provided');
+
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error('File size exceeds 5MB limit');
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      throw new Error('Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.');
+    }
+
+    const ext = file.type.split('/')[1];
+    const filename = `${user.id}-${randomBytes(8).toString('hex')}.${ext}`;
+    const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'avatars');
+    await mkdir(uploadDir, { recursive: true });
+    const filePath = path.join(uploadDir, filename);
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filePath, buffer);
+
+    const photoUrl = `/uploads/avatars/${filename}`;
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { photo: photoUrl },
+    });
+  } else {
+    await fileUpload('profile/photo', formData);
+  }
+
   await logAuditEvent({ action: 'change_photo', entity: 'User' });
   revalidatePath('/');
 }
@@ -52,15 +108,37 @@ const passwordSchema = z.object({
  * @throws {ActionError} On API failure.
  */
 export async function changePassword(password: string, currentPassword: string) {
+  await requireCsrf();
   const validated = validateInput(passwordSchema, { password, currentPassword }, 'changePassword');
 
-  const response = await apiFetch('settings/password', {
-    method: 'PUT',
-    body: JSON.stringify({ password: validated.password, currentPassword: validated.currentPassword }),
-  });
+  if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+    const { getLocalUserLite } = await import('./local-user.actions');
+    const user = await getLocalUserLite();
+    if (!user) throw new UnauthorizedError();
 
-  if (!response.ok) {
-    throwApiError(response.status);
+    const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+    if (!dbUser) throw new UnauthorizedError();
+
+    const valid = await bcrypt.compare(validated.currentPassword, dbUser.passwordHash);
+    if (!valid) throw new Error('Current password is incorrect');
+
+    const passwordHash = await bcrypt.hash(validated.password, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordHash,
+        tokenVersion: { increment: 1 },
+      },
+    });
+  } else {
+    const response = await apiFetch('settings/password', {
+      method: 'PUT',
+      body: JSON.stringify({ password: validated.password, currentPassword: validated.currentPassword }),
+    });
+
+    if (!response.ok) {
+      throwApiError(response.status);
+    }
   }
 
   await logAuditEvent({ action: 'change_password', entity: 'User' });
@@ -81,6 +159,7 @@ export async function updateNotificationPreferences(preferences: {
   notifyAnnouncements: boolean;
   notifyMessages: boolean;
 }) {
+  await requireCsrf();
   const validated = validateInput(notificationPrefsSchema, preferences, 'updateNotificationPreferences');
   if (env.NEXT_PUBLIC_LOCAL_AUTH !== 'true') {
     const response = await apiFetch('settings/notifications', {
@@ -92,8 +171,8 @@ export async function updateNotificationPreferences(preferences: {
       throwApiError(response.status);
     }
   } else {
-    const { getLocalUser } = await import('./local-auth.actions');
-    const user = await getLocalUser();
+    const { getLocalUserLite } = await import('./local-user.actions');
+    const user = await getLocalUserLite();
     if (!user) throw new UnauthorizedError();
 
     await prisma.user.update({

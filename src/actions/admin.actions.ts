@@ -4,8 +4,9 @@ import { revalidateTag } from 'next/cache';
 
 import { logAuditEvent } from '@/actions/audit.actions';
 import { getUserDetails } from '@/actions/auth.actions';
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { ADMIN_CACHE_TAG } from '@/lib/constants/cache-tags';
+import { requireCsrf } from '@/lib/csrf';
 import { UnauthorizedError } from '@/lib/errors';
 import { prisma } from '@/lib/prisma';
 import { UserCategory } from '@/types/enums/user-category';
@@ -35,7 +36,7 @@ const publicUserSelect = {
 } as const;
 
 const requireAdmin = async () => {
-  const localUser = await getLocalUser();
+  const localUser = await getLocalUserLite();
   if (localUser?.role === 'ADMIN') {
     return { schoolId: localUser.schoolId ?? undefined };
   }
@@ -160,7 +161,12 @@ export async function getFaculties(): Promise<string[]> {
 }
 
 export async function deleteUser(id: number): Promise<{ ok: boolean }> {
+  await requireCsrf();
   const { schoolId } = await requireAdmin();
+  const currentUser = await getLocalUserLite();
+  if (currentUser?.id === id) {
+    return { ok: false };
+  }
 
   try {
     const { count } = await prisma.user.deleteMany({
@@ -177,6 +183,7 @@ export async function deleteUser(id: number): Promise<{ ok: boolean }> {
 }
 
 export async function updateUserStatus(id: number, status: string): Promise<{ ok: boolean }> {
+  await requireCsrf();
   const { schoolId } = await requireAdmin();
 
   try {
@@ -208,6 +215,12 @@ export async function getDbStats() {
   return { users, courses, attendance, notifications };
 }
 
+/**
+ * Get paginated data from a database table.
+ * When schoolId is undefined (remote admin without school assignment),
+ * data from ALL schools is returned. This is intentional for super-admin
+ * scenarios but should be documented in access policies.
+ */
 export async function getDbTableData(table: string, page: number = 1, pageSize: number = 20) {
   const { schoolId } = await requireAdmin();
   const skip = (page - 1) * pageSize;

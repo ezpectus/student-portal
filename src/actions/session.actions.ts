@@ -12,7 +12,7 @@ export async function getSessionExpiry(): Promise<number | null> {
   if (!token) return null;
 
   try {
-    const payload = getJWTPayload<{ exp: number }>(token);
+    const payload = await getJWTPayload<{ exp: number }>(token);
     return payload.exp;
   } catch {
     return null;

@@ -6,7 +6,7 @@ import { intlMiddleware } from './intl.middleware';
 import { getAuthInfo, gotoNotFound, matchesUrl } from './utils';
 
 const isAuthorized = async (request: NextRequest) => {
-  const payload = getAuthInfo(request);
+  const payload = await getAuthInfo(request);
 
   if (!payload) {
     return false;

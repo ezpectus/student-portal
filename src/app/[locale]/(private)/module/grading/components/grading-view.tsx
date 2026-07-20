@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { EmptyState } from '@/components/utils/empty-state';
 
 import { GradingTable } from './grading-table';
+import { QrAttendanceGenerator } from './qr-attendance-generator';
 
 interface Props {
   courses: TeacherCourse[];
@@ -46,7 +47,18 @@ export const GradingView = ({ courses, emptyMessage }: Props) => {
         </CardContent>
       </Card>
 
-      {selectedCourse && <GradingTable courseName={selectedCourse} />}
+      {selectedCourse && (
+        <div className="flex flex-col gap-[20px]">
+          <div className="grid grid-cols-12 gap-[20px]">
+            <div className="col-span-12 xl:col-span-8">
+              <GradingTable courseName={selectedCourse} />
+            </div>
+            <div className="col-span-12 xl:col-span-4">
+              <QrAttendanceGenerator courseName={selectedCourse} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

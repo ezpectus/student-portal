@@ -14,37 +14,58 @@ model School {
   createdAt DateTime @default(now())
   users     User[]
   courses   Course[]
+  events    Event[]
+  chatRooms ChatRoom[]
+  attendanceSessions AttendanceSession[]
+  feedPosts FeedPost[]
 }
 
 model User {
-  id                Int            @id @default(autoincrement())
-  username          String         @unique
-  email             String         @unique
-  passwordHash      String
-  fullName          String
-  photo             String         @default("")
-  role              Role           @default(STUDENT)
-  faculty           String?
-  speciality        String?
-  groupName         String?
-  studyForm         String?
-  status            String?
-  studyYear         Int            @default(0)
-  gpa               Float          @default(0)
-  phone             String?
-  address           String?
-  birthDate         String?
-  gradeBookNumber   String?
-  codeOfHonorSigned Boolean        @default(false)
-  schoolId          Int?
-  school            School?        @relation(fields: [schoolId], references: [id], onDelete: SetNull)
-  taughtCourses     Course[]       @relation("teacherCourses")
-  createdAt         DateTime       @default(now())
-  lastActiveAt      DateTime       @default(now())
-  courses           Course[]
-  attendance        Attendance[]
-  notifications     Notification[]
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  photo        String    @default("")
+  role         Role      @default(STUDENT)
+  faculty      String?
+  speciality   String?
+  groupName    String?
+  studyForm    String?
+  status       String?
+  studyYear    Int       @default(0)
+  gpa          Float     @default(0)
+  phone        String?
+  address      String?
+  birthDate    String?
+  gradeBookNumber String?
+  codeOfHonorSigned Boolean @default(false)
+  tokenVersion    Int       @default(0)
+  notifyEmail     Boolean   @default(true)
+  notifyAnnouncements Boolean @default(true)
+  notifyMessages  Boolean   @default(true)
+  schoolId     Int?
+  school       School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  taughtCourses Course[] @relation("teacherCourses")
+  createdAt    DateTime  @default(now())
+  lastActiveAt DateTime  @default(now())
+  courses      Course[]
+  attendance   Attendance[]
+  notifications Notification[]
   sentNotifications Notification[] @relation("sender")
+  auditLogs    AuditLog[]
+  gradeChanges GradeHistory[]
+  children     ParentStudent[] @relation("parent")
+  parents      ParentStudent[] @relation("child")
+  events       Event[]
+  chatRooms    ChatMember[]
+  createdChatRooms ChatRoom[] @relation("createdChatRooms")
+  chatMessages ChatMessage[]
+  attendanceSessions AttendanceSession[]
+  feedPosts    FeedPost[]
+  feedComments FeedComment[]
+  feedLikes    FeedLike[]
+  refreshTokens RefreshToken[]
 
   @@index([role])
   @@index([faculty])
@@ -54,16 +75,18 @@ model User {
 }
 
 model Course {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   name      String
   grade     Float
+  gradeType String  @default("NUMERIC")
   credits   Int
   userId    Int
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   schoolId  Int?
   school    School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
   teacherId Int?
-  teacher   User?   @relation("teacherCourses", fields: [teacherId], references: [id], onDelete: SetNull)
+  teacher   User? @relation("teacherCourses", fields: [teacherId], references: [id], onDelete: SetNull)
+  gradeHistory GradeHistory[]
 
   @@index([userId])
   @@index([schoolId])
@@ -103,4 +126,183 @@ enum Role {
   ADMIN
   TEACHER
   STUDENT
+  PARENT
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  entity    String
+  entityId  Int?
+  metadata  String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model GradeHistory {
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  oldGrade  Float
+  newGrade  Float
+  gradeType String   @default("NUMERIC")
+  changedBy Int
+  changedByUser User @relation(fields: [changedBy], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([courseId])
+  @@index([changedBy])
+  @@index([createdAt])
+}
+
+model ParentStudent {
+  id        Int      @id @default(autoincrement())
+  parentId  Int
+  parent    User     @relation("parent", fields: [parentId], references: [id], onDelete: Cascade)
+  studentId Int
+  student   User     @relation("child", fields: [studentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([parentId, studentId])
+  @@index([parentId])
+  @@index([studentId])
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  location    String?
+  type        String   @default("general")
+  schoolId    Int?
+  school      School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  createdBy   Int
+  createdByUser User   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([schoolId])
+  @@index([startDate])
+  @@index([type])
+}
+
+model ChatRoom {
+  id        Int      @id @default(autoincrement())
+  name      String
+  courseId  Int?
+  schoolId  Int?
+  school    School? @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  createdBy Int
+  createdByUser User @relation("createdChatRooms", fields: [createdBy], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  members   ChatMember[]
+  messages  ChatMessage[]
+
+  @@index([schoolId])
+  @@index([courseId])
+}
+
+model ChatMember {
+  id        Int      @id @default(autoincrement())
+  roomId    Int
+  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime @default(now())
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+}
+
+model ChatMessage {
+  id        Int      @id @default(autoincrement())
+  content   String
+  roomId    Int
+  room      ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId  Int
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([roomId, createdAt])
+  @@index([senderId])
+}
+
+model AttendanceSession {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  courseName String
+  teacherId  Int
+  teacher    User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  schoolId   Int?
+  school     School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([teacherId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model FeedPost {
+  id        Int      @id @default(autoincrement())
+  content   String
+  imageUrl  String?
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  schoolId  Int?
+  school    School?  @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  comments  FeedComment[]
+  likes     FeedLike[]
+
+  @@index([schoolId, createdAt])
+  @@index([authorId])
+}
+
+model FeedComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  postId    Int
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+}
+
+model FeedLike {
+  id        Int      @id @default(autoincrement())
+  postId    Int
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@index([postId])
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  replacedBy String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }

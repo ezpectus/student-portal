@@ -55,7 +55,7 @@ export const matchesUrl = (request: NextRequest, url: string, strict = true) => 
 export const matchesAnyUrl = (request: NextRequest, urls: string[], strict = true) =>
   urls.some((url) => matchesUrl(request, url, strict));
 
-export const getAuthInfo = (request: NextRequest) => {
+export const getAuthInfo = async (request: NextRequest) => {
   const token = request.cookies.get(TOKEN_COOKIE_NAME)?.value;
 
   if (!token) {
@@ -63,7 +63,7 @@ export const getAuthInfo = (request: NextRequest) => {
   }
 
   try {
-    const decoded = getJWTPayload<CampusJwtPayload & { iss?: string }>(token);
+    const decoded = await getJWTPayload<CampusJwtPayload & { iss?: string }>(token);
     const payload = decoded.iss === LOCAL_JWT_ISSUER
       ? getVerifiedLocalJWTPayload<CampusJwtPayload>(token)
       : decoded;

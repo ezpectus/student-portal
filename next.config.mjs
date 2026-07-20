@@ -50,20 +50,6 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data:",
-              "connect-src 'self' https://www.google-analytics.com https://www.gstatic.com",
-              "frame-src 'self' https://www.google.com/recaptcha/ https://docs.google.com/",
-              "object-src 'none'",
-              "base-uri 'self'",
-            ].join('; '),
-          },
         ],
       },
     ];

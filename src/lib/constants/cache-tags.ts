@@ -11,3 +11,4 @@ export const DASHBOARD_CACHE_TAG = 'dashboard';
 export const ADMIN_CACHE_TAG = 'admin';
 export const PARENT_CACHE_TAG = 'parent';
 export const ANALYTICS_CACHE_TAG = 'analytics';
+export const CALENDAR_CACHE_TAG = 'calendar';

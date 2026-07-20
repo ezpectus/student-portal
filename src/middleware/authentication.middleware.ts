@@ -6,8 +6,8 @@ import { PUBLIC_PATHS } from './constants';
 import { intlMiddleware } from './intl.middleware';
 import { getAuthInfo, gotoLogin, matchesAnyUrl } from './utils';
 
-const isAuthenticated = (request: NextRequest) => {
-  const payload = getAuthInfo(request);
+const isAuthenticated = async (request: NextRequest) => {
+  const payload = await getAuthInfo(request);
 
   if (!payload) {
     return false;
@@ -28,8 +28,8 @@ const gotoLanding = (request: NextRequest) => {
   return NextResponse.redirect(url);
 };
 
-export const authenticationMiddleware = (request: NextRequest) => {
-  const userAuthenticated = isAuthenticated(request);
+export const authenticationMiddleware = async (request: NextRequest) => {
+  const userAuthenticated = await isAuthenticated(request);
 
   if (userAuthenticated) {
     return authorizationMiddleware(request);

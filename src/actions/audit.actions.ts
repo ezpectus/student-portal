@@ -1,10 +1,10 @@
 'use server';
 
-import { getLocalUser } from '@/actions/local-auth.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { prisma } from '@/lib/prisma';
 
 export async function getAuditLogs(page: number = 1, pageSize: number = 20) {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user || user.role !== 'ADMIN') {
     return { items: [], total: 0 };
   }
@@ -33,17 +33,21 @@ export async function logAuditEvent(params: {
   metadata?: Record<string, unknown>;
   ipAddress?: string;
 }) {
-  const user = await getLocalUser();
+  const user = await getLocalUserLite();
   if (!user) return;
 
-  await prisma.auditLog.create({
-    data: {
-      action: params.action,
-      entity: params.entity,
-      entityId: params.entityId,
-      metadata: params.metadata ? JSON.stringify(params.metadata) : null,
-      ipAddress: params.ipAddress,
-      userId: user.id,
-    },
-  });
+  try {
+    await prisma.auditLog.create({
+      data: {
+        action: params.action,
+        entity: params.entity,
+        entityId: params.entityId,
+        metadata: params.metadata ? JSON.stringify(params.metadata) : null,
+        ipAddress: params.ipAddress,
+        userId: user.id,
+      },
+    });
+  } catch (error) {
+    console.error('[audit] Failed to log audit event:', error);
+  }
 }

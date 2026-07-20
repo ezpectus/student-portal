@@ -8,10 +8,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import MultipleSelector from '@/components/ui/multi-select';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 
 import { type AnnouncementFormValues,formSchema } from './schema';
+
 
 const emptyValues: AnnouncementFormValues = {
   announcement: {
@@ -25,6 +27,8 @@ const emptyValues: AnnouncementFormValues = {
     start: '',
     end: '',
     language: 'uk',
+    scheduledAt: '',
+    autoTranslate: false,
   },
   filter: {
     roles: [],
@@ -180,6 +184,25 @@ export function AnnouncementForm({
 
         <FormField
           control={form.control}
+          name="announcement.scheduledAt"
+          render={({ field }) => (
+            <FormItem className="flex flex-1 flex-col">
+              <FormLabel>{t('fields.scheduledAt')}</FormLabel>
+              <Input
+                type="datetime-local"
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(e.target.value)}
+                name={field.name}
+                ref={field.ref}
+                onBlur={field.onBlur}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
           name="announcement.language"
           render={({ field }) => (
             <FormItem>
@@ -195,6 +218,22 @@ export function AnnouncementForm({
                   <SelectItem value="en">{t('languages.en')}</SelectItem>
                 </SelectContent>
               </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="announcement.autoTranslate"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center gap-3">
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel>{t('fields.autoTranslate')}</FormLabel>
               <FormMessage />
             </FormItem>
           )}

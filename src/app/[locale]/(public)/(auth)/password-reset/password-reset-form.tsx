@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useServerErrorToast } from '@/hooks/use-server-error-toast';
 import { useRouter } from '@/i18n/routing';
+import { env } from '@/lib/env';
 
 interface PasswordResetFormProps {
   username: string;
@@ -44,16 +45,16 @@ export default function PasswordResetForm({ username }: PasswordResetFormProps) 
     try {
       form.clearErrors();
 
-      if (!executeRecaptcha) {
-        return;
-      }
-
-      const token = await executeRecaptcha();
+      const token = executeRecaptcha ? await executeRecaptcha() : 'local-auth';
 
       await resetPassword(data.username, token);
 
-      router.replace(`/password-reset/success?username=${data.username}`);
-    } catch (error) {
+      if (env.NEXT_PUBLIC_LOCAL_AUTH === 'true') {
+        router.replace('/password-reset/new-password');
+      } else {
+        router.replace(`/password-reset/success?username=${data.username}`);
+      }
+    } catch {
       errorToast();
     }
   };
@@ -75,7 +76,7 @@ export default function PasswordResetForm({ username }: PasswordResetFormProps) 
           size="big"
           className="my-4 w-full"
           type="submit"
-          disabled={!form.formState.isValid || !executeRecaptcha}
+          disabled={!form.formState.isValid}
           loading={form.formState.isSubmitting}
         >
           {t('button.reset')}
