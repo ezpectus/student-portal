@@ -90,7 +90,15 @@
 
 ### Done
 1. ~~Tests for feed, ai-chat, grade-predictions~~ — 30 tests added (feed: 12, ai-chat: 9, grade-predictions: 9)
-8. ~~Notifications UI~~ — NotificationCenter component in header (popover with unread badge, mark read, auto-refresh 15s)
+8. ~~Notifications UI~~ — NotificationCenter popover in header + dedicated /notifications page with pagination, type badges, sender avatars, loading skeleton, "View all" link
+
+### Code quality audit (2026-07-20)
+- `console.log` — only in logger, error boundaries, middleware catch (all valid)
+- `any` types in server actions — 0
+- Hardcoded Ukrainian in components — 0
+- TODO/FIXME — 2 (recaptcha + React 19, known library limitation)
+- Unused imports — 0 (eslint clean)
+- `settings-form.tsx` — uses `as unknown as Record` for notif prefs (existing, non-critical)
 
 ### Nice to have (future)
 1. Email sending (Nodemailer + SMTP)
