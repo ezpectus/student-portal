@@ -85,11 +85,11 @@ docs/client-functionality-overview.md
 # SaaS transformation roadmap (internal planning, not for repo)
 docs/saas-transformation-roadmap.md
 
-# Prisma
-prisma/dev.db
-prisma/dev.db-journal
-prisma/dev.db-wal
-prisma/dev.db-shm
+# Prisma / SQLite
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
 src/generated/prisma/
 
 # User uploads (avatar photos)

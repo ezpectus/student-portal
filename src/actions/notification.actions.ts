@@ -9,15 +9,18 @@ const getLocalUserId = async () => {
   return user?.id ?? null;
 };
 
-export async function getNotifications() {
+export async function getNotifications(page: number = 1, pageSize: number = 20) {
   const userId = await getLocalUserId();
-  if (!userId) return { items: [], unreadCount: 0 };
+  if (!userId) return { items: [], unreadCount: 0, total: 0 };
 
-  const [items, unreadCount] = await Promise.all([
+  const skip = (page - 1) * pageSize;
+
+  const [items, unreadCount, total] = await Promise.all([
     prisma.notification.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      take: 20,
+      skip,
+      take: pageSize,
       select: {
         id: true,
         title: true,
@@ -25,12 +28,15 @@ export async function getNotifications() {
         type: true,
         read: true,
         createdAt: true,
+        senderId: true,
+        sender: { select: { id: true, fullName: true, photo: true } },
       },
     }),
     prisma.notification.count({ where: { userId, read: false } }),
+    prisma.notification.count({ where: { userId } }),
   ]);
 
-  return { items, unreadCount };
+  return { items, unreadCount, total };
 }
 
 export async function markNotificationRead(id: number) {

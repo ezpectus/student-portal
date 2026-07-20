@@ -88,17 +88,19 @@
 
 ## Remaining (future)
 
-### Nice to have
-1. Tests for feed, ai-chat, grade-predictions (currently 0 tests for new features)
-2. Email sending (Nodemailer + SMTP)
-3. PostgreSQL migration for production (prisma-postgres/ schema ready)
-4. Redis for rate limiting + circuit breaker + sessions
-5. Real-time feed/chat (SSE or WebSocket)
-6. Image upload for feed (currently URL only)
-7. Global search (posts, announcements, users)
-8. Notifications UI (notifications created in DB, no dedicated view page)
-9. API documentation (OpenAPI/Swagger)
-10. Monitoring (Grafana/Prometheus)
+### Done
+1. ~~Tests for feed, ai-chat, grade-predictions~~ — 30 tests added (feed: 12, ai-chat: 9, grade-predictions: 9)
+8. ~~Notifications UI~~ — NotificationCenter component in header (popover with unread badge, mark read, auto-refresh 15s)
+
+### Nice to have (future)
+1. Email sending (Nodemailer + SMTP)
+2. PostgreSQL migration for production (prisma-postgres/ schema ready)
+3. Redis for rate limiting + circuit breaker + sessions
+4. Real-time feed/chat (SSE or WebSocket)
+5. Image upload for feed (currently URL only)
+6. Global search (posts, announcements, users)
+7. API documentation (OpenAPI/Swagger) — N/A for server actions
+8. Monitoring (Grafana/Prometheus)
 
 ### Code quality (non-blocking)
 - `analytics.actions.ts` (12KB) — could split into admin/teacher analytics

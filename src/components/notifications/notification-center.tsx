@@ -1,6 +1,7 @@
 'use client';
 
 import { Bell, CheckCheck } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -105,7 +106,10 @@ export const NotificationCenter = () => {
             </button>
           ))}
         </div>
-        <div className="border-t border-border px-4 py-2 text-right">
+        <div className="flex items-center justify-between border-t border-border px-4 py-2">
+          <Button variant="tertiary" size="small" asChild>
+            <Link href="/notifications">{t('page-title')}</Link>
+          </Button>
           <Button variant="tertiary" size="small" onClick={() => void refresh()}>{t('refresh')}</Button>
         </div>
       </PopoverContent>

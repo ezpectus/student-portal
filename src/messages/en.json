@@ -1019,8 +1019,23 @@
       "open": "Open notifications",
       "unread": "{count} unread",
       "mark-all": "Mark all as read",
+      "mark-read": "Mark as read",
       "refresh": "Refresh",
-      "empty": "You are all caught up."
+      "empty": "You are all caught up.",
+      "show-more": "Load more",
+      "page-title": "All Notifications",
+      "page-description": "View all your notifications in one place.",
+      "from": "From",
+      "system": "System",
+      "types": {
+        "info": "Info",
+        "important": "Important",
+        "mail": "Message",
+        "parent-message": "Parent Message",
+        "announcement": "Announcement",
+        "grade": "Grade Update",
+        "password-reset": "Password Reset"
+      }
     },
     "privacy-consent": {
       "title": "Consent to Publish KPI Personal Data on the Internet",

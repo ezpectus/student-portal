@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
 import { getUserDetails } from '@/actions/auth.actions';
-import { getLocalUser } from '@/actions/local-user.actions';
+import { getLocalUserLite } from '@/actions/local-user.actions';
 import { Sidebar, SidebarContent, SidebarHeader } from '@/components/ui/sidebar';
 import { UserCategory } from '@/types/enums/user-category';
 
@@ -13,7 +13,7 @@ import { ModulesMenuItems } from './modules-menu-items';
 export async function AppSidebar() {
   const t = await getTranslations('global.menu');
 
-  const localUser = await getLocalUser();
+  const localUser = await getLocalUserLite();
   const remoteUser = !localUser ? await getUserDetails().catch(() => null) : null;
 
   const isAdmin = localUser?.role === 'ADMIN'
