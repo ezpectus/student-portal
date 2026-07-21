@@ -61,7 +61,7 @@ A production-grade SaaS web application for educational institutions. Built with
 
 - **Authentication** — JWT-based with httpOnly cookies, middleware route protection, user registration
 - **Database** — Prisma 7 ORM with SQLite (dev) / Neon Postgres (prod), driver adapters
-- **Multi-locale** — Ukrainian (default), English, Polish, German — extensible to any locale
+- **Multi-locale** — English (default), Ukrainian — extensible to any locale
 - **Server-Side Rendering** — all pages SSR with ISR caching (5-min revalidate)
 - **Security** — CSP headers, HSTS, cookie security flags, CSRF protection (middleware + server-side validation), env validation (Zod), URL allow-listing
 - **Responsive** — mobile-first design with TailwindCSS, works on all breakpoints
@@ -87,7 +87,7 @@ A production-grade SaaS web application for educational institutions. Built with
 | Auth      | bcryptjs password hashing + JWT in httpOnly cookies                                                     |
 | Security  | CSRF protection (double-submit cookie + Origin validation), school-scoped data isolation, audit logging |
 | Forms     | React Hook Form 7 + Zod 4 validation                                                                    |
-| i18n      | next-intl (Ukrainian / English / Polish / German)                                                       |
+| i18n      | next-intl (English / Ukrainian)                                                                       |
 | Charts    | Recharts 3 (dashboard analytics)                                                                        |
 | Icons     | Lucide React + centralized SVG index (@svgr/webpack)                                                    |
 | Deploy    | Vercel / Netlify / Docker multi-stage (node:22-alpine)                                                  |
@@ -139,7 +139,7 @@ npm run db:seed
 npm run dev
 
 # Or use one-click Windows launcher
-scripts\\start-no-docker.bat
+dev-start\\start-no-docker.bat
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
@@ -158,10 +158,8 @@ Log in with any test account from the table above.
 | `npm run db:generate:postgres` | Generate Prisma client from the Neon schema                     |
 | `npm run build:postgres`       | Generate PostgreSQL client and build production app             |
 | `npm run health`               | Monitor the configured external API in a log window             |
-| `scripts\\start-no-docker.bat` | Start frontend, Prisma Studio, API health, and info windows     |
-| `scripts\\start-docker.bat`    | Build/start Next.js + PostgreSQL with Compose                   |
-| `scripts/setup-local.bat`      | Install, generate, push, and seed SQLite                        |
-| `scripts/setup-neon.bat`       | Generate, push, and seed Neon PostgreSQL                        |
+| `dev-start/start-no-docker.bat` | Start frontend, Prisma Studio, API health, and info windows     |
+| `dev-start/start-docker.bat`    | Build/start Next.js + PostgreSQL with Compose                   |
 | `/module/admin`                | Admin-only panel with database explorer                         |
 
 ---
@@ -213,11 +211,11 @@ npm run db:seed
 
 ```bash
 # Windows one-click launcher
-scripts\\start-docker.bat
+dev-start\\start-docker.bat
 
 # Linux/macOS launcher
-chmod +x scripts/*.sh
-./scripts/start-docker.sh
+chmod +x dev-start/*.sh
+./dev-start/start-docker.sh
 
 # Or run directly
 docker compose up --build
@@ -227,12 +225,14 @@ The Compose stack starts PostgreSQL first, applies `prisma/schema-postgres.prism
 
 ### No-Docker logs
 
-`scripts/start-no-docker.bat` opens four CLI windows:
+`dev-start/start-no-docker.bat` opens six CLI windows:
 
 1. **Frontend** — Next.js/Turbopack logs at `http://localhost:3000`
-2. **Database** — Prisma Studio at `http://localhost:5555`
-3. **Backend/API** — health-watch logs for `API_BASE_URL`; this repository uses an external API rather than hosting its own backend
-4. **Info** — URLs, test credentials, and runtime hints
+2. **Backend** — API health-watch logs
+3. **TypeCheck** — `tsc --watch` for real-time type checking
+4. **Database** — Prisma Studio at `http://localhost:5555`
+5. **Tests** — Vitest watch mode
+6. **Info** — URLs, test credentials, and runtime hints
 
 ---
 

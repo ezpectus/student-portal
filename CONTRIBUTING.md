@@ -52,7 +52,7 @@ Test accounts (after seeding): `admin` / `teacher` / `student` / `parent` — pa
 - **Validation**: Use Zod schemas via `validateInput()`
 - **Auth**: Use `getLocalUserLite()` for id/role/schoolId, `getLocalUser()` for full profile
 - **Error handling**: Mutations throw, reads return safe defaults
-- **i18n**: All user-facing strings must have translations in `en.json`, `uk.json`, `pl.json`, `de.json`
+- **i18n**: All user-facing strings must have translations in `en.json` and `uk.json`
 
 ## Testing
 
@@ -75,7 +75,7 @@ src/
 ├── app/              # App router pages and layouts
 ├── components/       # React components (UI + feature)
 ├── lib/              # Utilities, services, configuration
-├── messages/         # i18n translations (en, uk, pl, de)
+├── messages/         # i18n translations (en, uk)
 ├── types/            # TypeScript type definitions
 └── generated/        # Prisma generated client (gitignored)
 ```
